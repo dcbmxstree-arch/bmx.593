@@ -135,14 +135,23 @@
   <!-- Overlay para cerrar panel en móvil -->
   <div class="panel-overlay" id="panelOverlay"></div>
 
-  <!-- Lightbox de fotos del detalle -->
-  <div id="lightbox-foto" onclick="if(event.target===this) cerrarFoto()">
+  <!-- Lightbox carrusel de fotos -->
+  <div id="lightbox-foto" onclick="if(event.target===this) cerrarCarrusel()">
     <div class="lbf-inner">
-      <button class="lbf-cerrar" onclick="cerrarFoto()" aria-label="Cerrar foto">
+      <button class="lbf-cerrar" onclick="cerrarCarrusel()" aria-label="Cerrar">
         <i class="fa-solid fa-xmark"></i>
       </button>
+      <button class="lbf-nav lbf-prev" id="lbf-prev" onclick="fotoAnterior()" aria-label="Foto anterior">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
       <img id="lbf-img" src="" alt="">
-      <p id="lbf-titulo" class="lbf-titulo"></p>
+      <button class="lbf-nav lbf-next" id="lbf-next" onclick="fotoSiguiente()" aria-label="Foto siguiente">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+      <div class="lbf-footer">
+        <div id="lbf-puntos" class="lbf-puntos"></div>
+        <span id="lbf-num" class="lbf-num"></span>
+      </div>
     </div>
   </div>
 
