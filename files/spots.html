@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BMX.593 — Mapa de spots de BMX en Ecuador. Encuentra parques, zonas street y dirt tracks en tu ciudad.">
+  <title>BMX.593 — Spots Ecuador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="spots-page">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-logo">BMX<span class="punto">.</span><span class="num">593</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+      <li><a href="spots.html" class="activo"><i class="fa-solid fa-map-location-dot"></i> Spots</a></li>
+      <li><a href="anatomia.html"><i class="fa-solid fa-bicycle"></i> Anatomía</a></li>
+      <li><a href="tutoriales.html"><i class="fa-solid fa-play-circle"></i> Tutoriales</a></li>
+      <li><a href="shop.html"><i class="fa-solid fa-bag-shopping"></i> Shop</a></li>
+    </ul>
+  </nav>
+
+  <!-- LAYOUT: panel izquierdo + mapa derecho -->
+  <div class="spots-layout">
+
+    <!-- ══════════════════════════════════
+         PANEL IZQUIERDO
+    ══════════════════════════════════ -->
+    <aside class="spots-panel" id="spotsPanel">
+
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-titulo">Spots <span>Ecuador</span></h1>
+          <p class="panel-subtitulo">Encuentra el mejor spot para rodar</p>
+        </div>
+        <button class="panel-cerrar" id="panelCerrar" aria-label="Cerrar panel">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- ── PASO 1: Elegir ciudad ── -->
+      <div class="panel-paso visible" id="paso-1">
+        <div class="paso-label">
+          <span class="paso-num">1</span>
+          <span>Elige una ciudad</span>
+        </div>
+        <div class="selector-ciudad-wrap">
+          <i class="fa-solid fa-location-dot selector-icon"></i>
+          <select id="selector-ciudad" class="selector-ciudad" aria-label="Seleccionar ciudad">
+            <option value="" disabled selected>Selecciona una ciudad...</option>
+            <!-- Las ciudades se cargan desde datos-spots.js via mapa.js -->
+          </select>
+          <i class="fa-solid fa-chevron-down selector-arrow"></i>
+        </div>
+      </div>
+
+      <!-- ── PASO 2: Elegir tipo ── -->
+      <div class="panel-paso" id="paso-2">
+        <div class="paso-label">
+          <span class="paso-num">2</span>
+          <span>¿Qué tipo de spot buscas?</span>
+        </div>
+        <div class="btns-tipo">
+          <button class="btn-tipo" data-tipo="parque">
+            <span class="btn-tipo-icono">🏟️</span>
+            <span class="btn-tipo-label">Parque</span>
+            <span class="btn-tipo-count" id="count-parque">—</span>
+          </button>
+          <button class="btn-tipo" data-tipo="street">
+            <span class="btn-tipo-icono">🏙️</span>
+            <span class="btn-tipo-label">Street</span>
+            <span class="btn-tipo-count" id="count-street">—</span>
+          </button>
+          <button class="btn-tipo" data-tipo="dirt">
+            <span class="btn-tipo-icono">🌿</span>
+            <span class="btn-tipo-label">Dirt</span>
+            <span class="btn-tipo-count" id="count-dirt">—</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── PASO 3: Lista de spots ── -->
+      <div class="panel-paso" id="paso-3">
+        <div class="paso-label">
+          <span class="paso-num">3</span>
+          <span>Selecciona un spot</span>
+        </div>
+        <div id="lista-spots" class="lista-spots"></div>
+      </div>
+
+      <!-- ── Detalle del spot ── -->
+      <div id="spot-detalle" class="spot-detalle">
+        <!-- Se rellena dinámicamente por mapa.js al seleccionar un spot -->
+      </div>
+
+    </aside>
+
+    <!-- ══════════════════════════════════
+         MAPA
+    ══════════════════════════════════ -->
+    <div class="spots-mapa-wrap">
+
+      <!-- Botón abrir panel (solo móvil) -->
+      <button class="btn-abrir-panel" id="btnAbrirPanel" aria-label="Ver spots">
+        <i class="fa-solid fa-list"></i> Spots
+      </button>
+
+      <!-- Botón mi ubicación -->
+      <button class="btn-mi-ubicacion" id="btnMiUbicacion" aria-label="Mi ubicación">
+        <i class="fa-solid fa-location-crosshairs"></i>
+      </button>
+
+      <!-- Mapa Leaflet -->
+      <div id="mapa" role="application" aria-label="Mapa de spots BMX en Ecuador"></div>
+
+      <!-- Leyenda flotante -->
+      <div class="mapa-leyenda">
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#e63946"></div><span>Parque</span></div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#f4a261"></div><span>Street</span></div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#2ec4b6"></div><span>Dirt</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Overlay para cerrar panel en móvil -->
+  <div class="panel-overlay" id="panelOverlay"></div>
+
+  <!-- Lightbox de fotos del detalle -->
+  <div id="lightbox-foto" onclick="if(event.target===this) cerrarFoto()">
+    <div class="lbf-inner">
+      <button class="lbf-cerrar" onclick="cerrarFoto()" aria-label="Cerrar foto">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <img id="lbf-img" src="" alt="">
+      <p id="lbf-titulo" class="lbf-titulo"></p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/datos-spots.js"></script>
+  <script src="js/mapa.js"></script>
+  <script>
+    // Menú hamburguesa navbar
+    document.getElementById("navToggle").addEventListener("click", () => {
+      document.getElementById("navLinks").classList.toggle("abierto");
+    });
+    // Actualizar contadores de tipo al seleccionar ciudad
+    document.getElementById("selector-ciudad").addEventListener("change", function () {
+      ["parque", "street", "dirt"].forEach(tipo => {
+        const n = SPOTS.filter(s => s.ciudad === this.value && s.tipo === tipo).length;
+        const el = document.getElementById("count-" + tipo);
+        if (el) el.textContent = n || "0";
+      });
+    });
+  </script>
+
+</body>
+</html>

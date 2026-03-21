@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BMX.593 — Comunidad de BMX Freestyle en Ecuador. Noticias, videos, fotos y eventos del BMX nacional.">
+  <title>BMX.593 — BMX Freestyle Ecuador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-logo">BMX<span class="punto">.</span><span class="num">593</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html" class="activo"><i class="fa-solid fa-house"></i> Inicio</a></li>
+      <li><a href="spots.html"><i class="fa-solid fa-map-location-dot"></i> Spots</a></li>
+      <li><a href="anatomia.html"><i class="fa-solid fa-bicycle"></i> Anatomía</a></li>
+      <li><a href="tutoriales.html"><i class="fa-solid fa-play-circle"></i> Tutoriales</a></li>
+      <li><a href="shop.html"><i class="fa-solid fa-bag-shopping"></i> Shop</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Comunidad BMX Freestyle · Ecuador</p>
+      <h1 class="hero-titulo">BMX<span class="punto">.</span><span class="num">593</span></h1>
+      <p class="hero-sub">Videos, noticias, spots y eventos del BMX freestyle nacional</p>
+      <div class="hero-ctas">
+        <a href="#videos" class="btn-primario"><i class="fa-solid fa-play"></i> Ver videos</a>
+        <a href="spots.html" class="btn-secundario"><i class="fa-solid fa-map-location-dot"></i> Ver spots</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+      <span>Explorar</span>
+    </div>
+  </section>
+
+  <!-- VIDEOS -->
+  <section id="videos" class="seccion">
+    <div class="seccion-header">
+      <div>
+        <h2 class="seccion-titulo">Videos <span>Destacados</span></h2>
+        <p class="seccion-subtitulo">Lo mejor del BMX freestyle ecuatoriano</p>
+        <div class="seccion-divider"></div>
+      </div>
+    </div>
+    <div id="videos-grid"></div>
+  </section>
+
+  <!-- GALERÍA -->
+  <div class="seccion-alt">
+    <section id="fotos" class="seccion">
+      <div class="seccion-header">
+        <div>
+          <h2 class="seccion-titulo">Galería de <span>Fotos</span></h2>
+          <p class="seccion-subtitulo">Imágenes de la escena BMX en Ecuador</p>
+          <div class="seccion-divider"></div>
+        </div>
+      </div>
+      <div id="fotos-grid" class="fotos-grid"></div>
+    </section>
+  </div>
+
+  <!-- NOTICIAS -->
+  <section id="noticias" class="seccion">
+    <div class="seccion-header">
+      <div>
+        <h2 class="seccion-titulo"><span>Noticias</span> del deporte</h2>
+        <p class="seccion-subtitulo">Actualidad del BMX a nivel nacional</p>
+        <div class="seccion-divider"></div>
+      </div>
+    </div>
+    <div id="noticias-grid" class="noticias-grid"></div>
+  </section>
+
+  <!-- EVENTOS -->
+  <div class="seccion-alt">
+    <section id="eventos" class="seccion">
+      <div class="seccion-header">
+        <div>
+          <h2 class="seccion-titulo">Concursos y <span>Eventos</span></h2>
+          <p class="seccion-subtitulo">Próximas competencias y sesiones</p>
+          <div class="seccion-divider"></div>
+        </div>
+      </div>
+      <div id="eventos-grid" class="eventos-grid"></div>
+    </section>
+  </div>
+
+  <!-- MODAL DE VIDEO -->
+  <div id="video-modal" role="dialog" aria-modal="true" aria-label="Reproductor de video">
+    <div class="vm-contenido">
+      <div class="vm-header">
+        <span id="video-modal-titulo" class="vm-titulo"></span>
+        <button class="vm-cerrar" onclick="cerrarVideoModal()" aria-label="Cerrar video">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="vm-iframe-wrap">
+        <iframe
+          id="video-modal-iframe"
+          src=""
+          title="Video BMX"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Visor de fotografías">
+    <div class="lb-contenido">
+      <button class="lb-cerrar" onclick="cerrarLightbox()" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+      <button class="lb-nav prev" onclick="navegarLightbox(-1)" aria-label="Foto anterior"><i class="fa-solid fa-chevron-left"></i></button>
+      <img id="lb-img" src="" alt="">
+      <button class="lb-nav next" onclick="navegarLightbox(1)" aria-label="Foto siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+      <div class="lb-info">
+        <h3 id="lb-titulo"></h3>
+        <span id="lb-autor"></span>
+      </div>
+      <span class="lb-num" id="lb-num"></span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">BMX<span>.</span>593</div>
+        <p class="footer-tagline">Comunidad de BMX Freestyle en Ecuador. Conectando riders, spots y eventos desde el corazón de la escena nacional.</p>
+        <p class="footer-contact">📧 <a href="mailto:hola@bmx593.ec">hola@bmx593.ec</a></p>
+      </div>
+      <div class="footer-social">
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://youtube.com"   target="_blank" rel="noopener" aria-label="YouTube">  <i class="fa-brands fa-youtube"></i></a>
+        <a href="https://tiktok.com"    target="_blank" rel="noopener" aria-label="TikTok">   <i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://facebook.com"  target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-brands fa-facebook"></i></a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 BMX.593 — Todos los derechos reservados</span>
+      <span>Hecho con 🚲 en Ecuador</span>
+    </div>
+  </footer>
+
+  <script src="js/contenido.js"></script>
+  <script src="js/home.js"></script>
+  <script>
+    document.getElementById("navToggle").addEventListener("click", () => {
+      document.getElementById("navLinks").classList.toggle("abierto");
+    });
+  </script>
+</body>
+</html>
