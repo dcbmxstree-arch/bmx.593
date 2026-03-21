@@ -362,17 +362,17 @@ function renderDetalle(spot) {
       </button>
     </div>`;
 
-  // Ocultar lista, mostrar detalle
-  ocultarPaso(3);
+  // Mostrar detalle encima del panel (posición absoluta)
   contenedor.classList.add("visible");
-}
+
+  // En móvil: mantener el panel abierto para que el usuario vea el detalle
+  if (window.innerWidth <= 768) {
+    abrirPanelMovil();
+  }
 
 function ocultarDetalle() {
   const contenedor = document.getElementById("spot-detalle");
   if (contenedor) contenedor.classList.remove("visible");
-
-  // Volver a mostrar la lista
-  mostrarPaso(3);
 
   document.querySelectorAll(".spot-item").forEach(i => i.classList.remove("activo"));
   marcadores.forEach(({ spot, marker }) => marker.setIcon(crearIcono(spot.tipo, false)));
