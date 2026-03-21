@@ -65,7 +65,7 @@ const FOTOS = [
     id: 1,
     titulo: "La Carolina",
     autor: "@rider_quitense",
-    imagen: "https://dcbmxstree-arch.github.io/bmx.593/assets/img/spots/carolina/carolina1.jpg",,
+    imagen: "https://dcbmxstree-arch.github.io/bmx.593/assets/img/spots/carolina/carolina1.jpg",
     fecha: "2024-11-10"
   },
   {
