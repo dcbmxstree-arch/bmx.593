@@ -579,14 +579,17 @@ img { max-width: 100%; display: block; }
 .lista-vacia p { font-size: 0.85rem; }
 .lista-vacia span { font-size: 0.75rem; color: var(--gris-600); }
 
-/* ── Detalle del spot — reemplaza la lista ─────────────────── */
+/* ── Detalle del spot — ocupa todo el panel ────────────────── */
 .spot-detalle {
   display: none;
-  flex: 1;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--gris-900);
   overflow-y: auto;
   overflow-x: hidden;
   flex-direction: column;
   border-top: 2px solid var(--rojo);
+  z-index: 20;
   animation: fadeSlideDown 0.3s ease forwards;
 }
 .spot-detalle.visible {
