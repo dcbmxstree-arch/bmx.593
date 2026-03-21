@@ -1,3 +1,4 @@
+
 // ============================================================
 //  BMX.593 — Lógica del módulo Spots
 //  ============================================================
@@ -324,6 +325,10 @@ function seleccionarSpot(id) {
   }
 }
 
+// ── Estado del carrusel ──────────────────────────────────────
+let carruselFotos  = [];   // array de URLs del spot activo
+let carruselIndice = 0;    // índice de la foto actual
+
 function renderDetalle(spot) {
   const contenedor = document.getElementById("spot-detalle");
   if (!contenedor) return;
@@ -331,22 +336,23 @@ function renderDetalle(spot) {
   const dif   = LABELS_DIF[spot.dificultad] || { color: "#999", label: spot.dificultad };
   const color = COLORES_TIPO[spot.tipo] || "#e63946";
 
-  // Galería de fotos
-  // Si fotos: [] vacío → muestra placeholder automático
-  const fotosHTML = spot.fotos && spot.fotos.length > 0
-    ? `<div class="detalle-galeria">
-         ${spot.fotos.map((f, i) => `
-           <div class="detalle-foto ${i === 0 ? 'principal' : ''}"
-                onclick="abrirFoto('${f}', '${spot.nombre.replace(/'/g,"\\'")}')">
-             <img src="${f}" alt="${spot.nombre} — foto ${i + 1}"
-                  onerror="this.src='https://picsum.photos/seed/bmx${spot.id}/800/500'">
-             <div class="detalle-foto-overlay"><i class="fa-solid fa-expand"></i></div>
-           </div>`).join("")}
+  // Preparar array de fotos para el carrusel
+  // Si no hay fotos → usar placeholder
+  carruselFotos = (spot.fotos && spot.fotos.length > 0)
+    ? spot.fotos
+    : [`https://picsum.photos/seed/bmxspot${spot.id}/800/500`];
+
+  // Primera foto para mostrar en el detalle
+  const primeraFoto = carruselFotos[0];
+  const totalFotos  = carruselFotos.length;
+
+  // Indicador de cuántas fotos hay
+  const indicadorHTML = totalFotos > 1
+    ? `<div class="detalle-foto-contador">
+         <i class="fa-solid fa-images"></i> ${totalFotos} fotos — toca para ver todas
        </div>`
-    : `<div class="detalle-galeria">
-         <div class="detalle-foto principal">
-           <img src="https://picsum.photos/seed/bmxspot${spot.id}/800/500" alt="${spot.nombre}">
-         </div>
+    : `<div class="detalle-foto-contador">
+         <i class="fa-solid fa-image"></i> Toca para ampliar
        </div>`;
 
   contenedor.innerHTML = `
@@ -366,7 +372,14 @@ function renderDetalle(spot) {
       </div>
     </div>
 
-    ${fotosHTML}
+    <div class="detalle-foto-unica" onclick="abrirCarrusel(0)">
+      <img src="${primeraFoto}" alt="${spot.nombre}"
+           onerror="this.src='https://picsum.photos/seed/bmx${spot.id}/800/500'">
+      <div class="detalle-foto-unica-overlay">
+        <i class="fa-solid fa-expand"></i>
+      </div>
+      ${indicadorHTML}
+    </div>
 
     <div class="detalle-body">
       <p class="detalle-descripcion">${spot.descripcion}</p>
@@ -381,35 +394,86 @@ function renderDetalle(spot) {
       </div>
     </div>`;
 
-  // Mostrar detalle encima del panel (posición absoluta)
   contenedor.classList.add("visible");
 }
 
-function ocultarDetalle() {
-  const contenedor = document.getElementById("spot-detalle");
-  if (contenedor) contenedor.classList.remove("visible");
+// ── Carrusel en lightbox ─────────────────────────────────────
+function abrirCarrusel(indice) {
+  if (carruselFotos.length === 0) return;
+  carruselIndice = indice;
 
-  document.querySelectorAll(".spot-item").forEach(i => i.classList.remove("activo"));
-
-  // Quitar resaltado de marcadores — volver todos a tamaño normal
-  marcadores.forEach(({ spot, marker }) => {
-    if (mapa.hasLayer(marker)) {
-      marker.setIcon(crearIcono(spot.tipo, false));
-    }
-  });
-  mapa.closePopup();
-  spotActivo = null;
-}
-
-// ── Lightbox fotos ───────────────────────────────────────────
-function abrirFoto(src, titulo) {
   const lb = document.getElementById("lightbox-foto");
   if (!lb) return;
-  document.getElementById("lbf-img").src              = src;
-  document.getElementById("lbf-titulo").textContent   = titulo;
+
   lb.classList.add("activo");
   document.body.style.overflow = "hidden";
+  renderCarrusel();
 }
+
+function renderCarrusel() {
+  const total = carruselFotos.length;
+  const src   = carruselFotos[carruselIndice];
+
+  // Imagen
+  const img = document.getElementById("lbf-img");
+  if (img) {
+    img.style.opacity = "0";
+    img.src = src;
+    img.onload = () => { img.style.opacity = "1"; };
+    img.onerror = () => {
+      img.src = `https://picsum.photos/seed/bmxcarrusel${carruselIndice}/800/500`;
+      img.style.opacity = "1";
+    };
+  }
+
+  // Puntos indicadores
+  const puntosEl = document.getElementById("lbf-puntos");
+  if (puntosEl) {
+    puntosEl.innerHTML = carruselFotos.map((_, i) =>
+      `<span class="lbf-punto ${i === carruselIndice ? 'activo' : ''}"
+             onclick="irFoto(${i})"></span>`
+    ).join("");
+  }
+
+  // Contador numérico
+  const numEl = document.getElementById("lbf-num");
+  if (numEl) numEl.textContent = `${carruselIndice + 1} / ${total}`;
+
+  // Mostrar/ocultar flechas según si hay más de una foto
+  const prev = document.getElementById("lbf-prev");
+  const next = document.getElementById("lbf-next");
+  if (prev) prev.style.display = total > 1 ? "flex" : "none";
+  if (next) next.style.display = total > 1 ? "flex" : "none";
+}
+
+function irFoto(indice) {
+  carruselIndice = indice;
+  renderCarrusel();
+}
+
+function fotoAnterior() {
+  carruselIndice = (carruselIndice - 1 + carruselFotos.length) % carruselFotos.length;
+  renderCarrusel();
+}
+
+function fotoSiguiente() {
+  carruselIndice = (carruselIndice + 1) % carruselFotos.length;
+  renderCarrusel();
+}
+
+function cerrarCarrusel() {
+  const lb = document.getElementById("lightbox-foto");
+  if (lb) lb.classList.remove("activo");
+  document.body.style.overflow = "";
+}
+
+// Mantener compatibilidad con llamadas antiguas a abrirFoto
+function abrirFoto(src, titulo) {
+  const indice = carruselFotos.indexOf(src);
+  abrirCarrusel(indice >= 0 ? indice : 0);
+}
+
+function cerrarFoto() { cerrarCarrusel(); }
 
 function cerrarFoto() {
   const lb = document.getElementById("lightbox-foto");
@@ -484,9 +548,34 @@ function initPanelMovil() {
   if (btnCerrar) btnCerrar.addEventListener("click",  cerrarPanelMovil);
   if (overlay)   overlay.addEventListener("click",    cerrarPanelMovil);
 
+  // Teclado: ESC cierra, flechas navegan el carrusel
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape") { cerrarPanelMovil(); cerrarFoto(); }
+    const lb = document.getElementById("lightbox-foto");
+    const lbAbierto = lb && lb.classList.contains("activo");
+
+    if (e.key === "Escape") {
+      if (lbAbierto) cerrarCarrusel();
+      else cerrarPanelMovil();
+    }
+    if (lbAbierto && e.key === "ArrowRight") fotoSiguiente();
+    if (lbAbierto && e.key === "ArrowLeft")  fotoAnterior();
   });
+
+  // Swipe en móvil para el carrusel
+  let touchStartX = 0;
+  const lbEl = document.getElementById("lightbox-foto");
+  if (lbEl) {
+    lbEl.addEventListener("touchstart", e => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    lbEl.addEventListener("touchend", e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        diff > 0 ? fotoSiguiente() : fotoAnterior();
+      }
+    }, { passive: true });
+  }
 }
 
 function abrirPanelMovil() {
