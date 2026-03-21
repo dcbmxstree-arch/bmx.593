@@ -48,10 +48,6 @@ const SPOTS = [
     // Ejemplo: "assets/img/spots/carolina/carolina_1.jpg"
     fotos: [
       "https://dcbmxstree-arch.github.io/bmx.593/assets/img/spots/carolina/carolina1.jpg",
-      "assets/img/spots/carolina/carolina1.jpg",
-      "https://picsum.photos/seed/carolina1/800/500",
-      "https://picsum.photos/seed/carolina2/800/500",
-      "https://picsum.photos/seed/carolina3/800/500"
     ]
   },
 
