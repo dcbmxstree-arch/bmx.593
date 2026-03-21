@@ -5,25 +5,19 @@
 //  Este archivo NO necesita editarse para agregar spots o ciudades.
 //  Todos los datos se editan en: js/datos-spots.js
 //
-//  FLUJO DE 3 PASOS:
-//  Paso 1 → El usuario elige una ciudad
-//  Paso 2 → El usuario elige un tipo (Parque / Street / Dirt)
-//  Paso 3 → Se muestra la lista de spots disponibles
-//           Al hacer clic en un spot → se abre el detalle
-//           y se señala el marcador en el mapa
-//
-//  MAPA:
-//  - Inicia centrado en Quito
-//  - Al elegir ciudad → hace zoom a esa ciudad
-//  - Popup del marcador → solo muestra el nombre del spot
-//  - Click en el popup → abre Google Maps en ese spot
+//  FLUJO:
+//  - Al cargar → todos los spots de Quito aparecen en el mapa
+//  - Paso 1 → usuario elige ciudad → mapa muestra todos los spots de esa ciudad
+//  - Paso 2 → usuario elige tipo → mapa filtra por tipo
+//  - Paso 3 → lista de spots → clic → detalle con fotos
+//  - Popup en el mapa → nombre del spot → clic → Google Maps (SIEMPRE funciona)
 //
 // ============================================================
 
 // ── Estado global ────────────────────────────────────────────
 let mapa;
 let marcadores      = [];   // lista de { spot, marker }
-let ciudadActiva    = null;
+let ciudadActiva    = "Quito";
 let tipoActivo      = null;
 let spotActivo      = null;
 let marcadorUsuario = null;
@@ -43,7 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initBtnUbicacion();
   initPanelMovil();
 
-  // Seleccionar Quito por defecto
+  // Mostrar todos los spots de Quito al cargar
+  // sin necesidad de que el usuario seleccione nada
   seleccionarCiudad("Quito");
 });
 
@@ -52,14 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
 // ════════════════════════════════════════════════════════════
 
 function initMapa() {
-  // Centrado inicial en Quito
   mapa = L.map("mapa", {
     center: [-0.2295, -78.5243],
     zoom: 12,
     zoomControl: false
   });
 
-  // Capa oscura CartoDB (no requiere API key)
   L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
     attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
     subdomains: "abcd",
@@ -69,19 +62,18 @@ function initMapa() {
   L.control.zoom({ position: "topright" }).addTo(mapa);
 }
 
-// Icono SVG personalizado para cada tipo
-// activo = true → marcador más grande y con borde blanco
+// ── Icono SVG ────────────────────────────────────────────────
 function crearIcono(tipo, activo = false) {
   const color = COLORES_TIPO[tipo] || "#e63946";
   const size  = activo ? 44 : 34;
   const anc   = activo ? 54 : 42;
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${anc}" viewBox="0 0 36 44">
-      <defs><filter id="sh">
+      <defs><filter id="sh${activo}">
         <feDropShadow dx="0" dy="2" stdDeviation="${activo ? 4 : 2}" flood-color="rgba(0,0,0,0.55)"/>
       </filter></defs>
       <path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 26 18 26S36 31.5 36 18C36 8.06 27.94 0 18 0z"
-            fill="${color}" filter="url(#sh)"
+            fill="${color}" filter="url(#sh${activo})"
             stroke="${activo ? '#fff' : 'none'}" stroke-width="${activo ? 2.5 : 0}"/>
       <circle cx="18" cy="17" r="9" fill="rgba(0,0,0,0.28)"/>
       <text x="18" y="22" text-anchor="middle" font-size="12" fill="white">🚲</text>
@@ -94,50 +86,9 @@ function crearIcono(tipo, activo = false) {
   });
 }
 
-// Crear/actualizar marcadores en el mapa
-// Muestra solo los spots de la ciudad y tipo seleccionados
-function actualizarMarcadores() {
-  // Limpiar marcadores anteriores
-  marcadores.forEach(({ marker }) => mapa.removeLayer(marker));
-  marcadores = [];
-
-  if (!ciudadActiva || !tipoActivo) return;
-
-  const spotsFiltrados = SPOTS.filter(
-    s => s.ciudad === ciudadActiva && s.tipo === tipoActivo
-  );
-
-  spotsFiltrados.forEach(spot => {
-    const marker = L.marker([spot.lat, spot.lng], {
-      icon:  crearIcono(spot.tipo, false),
-      title: spot.nombre
-    });
-
-    // Popup simplificado: solo nombre + click abre Google Maps
-    marker.bindPopup(construirPopupSimple(spot), {
-      maxWidth: 220,
-      className: "popup-bmx popup-simple"
-    });
-
-    // Click en el popup → Google Maps (sin pedir GPS, va directo al spot)
-    marker.on("popupopen", () => {
-      // Pequeño delay para asegurar que el DOM del popup esté listo
-      setTimeout(() => {
-        const btn = document.querySelector(".popup-nombre-link");
-        if (btn) {
-          btn.addEventListener("click", () => {
-            abrirEnGoogleMaps(spot.lat, spot.lng, spot.nombre);
-          });
-        }
-      }, 50);
-    });
-
-    marker.addTo(mapa);
-    marcadores.push({ spot, marker });
-  });
-}
-
-// Popup minimalista: solo el nombre del spot como botón
+// ── Popup simple: nombre + hint ──────────────────────────────
+// El onclick usa las coordenadas directamente en el HTML
+// así funciona para CUALQUIER marcador sin depender de listeners
 function construirPopupSimple(spot) {
   const color = COLORES_TIPO[spot.tipo] || "#e63946";
   return `
@@ -145,20 +96,62 @@ function construirPopupSimple(spot) {
       <div class="popup-simple-tipo" style="background:${color}">
         ${ICONOS_TIPO[spot.tipo]} ${spot.tipo.toUpperCase()}
       </div>
-      <button class="popup-nombre-link">${spot.nombre}</button>
+      <button class="popup-nombre-link"
+        onclick="abrirEnGoogleMaps(${spot.lat}, ${spot.lng}, '${spot.nombre.replace(/'/g,"\\'")}')">
+        ${spot.nombre}
+      </button>
       <p class="popup-simple-hint">
         <i class="fa-solid fa-diamond-turn-right"></i> Toca para ir con Google Maps
       </p>
     </div>`;
 }
 
-// Abrir Google Maps centrado en el spot (sin GPS, va directo al destino)
+// ── Abrir Google Maps ────────────────────────────────────────
 function abrirEnGoogleMaps(lat, lng, nombre) {
   const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${encodeURIComponent(nombre)}`;
   window.open(url, "_blank");
 }
 
-// Resaltar el marcador del spot activo en el mapa
+// ── Crear y registrar todos los marcadores de una vez ────────
+// Se crean al inicio y nunca se destruyen — solo se muestran u ocultan
+function crearTodosMarcadores() {
+  // Limpiar marcadores anteriores si los hay
+  marcadores.forEach(({ marker }) => mapa.removeLayer(marker));
+  marcadores = [];
+
+  SPOTS.forEach(spot => {
+    const marker = L.marker([spot.lat, spot.lng], {
+      icon:  crearIcono(spot.tipo, false),
+      title: spot.nombre
+    });
+
+    // Popup con onclick inline — funciona siempre sin listeners externos
+    marker.bindPopup(construirPopupSimple(spot), {
+      maxWidth: 220,
+      className: "popup-bmx popup-simple"
+    });
+
+    // Guardar referencia pero NO agregar al mapa todavía
+    marcadores.push({ spot, marker });
+  });
+}
+
+// ── Mostrar/ocultar marcadores según ciudad y tipo ───────────
+function actualizarMarcadores() {
+  marcadores.forEach(({ spot, marker }) => {
+    const coincideCiudad = spot.ciudad === ciudadActiva;
+    const coincideTipo   = !tipoActivo || spot.tipo === tipoActivo;
+    const mostrar        = coincideCiudad && coincideTipo;
+
+    if (mostrar && !mapa.hasLayer(marker)) {
+      marker.addTo(mapa);
+    } else if (!mostrar && mapa.hasLayer(marker)) {
+      mapa.removeLayer(marker);
+    }
+  });
+}
+
+// ── Resaltar marcador activo ─────────────────────────────────
 function resaltarMarcador(spotId) {
   marcadores.forEach(({ spot, marker }) => {
     const esActivo = spot.id === spotId;
@@ -178,7 +171,6 @@ function initSelectorCiudad() {
   const select = document.getElementById("selector-ciudad");
   if (!select) return;
 
-  // Poblar el select con las ciudades del array CIUDADES
   CIUDADES.forEach(c => {
     const opt = document.createElement("option");
     opt.value       = c.nombre;
@@ -196,7 +188,7 @@ function seleccionarCiudad(nombreCiudad) {
   tipoActivo   = null;
   spotActivo   = null;
 
-  // Centrar mapa en la ciudad elegida
+  // Centrar mapa en la ciudad
   const ciudad = CIUDADES.find(c => c.nombre === nombreCiudad);
   if (ciudad) {
     mapa.setView([ciudad.lat, ciudad.lng], ciudad.zoom, { animate: true });
@@ -206,13 +198,24 @@ function seleccionarCiudad(nombreCiudad) {
   const select = document.getElementById("selector-ciudad");
   if (select) select.value = nombreCiudad;
 
+  // Crear todos los marcadores la primera vez
+  // o actualizar visibilidad si ya existen
+  if (marcadores.length === 0) {
+    crearTodosMarcadores();
+  }
+
+  // Mostrar todos los spots de la ciudad (sin filtro de tipo todavía)
+  actualizarMarcadores();
+
+  // Actualizar contadores de tipo
+  actualizarContadoresTipo(nombreCiudad);
+
   // Mostrar paso 2, ocultar paso 3 y detalle
   mostrarPaso(2);
   ocultarPaso(3);
   ocultarDetalle();
   limpiarTipos();
   limpiarLista();
-  actualizarMarcadores();
 }
 
 // ════════════════════════════════════════════════════════════
@@ -234,13 +237,21 @@ function seleccionarTipo(tipo) {
   spotActivo = null;
 
   ocultarDetalle();
+  actualizarMarcadores();
   renderLista();
   mostrarPaso(3);
-  actualizarMarcadores();
 }
 
 function limpiarTipos() {
   document.querySelectorAll(".btn-tipo").forEach(b => b.classList.remove("activo"));
+}
+
+function actualizarContadoresTipo(ciudad) {
+  ["parque", "street", "dirt"].forEach(tipo => {
+    const n  = SPOTS.filter(s => s.ciudad === ciudad && s.tipo === tipo).length;
+    const el = document.getElementById("count-" + tipo);
+    if (el) el.textContent = n || "0";
+  });
 }
 
 // ════════════════════════════════════════════════════════════
@@ -308,7 +319,6 @@ function seleccionarSpot(id) {
   renderDetalle(spot);
 
   // En móvil: abrir el panel para que el usuario vea el detalle con fotos
-  // El usuario cierra el panel manualmente cuando quiera ver el mapa
   if (window.innerWidth <= 768) {
     abrirPanelMovil();
   }
@@ -322,6 +332,7 @@ function renderDetalle(spot) {
   const color = COLORES_TIPO[spot.tipo] || "#e63946";
 
   // Galería de fotos
+  // Si fotos: [] vacío → muestra placeholder automático
   const fotosHTML = spot.fotos && spot.fotos.length > 0
     ? `<div class="detalle-galeria">
          ${spot.fotos.map((f, i) => `
@@ -351,7 +362,7 @@ function renderDetalle(spot) {
         <span style="color:${dif.color}">
           <i class="fa-solid fa-signal"></i> ${dif.label}
         </span>
-        <span><i class="fa-regular fa-clock"></i> ${spot.horario}</span>
+        <span><i class="fa-regular fa-clock"></i> ${spot.horario || "Sin horario fijo"}</span>
       </div>
     </div>
 
@@ -379,17 +390,23 @@ function ocultarDetalle() {
   if (contenedor) contenedor.classList.remove("visible");
 
   document.querySelectorAll(".spot-item").forEach(i => i.classList.remove("activo"));
-  marcadores.forEach(({ spot, marker }) => marker.setIcon(crearIcono(spot.tipo, false)));
+
+  // Quitar resaltado de marcadores — volver todos a tamaño normal
+  marcadores.forEach(({ spot, marker }) => {
+    if (mapa.hasLayer(marker)) {
+      marker.setIcon(crearIcono(spot.tipo, false));
+    }
+  });
   mapa.closePopup();
   spotActivo = null;
 }
 
-// Lightbox simple para fotos del detalle
+// ── Lightbox fotos ───────────────────────────────────────────
 function abrirFoto(src, titulo) {
   const lb = document.getElementById("lightbox-foto");
   if (!lb) return;
-  document.getElementById("lbf-img").src   = src;
-  document.getElementById("lbf-titulo").textContent = titulo;
+  document.getElementById("lbf-img").src              = src;
+  document.getElementById("lbf-titulo").textContent   = titulo;
   lb.classList.add("activo");
   document.body.style.overflow = "hidden";
 }
@@ -401,13 +418,12 @@ function cerrarFoto() {
 }
 
 // ════════════════════════════════════════════════════════════
-//  HELPERS DE UI — pasos y panel móvil
+//  HELPERS DE UI
 // ════════════════════════════════════════════════════════════
 
 function mostrarPaso(num) {
   const el = document.getElementById(`paso-${num}`);
   if (el) el.classList.add("visible");
-  // Inicializar listeners del paso 2 cuando aparece
   if (num === 2) initTipos();
 }
 
@@ -467,6 +483,7 @@ function initPanelMovil() {
   if (btnAbrir)  btnAbrir.addEventListener("click",  abrirPanelMovil);
   if (btnCerrar) btnCerrar.addEventListener("click",  cerrarPanelMovil);
   if (overlay)   overlay.addEventListener("click",    cerrarPanelMovil);
+
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") { cerrarPanelMovil(); cerrarFoto(); }
   });
@@ -483,4 +500,3 @@ function cerrarPanelMovil() {
   document.getElementById("panelOverlay")?.classList.remove("activo");
   document.body.style.overflow = "";
 }
-
