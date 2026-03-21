@@ -63,7 +63,7 @@ const VIDEOS = [
 const FOTOS = [
   {
     id: 1,
-    titulo: "La Carolina-skate park",
+    titulo: "Carola-skate park",
     autor: "@rider_quitense",
     imagen: "https://dcbmxstree-arch.github.io/bmx.593/assets/img/spots/carolina/carolina1.jpg",
     fecha: "2024-11-10"
