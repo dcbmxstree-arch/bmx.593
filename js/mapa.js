@@ -369,6 +369,7 @@ function renderDetalle(spot) {
   if (window.innerWidth <= 768) {
     abrirPanelMovil();
   }
+}
 
 function ocultarDetalle() {
   const contenedor = document.getElementById("spot-detalle");
