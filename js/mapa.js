@@ -307,8 +307,11 @@ function seleccionarSpot(id) {
   // Renderizar detalle
   renderDetalle(spot);
 
-  // En móvil: cerrar panel para ver el mapa primero
-  if (window.innerWidth <= 768) cerrarPanelMovil();
+  // En móvil: abrir el panel para que el usuario vea el detalle con fotos
+  // El usuario cierra el panel manualmente cuando quiera ver el mapa
+  if (window.innerWidth <= 768) {
+    abrirPanelMovil();
+  }
 }
 
 function renderDetalle(spot) {
@@ -356,19 +359,19 @@ function renderDetalle(spot) {
 
     <div class="detalle-body">
       <p class="detalle-descripcion">${spot.descripcion}</p>
-      <button class="detalle-btn-maps"
-        onclick="abrirEnGoogleMaps(${spot.lat}, ${spot.lng}, '${spot.nombre.replace(/'/g,"\\'")}')">
-        <i class="fa-solid fa-diamond-turn-right"></i> Cómo llegar con Google Maps
-      </button>
+      <div class="detalle-acciones">
+        <button class="detalle-btn-maps"
+          onclick="abrirEnGoogleMaps(${spot.lat}, ${spot.lng}, '${spot.nombre.replace(/'/g,"\\'")}')">
+          <i class="fa-solid fa-diamond-turn-right"></i> Cómo llegar
+        </button>
+        <button class="detalle-btn-vermapa" onclick="cerrarPanelMovil()">
+          <i class="fa-solid fa-map"></i> Ver en mapa
+        </button>
+      </div>
     </div>`;
 
   // Mostrar detalle encima del panel (posición absoluta)
   contenedor.classList.add("visible");
-
-  // En móvil: mantener el panel abierto para que el usuario vea el detalle
-  if (window.innerWidth <= 768) {
-    abrirPanelMovil();
-  }
 }
 
 function ocultarDetalle() {
@@ -480,3 +483,4 @@ function cerrarPanelMovil() {
   document.getElementById("panelOverlay")?.classList.remove("activo");
   document.body.style.overflow = "";
 }
+
