@@ -47,6 +47,7 @@ const SPOTS = [
     // FOTOS: agrega las imágenes en assets/img/spots/carolina/
     // Ejemplo: "assets/img/spots/carolina/carolina_1.jpg"
     fotos: [
+      "https://dcbmxstree-arch.github.io/bmx.593/assets/img/spots/carolina/carolina1.jpg",
       "assets/img/spots/carolina/carolina1.jpg",
       "https://picsum.photos/seed/carolina1/800/500",
       "https://picsum.photos/seed/carolina2/800/500",
@@ -85,6 +86,7 @@ const SPOTS = [
 
     // FOTOS: agrega las imágenes en assets/img/spots/inaquito/
     fotos: [
+      "https://dcbmxstree-arch.github.io/bmx.593/assets/img/spots/turubamba/turubamba1.jpg",
       "https://picsum.photos/seed/inaquito1/800/500",
       "https://picsum.photos/seed/inaquito2/800/500",
       "https://picsum.photos/seed/inaquito3/800/500"
