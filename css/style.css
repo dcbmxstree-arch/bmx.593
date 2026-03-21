@@ -745,13 +745,16 @@ img { max-width: 100%; display: block; }
 .btn-mi-ubicacion.ubicacion-activa { border-color: var(--teal); color: var(--teal); }
 
 .btn-abrir-panel {
-  display: none; position: absolute; bottom: 5rem; right: 1rem; z-index: 500;
+  display: none;
+  position: absolute; bottom: 5rem; right: 1rem; z-index: 500;
   background: var(--rojo); border: none; border-radius: 40px; color: #fff;
-  padding: 10px 20px; font-family: var(--font-display);
-  font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; cursor: pointer;
+  padding: 12px 22px; font-family: var(--font-display);
+  font-size: 0.9rem; font-weight: 700; letter-spacing: 1px; cursor: pointer;
   align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(230,57,70,0.5); transition: background 0.2s;
+  box-shadow: 0 4px 20px rgba(230,57,70,0.5);
+  transition: background 0.2s, transform 0.15s;
 }
+.btn-abrir-panel:active { transform: scale(0.97); }
 
 .icono-spot { background: none !important; border: none !important; }
 .icono-usuario { position: relative; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
