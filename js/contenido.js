@@ -65,7 +65,7 @@ const FOTOS = [
     id: 1,
     titulo: "Tailwhip — La Carolina",
     autor: "@rider_quitense",
-    imagen: "https://picsum.photos/seed/bmx1/600/400",
+    imagen: "https://dcbmxstree-arch.github.io/bmx.593/assets/img/spots/carolina/carolina1.jpg",,
     fecha: "2024-11-10"
   },
   {
