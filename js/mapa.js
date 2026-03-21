@@ -1,4 +1,3 @@
-
 // ============================================================
 //  BMX.593 — Lógica del módulo Spots
 //  ============================================================
@@ -475,10 +474,19 @@ function abrirFoto(src, titulo) {
 
 function cerrarFoto() { cerrarCarrusel(); }
 
-function cerrarFoto() {
-  const lb = document.getElementById("lightbox-foto");
-  if (lb) lb.classList.remove("activo");
-  document.body.style.overflow = "";
+// ── Ocultar detalle del spot ─────────────────────────────────
+function ocultarDetalle() {
+  const contenedor = document.getElementById("spot-detalle");
+  if (contenedor) contenedor.classList.remove("visible");
+
+  document.querySelectorAll(".spot-item").forEach(i => i.classList.remove("activo"));
+
+  // Quitar resaltado de marcadores
+  marcadores.forEach(({ spot, marker }) => {
+    if (mapa.hasLayer(marker)) marker.setIcon(crearIcono(spot.tipo, false));
+  });
+  mapa.closePopup();
+  spotActivo = null;
 }
 
 // ════════════════════════════════════════════════════════════
