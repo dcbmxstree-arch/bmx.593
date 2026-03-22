@@ -70,9 +70,9 @@ const FOTOS = [
   },
   {
     id: 2,
-    titulo: "Barspin en el bowl",
+    titulo: "One handed x-up Calzado",
     autor: "@bmxec",
-    imagen: "https://picsum.photos/seed/bmx2/600/400",
+    imagen: ""https://dcbmxstree-arch.github.io/bmx.593/assets/img/spots/carolina/carolina2.jpg",
     fecha: "2024-10-18"
   },
   {
