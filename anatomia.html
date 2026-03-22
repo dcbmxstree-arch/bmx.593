@@ -320,6 +320,15 @@
           </table>
         </div>
       </div>
+      <div class="detalle-seccion" id="seccion-tabla-alt" style="display:none">
+        <div class="seccion-titulo"><i class="fa-solid fa-list-check"></i> <span id="det-tabla-alt-titulo"></span></div>
+        <div style="overflow-x:auto">
+          <table class="medidas-tabla" id="det-tabla-alt">
+            <thead><tr id="det-tabla-alt-headers"></tr></thead>
+            <tbody id="det-tabla-alt-body"></tbody>
+          </table>
+        </div>
+      </div>
       <div class="detalle-seccion">
         <div class="seccion-titulo"><i class="fa-solid fa-tag"></i> Estilo de riding</div>
         <p class="seccion-texto" id="det-estilos-texto">—</p>
@@ -352,151 +361,270 @@
 
 <script>
 const COMPONENTES = [
+  // ── CUADRO ──────────────────────────────────────────────────
   {
-    id:"cuadro",nombre:"Cuadro",nombreEn:"Frame",categoria:"Estructura principal",
-    subtitulo:"El corazón de la BMX. Define el tamaño, estilo de riding y compatibilidad con todas las demás piezas.",
-    descripcion:"El cuadro es la pieza más importante de una BMX. Determina cómo se siente y maneja la bici. Está fabricado principalmente en acero cromoly 4130 (el mejor) o acero Hi-Ten (más económico). La geometría del cuadro — especialmente el toptube — es la medida más crítica para elegir el tamaño correcto según la altura del rider.",
+    id:"cuadro", nombre:"Cuadro", nombreEn:"Frame", categoria:"Estructura principal",
+    subtitulo:"El componente más importante de la BMX. Define el tamaño, estilo de riding y la compatibilidad con todas las demás piezas.",
+    descripcion:"El cuadro determina cómo se siente y maneja la bici. El toptube es la medida más crítica para el tamaño. Un headtube angle más empinado (75°+) hace la bici más reactiva pero twitchy a alta velocidad. El chainstay más corto la hace más maniobrable. El standover bajo facilita los trucos, el alto da estabilidad a velocidad.",
     medidas:[
-      {medida:"Toptube",rango:'20\" – 21.25\"',efecto:'+ largo = más estable'},
-      {medida:"Chainstay",rango:'12.5\" – 14\"',efecto:'+ corto = más ágil'},
-      {medida:"Headtube angle",rango:'74° – 76.25°',efecto:'+ grados = más reactivo'},
-      {medida:"BB Height",rango:'11.5\" – 11.8\"',efecto:'+ alto = más clearance'},
-      {medida:"Standover",rango:'7\" – 10\"',efecto:'Preferencia personal'},
+      {medida:"Toptube",        rango:'20\" – 21.25\"',   efecto:'+ largo = más estable, - largo = más ágil'},
+      {medida:"Headtube angle", rango:'74.5° – 76°',      efecto:'75°+ = reactivo/twitchy · 74.5° = estable'},
+      {medida:"Chainstay",      rango:'12.5\" – 14\"',    efecto:'< 13.5\" = ágil · > 13.5\" = estable'},
+      {medida:"Seat tube angle",rango:'69° – 71°',        efecto:'69° = bici se siente más larga'},
+      {medida:"Standover",      rango:'7\" – 10\"',        efecto:'Bajo = maniobrabilidad · Alto = estabilidad'},
+      {medida:"BB Height",      rango:'11.5\" – 11.8\"',  efecto:'Calculado con rueda estándar 20\"'},
     ],
     tablaEstilos:{
       headers:["Medida","Street","Park","Dirt","Racing"],
       filas:[
-        ["Toptube",    '20.5–21"',   '20–20.75"',  '20.5–21"',  '20–20.5"'],
-        ["Chainstay",  '12.5–13"',   '13–13.5"',   '13–13.5"',  '13.5–14"'],
-        ["BB Height",  '11.6–11.8"', '11.5–11.7"', '11.6"',     '11.5"'],
+        ["Toptube",    '20.5–21"',    '20–20.75"',   '20.5–21"',   '20–20.5"'],
+        ["Chainstay",  '12.5–13"',    '13–13.5"',    '13–13.5"',   '13.5–14"'],
+        ["BB Height",  '11.6–11.8"',  '11.5–11.7"',  '11.6"',      '11.5"'],
       ]
     },
-    estiloTexto:"El toptube varía según estilo de riding:",
-    estilos:[{label:"Street",color:"#f4a261"},{label:"Park",color:"#e63946"},{label:"Dirt",color:"#2ec4b6"},{label:"Flatland",color:"#a8dadc"}],
-    mantenimiento:"Revisa periódicamente las soldaduras buscando microfisuras, especialmente en las uniones del toptube con el headtube y el seattube. Limpia el cuadro después de sesiones en lluvia o tierra para evitar oxidación.",
-  },
-  {
-    id:"rueda-trasera",nombre:"Rueda Trasera",nombreEn:"Rear Wheel",categoria:"Sistema de rodaje",
-    subtitulo:"Incluye hub, rim, radios y neumático. El hub define si usas cassette o freecoaster.",
-    descripcion:"La rueda trasera incluye el hub trasero (cassette o freecoaster), el rim de aluminio, los radios de acero y el neumático. El hub determina si la rueda puede rodar hacia atrás sin que las bielas giren (freecoaster) o no (cassette). La mayoría de riders usan cassette por su menor mantenimiento.",
-    medidas:[
-      {medida:"Diámetro",rango:'20\" (estándar)',efecto:'Tamaño fijo BMX freestyle'},
-      {medida:"Ancho rim",rango:'30 – 42mm',efecto:'+ ancho = más fuerte'},
-      {medida:"Radios",rango:'36 radios',efecto:'Estándar industria'},
-      {medida:"Eje trasero",rango:'14mm (estándar)',efecto:'Compatibilidad dropouts'},
+    tablaAlt:{
+      titulo:"Toptube según estatura del rider",
+      headers:["Estatura","Toptube sugerido"],
+      filas:[
+        ["120 – 160cm", '18\" – 20.25\"'],
+        ["150 – 170cm", '20\" – 20.5\"'],
+        ["165 – 185cm", '20.25\" – 21\"'],
+        ["180cm+",      '20.75\" – 21.5\"'],
+      ]
+    },
+    estiloTexto:"Headtube angle según estilo:",
+    estilos:[
+      {label:"Street · 75°–75.5° (reactivo)",color:"#f4a261"},
+      {label:"Park · 75°–75.5° (equilibrado)",color:"#e63946"},
+      {label:"Dirt · 74.5°–75° (estable)",color:"#2ec4b6"},
+      {label:"Racing · 74°–74.5° (muy estable)",color:"#a8dadc"},
     ],
-    estiloTexto:"El tipo de hub varía según el estilo:",
-    estilos:[{label:"Cassette (Street/Park)",color:"#e63946"},{label:"Freecoaster (Street)",color:"#f4a261"}],
-    mantenimiento:"Revisa la tensión de los radios regularmente. Ajusta los rodamientos del hub si sientes juego lateral. Reemplaza el neumático cuando la banda de rodadura está lisa.",
+    mantenimiento:"Revisa las soldaduras periódicamente buscando microfisuras, especialmente en las uniones del toptube con el headtube y el seattube. Limpia el cuadro después de sesiones en lluvia o tierra para evitar oxidación interior.",
   },
+
+  // ── RUEDA TRASERA ───────────────────────────────────────────
   {
-    id:"rueda-delantera",nombre:"Rueda Delantera",nombreEn:"Front Wheel",categoria:"Sistema de rodaje",
-    subtitulo:"Más simple que la trasera — no tiene tracción. Se enfoca en resistencia y ligereza.",
-    descripcion:"La rueda delantera es estructuralmente similar a la trasera pero sin mecanismo de tracción. El hub delantero puede ser sólido (bolt-on) o con eje hueco. Algunos riders instalan un rotor para el freno delantero en sistemas de giro completo (detangler).",
+    id:"rueda-trasera", nombre:"Rueda Trasera", nombreEn:"Rear Wheel", categoria:"Sistema de rodaje",
+    subtitulo:"La rueda más importante de la BMX. El hub define tu estilo de riding: cassette para tracción directa, freecoaster para ir hacia atrás sin pedalear.",
+    descripcion:"La elección principal es cassette vs freecoaster. El cassette ofrece tracción inmediata y menos mantenimiento — es el estándar para la mayoría de riders. El freecoaster permite rodar hacia atrás sin mover los pedales, ideal para trucos switch y fakie, pero requiere más mantenimiento. Los hub guards protegen el flange y los radios en grinds.",
     medidas:[
-      {medida:"Diámetro",rango:'20\" (estándar)',efecto:'Tamaño fijo BMX freestyle'},
-      {medida:"Ancho rim",rango:'30 – 42mm',efecto:'+ ancho = más fuerte'},
-      {medida:"Eje delantero",rango:'10mm estándar',efecto:'Compatibilidad horquilla'},
-      {medida:"Radios",rango:'36 radios',efecto:'Estándar industria'},
+      {medida:"Diámetro",    rango:'20\" (estándar)',   efecto:'Fijo en BMX freestyle'},
+      {medida:"Ancho rim",   rango:'30 – 42mm',        efecto:'+ ancho = más resistente a impactos'},
+      {medida:"Radios",      rango:'36 radios',        efecto:'Estándar industria BMX'},
+      {medida:"Eje trasero", rango:'14mm (estándar)',  efecto:'Compatibilidad con dropouts del cuadro'},
+    ],
+    tablaAlt:{
+      titulo:"Cassette vs Freecoaster",
+      headers:["Característica","Cassette","Freecoaster"],
+      filas:[
+        ["Tracción",        "Directa e inmediata",    "Directa hacia adelante"],
+        ["Hacia atrás",     "Pedaleo requerido",      "Sin pedalear"],
+        ["Mantenimiento",   "Bajo",                   "Medio-alto"],
+        ["Peso",            "Más liviano",            "Más pesado"],
+        ["Ideal para",      "Todo estilo",            "Street switch/fakie"],
+      ]
+    },
+    estiloTexto:"Hub guards: ¿los necesitas?",
+    estilos:[
+      {label:"Con pegs/grinds → Hub guards sí",color:"#e63946"},
+      {label:"Sin grinds → Hub guards opcionales",color:"#f4a261"},
+      {label:"Freecoaster → Street técnico",color:"#2ec4b6"},
+    ],
+    mantenimiento:"Revisa la tensión de los radios regularmente. Un radio flojo puede causar que la rueda quede 'en ocho'. Ajusta los rodamientos del hub si sientes juego lateral. El freecoaster requiere ajuste del slack periódicamente.",
+  },
+
+  // ── RUEDA DELANTERA ─────────────────────────────────────────
+  {
+    id:"rueda-delantera", nombre:"Rueda Delantera", nombreEn:"Front Wheel", categoria:"Sistema de rodaje",
+    subtitulo:"Más simple que la trasera — sin tracción. El foco está en la resistencia a impactos y la ligereza.",
+    descripcion:"La rueda delantera no tiene mecanismo de tracción. El hub delantero puede ser bolt-on o con eje hueco. Los hub guards delanteros protegen el flange en grinds de nose. El rim más ancho absorbe mejor los impactos de aterrizajes.",
+    medidas:[
+      {medida:"Diámetro",      rango:'20\" (estándar)',  efecto:'Fijo en BMX freestyle'},
+      {medida:"Ancho rim",     rango:'30 – 42mm',       efecto:'+ ancho = más resistente'},
+      {medida:"Eje delantero", rango:'10mm estándar',   efecto:'Compatibilidad con la horquilla'},
+      {medida:"Radios",        rango:'36 radios',       efecto:'Estándar industria'},
     ],
     estiloTexto:"Consideraciones por estilo:",
-    estilos:[{label:"Street",color:"#f4a261"},{label:"Park",color:"#e63946"},{label:"Dirt",color:"#2ec4b6"}],
-    mantenimiento:"Verifica el estado de los rodamientos del hub. Revisa que los radios estén bien tensados y la rueda no esté «ocho». Inspecciona el neumático antes de cada sesión.",
-  },
-  {
-    id:"horquilla",nombre:"Horquilla",nombreEn:"Fork",categoria:"Dirección",
-    subtitulo:"Conecta la rueda delantera con el headtube. Afecta directamente la dirección y el feel del front-end.",
-    descripcion:"La horquilla soporta el impacto de la rueda delantera y define el comportamiento de la dirección. Las mejores son de acero cromoly 4130 con soldaduras reforzadas. El offset (desplazamiento) afecta directamente el trail y la estabilidad.",
-    medidas:[
-      {medida:"Offset",rango:'28 – 35mm',efecto:'+ offset = más estable'},
-      {medida:"Steerer tube",rango:'1\" o 1-1/8\"',efecto:'Compatibilidad headset'},
-      {medida:"Longitud legs",rango:'355 – 375mm',efecto:'Clearance del neumático'},
-      {medida:"Dropout gap",rango:'100mm (estándar)',efecto:'Compatibilidad eje'},
+    estilos:[
+      {label:"Street → rim ancho 36–42mm",color:"#f4a261"},
+      {label:"Park → rim medio 32–36mm",color:"#e63946"},
+      {label:"Dirt → rim resistente 36mm+",color:"#2ec4b6"},
     ],
-    estiloTexto:"Elección de offset según estilo:",
-    estilos:[{label:"Street (menor offset)",color:"#f4a261"},{label:"Park (offset medio)",color:"#e63946"},{label:"Race (mayor offset)",color:"#2ec4b6"}],
-    mantenimiento:"Inspecciona las soldaduras en los dropouts y en la corona. Si recibe impactos laterales fuertes, verifica que no esté doblada. Una horquilla doblada es peligrosa y debe reemplazarse.",
+    mantenimiento:"Verifica el estado de los rodamientos del hub. Revisa que los radios estén bien tensados. Inspecciona el neumático antes de cada sesión — un corte en el flanco puede causar un pinchazo bajo impacto.",
   },
+
+  // ── HORQUILLA ───────────────────────────────────────────────
   {
-    id:"manubrio",nombre:"Manubrio",nombreEn:"Handlebar",categoria:"Control",
-    subtitulo:"Define la postura del rider y el control de la bici. Segunda medida más importante después del toptube.",
-    descripcion:"Los manubrios de BMX son una sola pieza de tubo doblado. Se miden por altura (rise) y ancho. Un manubrio más alto da una postura más erguida, ideal para street. Uno más bajo y angosto es preferido para park y flatland.",
+    id:"horquilla", nombre:"Horquilla", nombreEn:"Fork", categoria:"Dirección",
+    subtitulo:"El offset de la horquilla define el comportamiento del front-end. Es la variable más ignorada y una de las más importantes.",
+    descripcion:"El offset es la distancia del centro del leg al centro del dropout. Un offset menor (18–20mm) hace la bici más corta y reactiva — ideal para nose manuals y barspins. El rango 25–28mm es el más universal. Los 30mm+ son para riders que principalmente ruedan bowls profundos o trails donde se necesita estabilidad en grandes transiciones.",
     medidas:[
-      {medida:"Rise (altura)",rango:'7\" – 10.5\"',efecto:'+ rise = postura más alta'},
-      {medida:"Width (ancho)",rango:'26\" – 30\"',efecto:'+ ancho = más control'},
-      {medida:"Upsweep",rango:'0° – 5°',efecto:'Ángulo hacia arriba'},
-      {medida:"Backsweep",rango:'8° – 13°',efecto:'Ángulo hacia atrás'},
-      {medida:"Clamp diameter",rango:'22.2mm ó 25.4mm',efecto:'Compatibilidad stem'},
+      {medida:"Offset",         rango:'18 – 35mm',       efecto:'Ver tabla de estilos abajo'},
+      {medida:"Steerer tube",   rango:'1\" ó 1-1/8\"',   efecto:'Compatibilidad con headset'},
+      {medida:"Longitud legs",  rango:'355 – 375mm',     efecto:'Clearance del neumático'},
+      {medida:"Dropout gap",    rango:'100mm estándar',  efecto:'Compatibilidad con eje delantero'},
     ],
-    estiloTexto:"Rise recomendado según estilo:",
-    estilos:[{label:'Street 8.5\"-10\"',color:"#f4a261"},{label:'Park 7.5\"-9\"',color:"#e63946"},{label:'Flatland 7\"-8\"',color:"#2ec4b6"}],
-    mantenimiento:"Verifica que el manubrio no tenga grietas en los dobleces. Asegúrate de que el stem esté bien apretado para evitar que el manubrio gire bajo carga.",
+    tablaAlt:{
+      titulo:"Offset según estilo de riding",
+      headers:["Offset","Perfil","Ideal para"],
+      filas:[
+        ['18–20mm', 'Muy reactivo · bici corta · giro rápido',    'Street técnico · nose manuals · barspins'],
+        ['25–28mm', 'Universal · equilibrado · cómodo en todo',   'Street + Park · uso mixto · la mayoría de riders'],
+        ['30mm+',   'Estable · suave · menos twitchy',            'Bowls profundos · trails · dirt de gran escala'],
+      ]
+    },
+    estiloTexto:"Offset recomendado por estilo:",
+    estilos:[
+      {label:"Street técnico → 18–20mm",color:"#f4a261"},
+      {label:"Street/Park mixto → 25–28mm",color:"#e63946"},
+      {label:"Park/Dirt/Trails → 30mm+",color:"#2ec4b6"},
+    ],
+    mantenimiento:"Inspecciona las soldaduras en los dropouts y en la corona después de caídas fuertes. Una horquilla doblada afecta la dirección y es peligrosa — reemplázala inmediatamente si sospechas que está dañada.",
   },
+
+  // ── MANUBRIO ────────────────────────────────────────────────
   {
-    id:"stem",nombre:"Stem",nombreEn:"Stem",categoria:"Dirección",
-    subtitulo:"Conecta el manubrio con el steerer tube de la horquilla. Afina la posición del manubrio.",
-    descripcion:"El stem de BMX puede ser top-load (manubrio encima) o front-load (manubrio al frente). El top-load eleva el manubrio, ideal para riders más altos. El front-load baja el manubrio. La longitud afecta el reach (distancia al manubrio).",
+    id:"manubrio", nombre:"Manubrio", nombreEn:"Handlebar", categoria:"Control",
+    subtitulo:"Define la postura del rider y el control de la bici. El rise y el ancho son las medidas clave.",
+    descripcion:"El rise (altura) determina qué tan erguido va el rider. Barras demasiado bajas generan dolor lumbar. El ancho afecta la estabilidad: más ancho = más estable pero más difícil de maniobrar en el aire. El backsweep permite una posición de manos natural. El upsweep reduce la presión en las muñecas.",
     medidas:[
-      {medida:"Longitud",rango:'48 – 55mm',efecto:'+ largo = manubrio más adelante'},
-      {medida:"Rise (top-load)",rango:'0 – 30mm',efecto:'Eleva el manubrio'},
-      {medida:"Clamp (barra)",rango:'22.2mm ó 25.4mm',efecto:'Compatibilidad manubrio'},
-      {medida:"Steerer clamp",rango:'22.2mm ó 1-1/8\"',efecto:'Compatibilidad horquilla'},
+      {medida:"Rise (altura)",    rango:'7\" – 10.5\"',     efecto:'+ rise = postura más erguida'},
+      {medida:"Width (ancho)",    rango:'26\" – 30\"',      efecto:'+ ancho = más estable, - ágil en el aire'},
+      {medida:"Backsweep",        rango:'8° – 13°',         efecto:'Posición natural de manos'},
+      {medida:"Upsweep",          rango:'1° – 5°',          efecto:'Reduce presión en muñecas'},
+      {medida:"Clamp diameter",   rango:'22.2mm ó 25.4mm', efecto:'Compatibilidad con el stem'},
     ],
-    estiloTexto:"Tipo de stem según preferencia:",
-    estilos:[{label:"Top-load (más popular)",color:"#e63946"},{label:"Front-load (clásico)",color:"#f4a261"}],
-    mantenimiento:"Aprieta los tornillos con el torque correcto (8-10 Nm). Un stem flojo puede hacer que el manubrio gire durante un truco. Inspecciona el stem después de caídas fuertes.",
+    tablaAlt:{
+      titulo:"Rise recomendado por estilo y estatura",
+      headers:["Perfil","Rise","Ancho"],
+      filas:[
+        ['Street',         '8.5\" – 10\"',   '28\" – 29\"'],
+        ['Park',           '7.5\" – 9\"',    '27\" – 28.5\"'],
+        ['Dirt',           '8.5\" – 9.5\"',  '28\" – 29\"'],
+        ['Flatland',       '7\" – 8\"',      '26\" – 27\"'],
+        ['Riders altos',   '9\" – 10.5\"',   '28\" – 30\"'],
+      ]
+    },
+    estiloTexto:"Tipo de construcción:",
+    estilos:[
+      {label:"2 piezas — look clásico",color:"#f4a261"},
+      {label:"4 piezas — look moderno",color:"#e63946"},
+    ],
+    mantenimiento:"Verifica que no haya grietas en los dobleces del tubo. Asegúrate de que el stem esté bien torqueado (8–10 Nm). Un manubrio que gira bajo carga es una señal de stem flojo — apriétalo antes de rodar.",
   },
+
+  // ── STEM ────────────────────────────────────────────────────
   {
-    id:"sillin",nombre:"Sillín",nombreEn:"Seat",categoria:"Contacto",
-    subtitulo:"En BMX freestyle el sillín es más estético que funcional — se usa en trucos como el seat grab.",
-    descripcion:"El sillín de BMX freestyle es delgado y bajo. Va unido al seat post (tija), cuyo diámetro debe coincidir con el seattube del cuadro. El seat post clamp fija la altura.",
+    id:"stem", nombre:"Stem", nombreEn:"Stem", categoria:"Dirección",
+    subtitulo:"Conecta el manubrio con la horquilla. El tipo de carga y el reach afinan la posición del cockpit.",
+    descripcion:"El top-load (barra cargada desde arriba) es el más popular actualmente — eleva el manubrio y da más altura al cockpit. El front-load (barra al frente) es el estilo clásico y baja el manubrio. El reach alarga o acorta efectivamente el toptube: un stem de 53mm hace que la bici se sienta 3mm más larga que uno de 50mm.",
     medidas:[
-      {medida:"Seat post diam.",rango:'25.4mm ó 27.2mm',efecto:'Compatibilidad cuadro'},
-      {medida:"Seat post length",rango:'200 – 350mm',efecto:'Altura ajustable'},
-      {medida:"Clamp diam.",rango:'28.6mm – 35mm',efecto:'Compatibilidad seattube'},
+      {medida:"Reach (longitud)", rango:'48 – 58mm',        efecto:'+ largo = bici se siente más larga'},
+      {medida:"Rise (top-load)",  rango:'0 – 30mm',         efecto:'Eleva el punto del manubrio'},
+      {medida:"Clamp (barra)",    rango:'22.2mm ó 25.4mm', efecto:'Compatibilidad con el manubrio'},
+      {medida:"Steerer clamp",    rango:'22.2mm ó 28.6mm', efecto:'Compatibilidad con la horquilla'},
     ],
-    estiloTexto:"Preferencia por estilo:",
-    estilos:[{label:"Fat seat (Street)",color:"#f4a261"},{label:"Slim seat (Park/Flat)",color:"#e63946"}],
-    mantenimiento:"Asegúrate de que el seat post clamp esté bien apretado. Aplica grasa en el interior del seattube para evitar que el seat post se oxide y quede atascado.",
+    tablaAlt:{
+      titulo:"Reach y tipo según estilo",
+      headers:["Estilo","Tipo","Reach"],
+      filas:[
+        ['Street',    'Top-load',              '50 – 53mm'],
+        ['Park',      'Top-load o Front-load', '48 – 50mm'],
+        ['Dirt',      'Top-load',              '50 – 53mm'],
+        ['Flatland',  'Front-load',            '48mm'],
+      ]
+    },
+    estiloTexto:"Top-load vs Front-load:",
+    estilos:[
+      {label:"Top-load → más altura, estilo moderno",color:"#e63946"},
+      {label:"Front-load → postura más baja, estilo clásico",color:"#f4a261"},
+    ],
+    mantenimiento:"Aprieta los tornillos con torque correcto (8–10 Nm) en patrón cruzado. El aluminio 7075 es más resistente que el 6061. Inspecciona el stem después de caídas fuertes — un stem doblado debe reemplazarse.",
   },
+
+  // ── SILLÍN ──────────────────────────────────────────────────
   {
-    id:"bielas",nombre:"Bielas",nombreEn:"Cranks",categoria:"Transmisión",
-    subtitulo:"Transmiten la potencia del rider a la rueda trasera. Junto con el bottom bracket son el eje de la transmisión.",
-    descripcion:"Las bielas de BMX pueden ser de 3 piezas (las mejores, con eje separado) o de 1 pieza (antiguas, más pesadas). Las de 3 piezas permiten elegir el bottom bracket por separado y son más fáciles de mantener.",
+    id:"sillin", nombre:"Sillín", nombreEn:"Seat", categoria:"Contacto",
+    subtitulo:"En BMX freestyle el sillín es más estético que funcional — se usa en trucos como el seat grab y el decade.",
+    descripcion:"El sillín de BMX freestyle es delgado y bajo. Su función principal en freestyle es dar un punto de agarre para trucos. Va unido al seat post cuyo diámetro debe coincidir exactamente con el seattube del cuadro.",
     medidas:[
-      {medida:"Longitud biela",rango:'165 – 175mm',efecto:'+ largo = más torque'},
-      {medida:"Spindle diam.",rango:'19mm ó 22mm (Mid)',efecto:'Compatibilidad BB'},
-      {medida:"Bolt circle diam.",rango:'104mm (estándar)',efecto:'Compatibilidad plato'},
+      {medida:"Seat post diam.", rango:'25.4mm ó 27.2mm', efecto:'Debe coincidir con el seattube del cuadro'},
+      {medida:"Seat post length",rango:'200 – 350mm',     efecto:'Se corta a la altura deseada'},
+      {medida:"Clamp diam.",     rango:'28.6mm – 35mm',   efecto:'Compatibilidad con el seattube'},
     ],
-    estiloTexto:"Configuración según estilo:",
-    estilos:[{label:"3 piezas (recomendado)",color:"#2ec4b6"},{label:"1 pieza (legacy)",color:"#666"}],
-    mantenimiento:"Verifica que los pernos de los pedales estén bien apretados (pedal izquierdo = rosca inversa). Revisa el juego lateral del bottom bracket — si hay movimiento, ajusta o reemplaza los rodamientos.",
+    estiloTexto:"Estilo de sillín según riding:",
+    estilos:[
+      {label:"Fat seat → Street (más agarre)",color:"#f4a261"},
+      {label:"Slim seat → Park/Flatland (más estético)",color:"#e63946"},
+    ],
+    mantenimiento:"Aplica grasa en el interior del seattube antes de instalar el seat post para evitar que se oxide y quede atascado. Verifica que el seat post clamp esté bien apretado para evitar que el sillín gire.",
   },
+
+  // ── BIELAS ──────────────────────────────────────────────────
   {
-    id:"pedales",nombre:"Pedales",nombreEn:"Pedals",categoria:"Contacto",
-    subtitulo:"El punto de contacto entre el pie y la bici. En BMX se usan pedales planos (platform) casi exclusivamente.",
-    descripcion:"Los pedales de BMX freestyle son planos (platform) con pins para maximizar el agarre. Los hay de plástico (más económicos, más livianos) y de aluminio o magnesio (más resistentes). Recuerda: el pedal izquierdo tiene rosca inversa.",
+    id:"bielas", nombre:"Bielas", nombreEn:"Cranks", categoria:"Transmisión",
+    subtitulo:"La longitud define la velocidad de rotación y la potencia. Las de 3 piezas son el estándar actual en BMX freestyle.",
+    descripcion:"La longitud de las bielas afecta directamente cómo maneja la bici. Las bielas más cortas (160–165mm) acercan los pies entre sí — como cerrar los brazos al girar en una silla — lo que permite rotar más rápido y saltar más alto. Las estándar (170–175mm) son el punto de partida para la mayoría. Las más largas (180mm+) dan más potencia en cada pedaleada, útil en dirt. El cromoly 4130 es el material estándar.",
     medidas:[
-      {medida:"Rosca spindle",rango:'9/16\" (estándar)',efecto:'Universal en BMX'},
-      {medida:"Tamaño plataforma",rango:'100 – 115mm ancho',efecto:'Más grande = más grip'},
-      {medida:"Espesor",rango:'15 – 22mm',efecto:'Más delgado = menos golpes'},
+      {medida:"Longitud",      rango:'160 – 180mm+',      efecto:'Ver tabla de estilos'},
+      {medida:"Spindle diam.", rango:'19mm ó 22mm (Mid)', efecto:'Compatibilidad con bottom bracket'},
+      {medida:"Construcción",  rango:'2 ó 3 piezas',      efecto:'Sin diferencia en el ride'},
+      {medida:"Material",      rango:'Cromoly 4130',       efecto:'Estándar industria — más resistente'},
     ],
-    estiloTexto:"Material según preferencia:",
-    estilos:[{label:"Plástico (precio/peso)",color:"#f4a261"},{label:"Aluminio (durabilidad)",color:"#e63946"},{label:"Magnesio (premium)",color:"#2ec4b6"}],
-    mantenimiento:"Pedal IZQUIERDO tiene rosca INVERSA (se aprieta al revés). Aplica grasa en el spindle antes de instalar. Reemplaza los pins cuando estén desgastados.",
+    tablaAlt:{
+      titulo:"Longitud de bielas según perfil",
+      headers:["Longitud","Perfil","Ideal para"],
+      filas:[
+        ['160–165mm', 'Rotación rápida · saltos más altos · pies juntos', 'Street técnico · Park · spins · bunny hops'],
+        ['170–175mm', 'Estándar · equilibrado · viene en bicicletas completas', 'Todos los estilos · riders promedio'],
+        ['180mm+',    'Más potencia por pedaleada · más recorrido', 'Dirt · riders altos (180cm+) · racing'],
+      ]
+    },
+    estiloTexto:"Recomendación por estilo:",
+    estilos:[
+      {label:"Street/Park → 165–170mm",color:"#f4a261"},
+      {label:"Estándar → 170–175mm",color:"#e63946"},
+      {label:"Dirt/riders altos → 175–180mm",color:"#2ec4b6"},
+    ],
+    mantenimiento:"El pedal IZQUIERDO tiene rosca INVERSA (gira al revés para apretar). Aplica grasa en el spindle del bottom bracket. Verifica el juego lateral del BB regularmente — si hay movimiento, ajusta los rodamientos.",
   },
+
+  // ── PEDALES ─────────────────────────────────────────────────
   {
-    id:"cadena",nombre:"Cadena",nombreEn:"Chain",categoria:"Transmisión",
-    subtitulo:"Transmite la potencia de las bielas al hub trasero. En BMX se usan cadenas 1/8\" de eslabón simple.",
-    descripcion:"La cadena de BMX es de paso 1/2\" × 1/8\" (más gruesa que las de ruta). Las cadenas BMX premium son más resistentes a la rotura. La tensión correcta es crítica — ni muy tensa (daña hub y BB) ni muy floja (se puede salir).",
+    id:"pedales", nombre:"Pedales", nombreEn:"Pedals", categoria:"Contacto",
+    subtitulo:"El punto de contacto entre el pie y la bici. En BMX freestyle se usan pedales planos (platform) con pins de agarre.",
+    descripcion:"Los pedales planos con pins son el estándar en BMX freestyle. Los de plástico son más económicos y más livianos pero se desgastan más rápido. Los de aluminio son más duraderos. Los de magnesio son la opción premium — livianos y resistentes. Recuerda siempre: el pedal izquierdo tiene rosca inversa.",
     medidas:[
-      {medida:"Paso",rango:'1/2\" × 1/8\"',efecto:'Estándar BMX freestyle'},
-      {medida:"Links (eslabones)",rango:'96 – 112 links',efecto:'Se corta al largo necesario'},
-      {medida:"Tensión",rango:'6 – 10mm de juego',efecto:'Ni muy tensa ni floja'},
+      {medida:"Rosca spindle",      rango:'9/16\" (estándar)', efecto:'Universal en BMX freestyle'},
+      {medida:"Tamaño plataforma",  rango:'100 – 115mm',      efecto:'+ grande = más superficie de agarre'},
+      {medida:"Espesor",            rango:'15 – 22mm',         efecto:'Más delgado = menos golpes en trucos'},
     ],
-    estiloTexto:"Consideraciones:",
-    estilos:[{label:"Cadena estándar",color:"#666"},{label:"Cadena reforzada (recomendada)",color:"#e63946"},{label:"Cadena de color",color:"#f4a261"}],
-    mantenimiento:"Lubrica la cadena regularmente. Revisa la tensión antes de cada sesión. Una cadena estirada debe reemplazarse — puede saltarse del plato en el peor momento.",
+    estiloTexto:"Material según necesidad:",
+    estilos:[
+      {label:"Plástico → peso liviano, bajo costo",color:"#f4a261"},
+      {label:"Aluminio → durabilidad y grip",color:"#e63946"},
+      {label:"Magnesio → liviano y resistente (premium)",color:"#2ec4b6"},
+    ],
+    mantenimiento:"⚠️ Pedal IZQUIERDO = rosca INVERSA. Para quitar: gira en sentido horario. Para instalar: gira en sentido antihorario. Aplica grasa en el spindle. Reemplaza los pins cuando estén desgastados — afectan directamente la seguridad.",
+  },
+
+  // ── CADENA ──────────────────────────────────────────────────
+  {
+    id:"cadena", nombre:"Cadena", nombreEn:"Chain", categoria:"Transmisión",
+    subtitulo:"Transmite la potencia de las bielas al hub. En BMX se usa cadena 1/8\" de paso único — más gruesa que las de bicicletas con cambios.",
+    descripcion:"La cadena de BMX es de paso 1/2\" × 1/8\" — significativamente más gruesa que las de ruta o MTB. Las cadenas premium son de cromoly tratado térmicamente para mayor resistencia. La tensión correcta es crítica: demasiado tensa daña el hub y el bottom bracket; demasiado floja se puede salir del plato. El grosor 3/32\" es solo para bicicletas con cambios — no aplica en BMX freestyle.",
+    medidas:[
+      {medida:"Paso",            rango:'1/2\" × 1/8\"',   efecto:'Estándar BMX freestyle — no usar 3/32\"'},
+      {medida:"Links",           rango:'96 – 112 links',  efecto:'Se corta al largo necesario'},
+      {medida:"Tensión",         rango:'6 – 10mm de juego',efecto:'Ni muy tensa ni muy floja'},
+    ],
+    estiloTexto:"Elección de cadena:",
+    estilos:[
+      {label:"Cadena reforzada → más seguridad (recomendada)",color:"#e63946"},
+      {label:"Cadena estándar → uso normal",color:"#f4a261"},
+      {label:"Cadena de color → personalización",color:"#2ec4b6"},
+    ],
+    mantenimiento:"Lubrica la cadena regularmente con lubricante específico para cadenas. Revisa la tensión antes de cada sesión. Una cadena estirada debe reemplazarse — puede saltarse del plato en el momento más inoportuno.",
   },
 ];
 
@@ -543,23 +671,19 @@ function seleccionar(id) {
     `<tr><td>${m.medida}</td><td>${m.rango}</td><td>${m.efecto}</td></tr>`
   ).join("");
 
-  // Tabla por estilo de riding (solo para componentes que la tienen)
-  const seccionTabla = document.getElementById("seccion-tabla-estilos");
-  if (comp.tablaEstilos) {
-    const colores = { Street:"#f4a261", Park:"#e63946", Dirt:"#2ec4b6", Racing:"#a8dadc" };
-    document.getElementById("det-tabla-headers").innerHTML =
-      comp.tablaEstilos.headers.map((h, i) =>
-        i === 0
-          ? `<th>${h}</th>`
-          : `<th style="color:${colores[h] || 'var(--gris-200)'}">${h}</th>`
+  // Tabla alt (tabla secundaria específica del componente)
+  const seccionAlt = document.getElementById("seccion-tabla-alt");
+  if (comp.tablaAlt) {
+    document.getElementById("det-tabla-alt-titulo").textContent = comp.tablaAlt.titulo;
+    document.getElementById("det-tabla-alt-headers").innerHTML =
+      comp.tablaAlt.headers.map(h => `<th>${h}</th>`).join("");
+    document.getElementById("det-tabla-alt-body").innerHTML =
+      comp.tablaAlt.filas.map(fila =>
+        `<tr>${fila.map(celda => `<td>${celda}</td>`).join("")}</tr>`
       ).join("");
-    document.getElementById("det-tabla-body").innerHTML =
-      comp.tablaEstilos.filas.map(fila =>
-        `<tr>${fila.map((celda, i) => `<td>${celda}</td>`).join("")}</tr>`
-      ).join("");
-    seccionTabla.style.display = "block";
+    seccionAlt.style.display = "block";
   } else {
-    seccionTabla.style.display = "none";
+    seccionAlt.style.display = "none";
   }
 
   document.getElementById("det-estilos-texto").textContent = comp.estiloTexto;
