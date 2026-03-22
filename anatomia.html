@@ -253,6 +253,15 @@
           <tbody id="det-medidas"></tbody>
         </table>
       </div>
+      <div class="detalle-seccion" id="seccion-tabla-estilos" style="display:none">
+        <div class="seccion-titulo"><i class="fa-solid fa-table"></i> Medidas por estilo de riding</div>
+        <div style="overflow-x:auto">
+          <table class="medidas-tabla" id="det-tabla-estilos">
+            <thead><tr id="det-tabla-headers"></tr></thead>
+            <tbody id="det-tabla-body"></tbody>
+          </table>
+        </div>
+      </div>
       <div class="detalle-seccion">
         <div class="seccion-titulo"><i class="fa-solid fa-tag"></i> Estilo de riding</div>
         <p class="seccion-texto" id="det-estilos-texto">—</p>
@@ -296,6 +305,14 @@ const COMPONENTES = [
       {medida:"BB Height",rango:'11.5\" – 11.8\"',efecto:'+ alto = más clearance'},
       {medida:"Standover",rango:'7\" – 10\"',efecto:'Preferencia personal'},
     ],
+    tablaEstilos:{
+      headers:["Medida","Street","Park","Dirt","Racing"],
+      filas:[
+        ["Toptube",    '20.5–21"',   '20–20.75"',  '20.5–21"',  '20–20.5"'],
+        ["Chainstay",  '12.5–13"',   '13–13.5"',   '13–13.5"',  '13.5–14"'],
+        ["BB Height",  '11.6–11.8"', '11.5–11.7"', '11.6"',     '11.5"'],
+      ]
+    },
     estiloTexto:"El toptube varía según estilo de riding:",
     estilos:[{label:"Street",color:"#f4a261"},{label:"Park",color:"#e63946"},{label:"Dirt",color:"#2ec4b6"},{label:"Flatland",color:"#a8dadc"}],
     mantenimiento:"Revisa periódicamente las soldaduras buscando microfisuras, especialmente en las uniones del toptube con el headtube y el seattube. Limpia el cuadro después de sesiones en lluvia o tierra para evitar oxidación.",
@@ -467,6 +484,25 @@ function seleccionar(id) {
   document.getElementById("det-medidas").innerHTML = comp.medidas.map(m =>
     `<tr><td>${m.medida}</td><td>${m.rango}</td><td>${m.efecto}</td></tr>`
   ).join("");
+
+  // Tabla por estilo de riding (solo para componentes que la tienen)
+  const seccionTabla = document.getElementById("seccion-tabla-estilos");
+  if (comp.tablaEstilos) {
+    const colores = { Street:"#f4a261", Park:"#e63946", Dirt:"#2ec4b6", Racing:"#a8dadc" };
+    document.getElementById("det-tabla-headers").innerHTML =
+      comp.tablaEstilos.headers.map((h, i) =>
+        i === 0
+          ? `<th>${h}</th>`
+          : `<th style="color:${colores[h] || 'var(--gris-200)'}">${h}</th>`
+      ).join("");
+    document.getElementById("det-tabla-body").innerHTML =
+      comp.tablaEstilos.filas.map(fila =>
+        `<tr>${fila.map((celda, i) => `<td>${celda}</td>`).join("")}</tr>`
+      ).join("");
+    seccionTabla.style.display = "block";
+  } else {
+    seccionTabla.style.display = "none";
+  }
 
   document.getElementById("det-estilos-texto").textContent = comp.estiloTexto;
   document.getElementById("det-estilos-tags").innerHTML = comp.estilos.map(e =>
