@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMX.593 — Anatomía BMX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --rojo:#e63946;--negro:#0a0a0a;--gris-900:#111;--gris-800:#1a1a1a;
+      --gris-700:#242424;--gris-600:#333;--gris-400:#666;--gris-200:#aaa;
+      --blanco:#f0ece4;--teal:#2ec4b6;--naranja:#f4a261;
+      --font-display:'Barlow Condensed',sans-serif;--font-body:'DM Sans',sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--negro);color:var(--blanco);font-family:var(--font-body);min-height:100vh;}
+
+    .anatomy-header{padding:2rem 2rem 1rem;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);}
+    .anatomy-header h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;text-transform:uppercase;letter-spacing:2px;}
+    .anatomy-header h1 span{color:var(--rojo);}
+    .anatomy-header p{font-size:0.88rem;color:var(--gris-400);margin-top:6px;}
+
+    .anatomy-layout{display:grid;grid-template-columns:1fr 380px;min-height:calc(100vh - 110px);}
+
+    /* Diagrama */
+    .diagrama-wrap{display:flex;align-items:center;justify-content:center;padding:2rem;background:var(--gris-900);}
+    .svg-container{width:100%;max-width:620px;}
+    .diagrama-hint{text-align:center;font-size:0.75rem;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:6px;}
+    .diagrama-hint i{color:var(--rojo);}
+    #bmx-svg{width:100%;height:auto;display:block;}
+
+    /* Zonas clicables SVG */
+    .zona-click{cursor:pointer;}
+    .zona-click circle{fill:rgba(230,57,70,0);stroke:rgba(230,57,70,0);stroke-width:2.5;transition:fill 0.25s,stroke 0.25s;}
+    .zona-click:hover circle,.zona-click.activo circle{fill:rgba(230,57,70,0.15);stroke:rgba(230,57,70,0.85);}
+
+    /* Etiquetas SVG */
+    .etiqueta-grupo text{font-family:var(--font-display);font-size:13px;font-weight:700;fill:var(--blanco);cursor:pointer;transition:fill 0.2s;}
+    .etiqueta-grupo:hover text,.etiqueta-grupo.activo text{fill:var(--rojo);}
+    .etiqueta-grupo line{stroke:rgba(255,255,255,0.3);stroke-width:1.5;stroke-dasharray:4 3;transition:stroke 0.2s;}
+    .etiqueta-grupo:hover line,.etiqueta-grupo.activo line{stroke:var(--rojo);}
+    .punto-etiqueta{fill:rgba(255,255,255,0.5);transition:fill 0.2s;}
+    .etiqueta-grupo:hover .punto-etiqueta,.etiqueta-grupo.activo .punto-etiqueta{fill:var(--rojo);}
+
+    /* Panel detalle */
+    .detalle-panel{background:var(--gris-800);border-left:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;overflow-y:auto;}
+    .detalle-panel::-webkit-scrollbar{width:4px;}
+    .detalle-panel::-webkit-scrollbar-thumb{background:var(--gris-600);border-radius:2px;}
+
+    .detalle-vacio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;color:var(--gris-400);gap:1rem;}
+    .detalle-vacio i{font-size:3rem;opacity:0.2;}
+    .detalle-vacio h3{font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--gris-200);}
+    .detalle-vacio p{font-size:0.82rem;line-height:1.6;}
+
+    #detalle-contenido{display:none;flex-direction:column;}
+    #detalle-contenido.visible{display:flex;}
+
+    .detalle-top{padding:1.5rem 1.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+    .detalle-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:0.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:4px;background:var(--rojo);color:#fff;margin-bottom:10px;}
+    .detalle-nombre{font-family:var(--font-display);font-size:1.8rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;line-height:1;margin-bottom:6px;}
+    .detalle-subtitulo{font-size:0.8rem;color:var(--gris-400);line-height:1.5;}
+
+    .detalle-seccion{padding:1.2rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.05);}
+    .seccion-titulo{font-family:var(--font-display);font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--rojo);margin-bottom:0.75rem;display:flex;align-items:center;gap:6px;}
+    .seccion-texto{font-size:0.82rem;color:var(--gris-200);line-height:1.7;}
+
+    .medidas-tabla{width:100%;border-collapse:collapse;font-size:0.78rem;margin-top:0.5rem;}
+    .medidas-tabla th{font-family:var(--font-display);font-size:0.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gris-400);text-align:left;padding:6px 8px;border-bottom:1px solid var(--gris-700);}
+    .medidas-tabla td{padding:7px 8px;color:var(--gris-200);border-bottom:1px solid rgba(255,255,255,0.04);}
+    .medidas-tabla td:first-child{color:var(--blanco);font-weight:600;}
+    .medidas-tabla tr:hover td{background:rgba(255,255,255,0.03);}
+
+    .estilo-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:0.5rem;}
+    .estilo-tag{font-family:var(--font-display);font-size:0.68rem;font-weight:700;letter-spacing:1px;padding:3px 9px;border-radius:4px;color:#fff;}
+
+    .mantenimiento-box{background:rgba(46,196,182,0.08);border:1px solid rgba(46,196,182,0.2);border-radius:8px;padding:12px 14px;font-size:0.78rem;color:var(--gris-200);line-height:1.6;display:flex;gap:10px;align-items:flex-start;margin-top:0.5rem;}
+    .mantenimiento-box i{color:var(--teal);font-size:0.9rem;margin-top:2px;flex-shrink:0;}
+
+    .detalle-nav{padding:1rem 1.5rem;display:flex;justify-content:space-between;gap:8px;border-top:1px solid rgba(255,255,255,0.06);margin-top:auto;}
+    .nav-btn{font-family:var(--font-display);font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 14px;border-radius:6px;border:1px solid var(--gris-600);background:transparent;color:var(--gris-200);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+    .nav-btn:hover{border-color:var(--blanco);color:var(--blanco);}
+    .nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
+
+    .componentes-lista{padding:1.2rem;border-top:1px solid rgba(255,255,255,0.06);}
+    .componentes-lista p{font-size:0.72rem;color:var(--gris-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:0.75rem;font-family:var(--font-display);}
+    .comp-chips{display:flex;flex-wrap:wrap;gap:6px;}
+    .comp-chip{font-family:var(--font-display);font-size:0.72rem;font-weight:700;letter-spacing:0.5px;padding:5px 10px;border-radius:20px;border:1px solid var(--gris-600);background:transparent;color:var(--gris-200);cursor:pointer;transition:all 0.2s;}
+    .comp-chip:hover{border-color:var(--rojo);color:var(--blanco);}
+    .comp-chip.activo{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+
+    @media(max-width:900px){
+      .anatomy-layout{grid-template-columns:1fr;}
+      .detalle-panel{border-left:none;border-top:1px solid rgba(255,255,255,0.07);max-height:60vh;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="anatomy-header">
+  <h1>BMX <span>Anatomy</span></h1>
+  <p>Haz clic en cualquier parte de la bici para ver sus especificaciones técnicas</p>
+</div>
+
+<div class="anatomy-layout">
+
+  <!-- DIAGRAMA -->
+  <div class="diagrama-wrap">
+    <div class="svg-container">
+      <div class="diagrama-hint">
+        <i class="fa-solid fa-arrow-pointer"></i>
+        Toca cualquier componente para ver sus detalles técnicos
+      </div>
+
+      <svg id="bmx-svg" viewBox="0 0 557 430" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- Imagen de fondo — sube bmx_bike.png a assets/img/ -->
+        <image href="assets/img/bmx_bike.png" x="0" y="0" width="557" height="430"/>
+
+        <!-- RUEDA TRASERA -->
+        <g class="zona-click" id="zona-rueda-trasera" onclick="seleccionar('rueda-trasera')">
+          <circle cx="115" cy="295" r="92"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-rueda-trasera" onclick="seleccionar('rueda-trasera')">
+          <line x1="50" y1="188" x2="90" y2="222"/>
+          <circle class="punto-etiqueta" cx="90" cy="222" r="3"/>
+          <text x="2" y="183">Rueda</text>
+          <text x="2" y="198">Trasera</text>
+        </g>
+
+        <!-- RUEDA DELANTERA -->
+        <g class="zona-click" id="zona-rueda-delantera" onclick="seleccionar('rueda-delantera')">
+          <circle cx="438" cy="298" r="92"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-rueda-delantera" onclick="seleccionar('rueda-delantera')">
+          <line x1="516" y1="188" x2="476" y2="222"/>
+          <circle class="punto-etiqueta" cx="476" cy="222" r="3"/>
+          <text x="488" y="183">Rueda</text>
+          <text x="478" y="198">Delantera</text>
+        </g>
+
+        <!-- CUADRO -->
+        <g class="zona-click" id="zona-cuadro" onclick="seleccionar('cuadro')">
+          <circle cx="268" cy="240" r="52"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-cuadro" onclick="seleccionar('cuadro')">
+          <line x1="228" y1="138" x2="255" y2="198"/>
+          <circle class="punto-etiqueta" cx="255" cy="198" r="3"/>
+          <text x="188" y="133">Cuadro</text>
+          <text x="195" y="148">(Frame)</text>
+        </g>
+
+        <!-- HORQUILLA -->
+        <g class="zona-click" id="zona-horquilla" onclick="seleccionar('horquilla')">
+          <circle cx="408" cy="230" r="32"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-horquilla" onclick="seleccionar('horquilla')">
+          <line x1="492" y1="228" x2="442" y2="228"/>
+          <circle class="punto-etiqueta" cx="442" cy="228" r="3"/>
+          <text x="490" y="225">Horquilla</text>
+        </g>
+
+        <!-- MANUBRIO -->
+        <g class="zona-click" id="zona-manubrio" onclick="seleccionar('manubrio')">
+          <circle cx="432" cy="88" r="32"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-manubrio" onclick="seleccionar('manubrio')">
+          <line x1="510" y1="62" x2="465" y2="82"/>
+          <circle class="punto-etiqueta" cx="465" cy="82" r="3"/>
+          <text x="505" y="58">Manubrio</text>
+        </g>
+
+        <!-- STEM -->
+        <g class="zona-click" id="zona-stem" onclick="seleccionar('stem')">
+          <circle cx="418" cy="148" r="20"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-stem" onclick="seleccionar('stem')">
+          <line x1="510" y1="118" x2="438" y2="142"/>
+          <circle class="punto-etiqueta" cx="438" cy="142" r="3"/>
+          <text x="506" y="115">Stem</text>
+        </g>
+
+        <!-- SILLÍN -->
+        <g class="zona-click" id="zona-sillin" onclick="seleccionar('sillin')">
+          <circle cx="196" cy="160" r="26"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-sillin" onclick="seleccionar('sillin')">
+          <line x1="148" y1="115" x2="185" y2="148"/>
+          <circle class="punto-etiqueta" cx="185" cy="148" r="3"/>
+          <text x="110" y="112">Sillín</text>
+        </g>
+
+        <!-- BIELAS -->
+        <g class="zona-click" id="zona-bielas" onclick="seleccionar('bielas')">
+          <circle cx="252" cy="308" r="28"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-bielas" onclick="seleccionar('bielas')">
+          <line x1="192" y1="395" x2="242" y2="332"/>
+          <circle class="punto-etiqueta" cx="242" cy="332" r="3"/>
+          <text x="158" y="403">Bielas</text>
+          <text x="152" y="417">(Cranks)</text>
+        </g>
+
+        <!-- PEDALES -->
+        <g class="zona-click" id="zona-pedales" onclick="seleccionar('pedales')">
+          <circle cx="293" cy="342" r="18"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-pedales" onclick="seleccionar('pedales')">
+          <line x1="342" y1="405" x2="303" y2="356"/>
+          <circle class="punto-etiqueta" cx="303" cy="356" r="3"/>
+          <text x="332" y="418">Pedales</text>
+        </g>
+
+        <!-- CADENA -->
+        <g class="zona-click" id="zona-cadena" onclick="seleccionar('cadena')">
+          <circle cx="183" cy="318" r="18"/>
+        </g>
+        <g class="etiqueta-grupo" id="label-cadena" onclick="seleccionar('cadena')">
+          <line x1="82" y1="378" x2="172" y2="328"/>
+          <circle class="punto-etiqueta" cx="172" cy="328" r="3"/>
+          <text x="45" y="390">Cadena</text>
+        </g>
+
+      </svg>
+    </div>
+  </div>
+
+  <!-- PANEL DETALLE -->
+  <aside class="detalle-panel" id="detalle-panel">
+
+    <div class="detalle-vacio" id="detalle-vacio">
+      <i class="fa-solid fa-bicycle"></i>
+      <h3>Selecciona un componente</h3>
+      <p>Haz clic en cualquier parte de la bici para ver sus especificaciones técnicas, medidas y consejos de selección.</p>
+    </div>
+
+    <div id="detalle-contenido">
+      <div class="detalle-top">
+        <div class="detalle-badge"><i class="fa-solid fa-wrench"></i><span id="det-categoria">—</span></div>
+        <h2 class="detalle-nombre" id="det-nombre">—</h2>
+        <p class="detalle-subtitulo" id="det-subtitulo">—</p>
+      </div>
+      <div class="detalle-seccion">
+        <div class="seccion-titulo"><i class="fa-solid fa-circle-info"></i> Descripción</div>
+        <p class="seccion-texto" id="det-descripcion">—</p>
+      </div>
+      <div class="detalle-seccion">
+        <div class="seccion-titulo"><i class="fa-solid fa-ruler"></i> Medidas clave</div>
+        <table class="medidas-tabla">
+          <thead><tr><th>Medida</th><th>Rango típico</th><th>Efecto</th></tr></thead>
+          <tbody id="det-medidas"></tbody>
+        </table>
+      </div>
+      <div class="detalle-seccion">
+        <div class="seccion-titulo"><i class="fa-solid fa-tag"></i> Estilo de riding</div>
+        <p class="seccion-texto" id="det-estilos-texto">—</p>
+        <div class="estilo-tags" id="det-estilos-tags"></div>
+      </div>
+      <div class="detalle-seccion">
+        <div class="seccion-titulo"><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento</div>
+        <div class="mantenimiento-box">
+          <i class="fa-solid fa-lightbulb"></i>
+          <span id="det-mantenimiento">—</span>
+        </div>
+      </div>
+      <div class="detalle-nav">
+        <button class="nav-btn" id="btn-anterior" onclick="navegarComponente(-1)">
+          <i class="fa-solid fa-arrow-left"></i> Anterior
+        </button>
+        <button class="nav-btn" id="btn-siguiente" onclick="navegarComponente(1)">
+          Siguiente <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="componentes-lista">
+      <p><i class="fa-solid fa-grip"></i> Navegación rápida</p>
+      <div class="comp-chips" id="comp-chips"></div>
+    </div>
+
+  </aside>
+</div>
+
+<script>
+const COMPONENTES = [
+  {
+    id:"cuadro",nombre:"Cuadro",nombreEn:"Frame",categoria:"Estructura principal",
+    subtitulo:"El corazón de la BMX. Define el tamaño, estilo de riding y compatibilidad con todas las demás piezas.",
+    descripcion:"El cuadro es la pieza más importante de una BMX. Determina cómo se siente y maneja la bici. Está fabricado principalmente en acero cromoly 4130 (el mejor) o acero Hi-Ten (más económico). La geometría del cuadro — especialmente el toptube — es la medida más crítica para elegir el tamaño correcto según la altura del rider.",
+    medidas:[
+      {medida:"Toptube",rango:'20\" – 21.25\"',efecto:'+ largo = más estable'},
+      {medida:"Chainstay",rango:'12.5\" – 14\"',efecto:'+ corto = más ágil'},
+      {medida:"Headtube angle",rango:'74° – 76.25°',efecto:'+ grados = más reactivo'},
+      {medida:"BB Height",rango:'11.5\" – 11.8\"',efecto:'+ alto = más clearance'},
+      {medida:"Standover",rango:'7\" – 10\"',efecto:'Preferencia personal'},
+    ],
+    estiloTexto:"El toptube varía según estilo de riding:",
+    estilos:[{label:"Street",color:"#f4a261"},{label:"Park",color:"#e63946"},{label:"Dirt",color:"#2ec4b6"},{label:"Flatland",color:"#a8dadc"}],
+    mantenimiento:"Revisa periódicamente las soldaduras buscando microfisuras, especialmente en las uniones del toptube con el headtube y el seattube. Limpia el cuadro después de sesiones en lluvia o tierra para evitar oxidación.",
+  },
+  {
+    id:"rueda-trasera",nombre:"Rueda Trasera",nombreEn:"Rear Wheel",categoria:"Sistema de rodaje",
+    subtitulo:"Incluye hub, rim, radios y neumático. El hub define si usas cassette o freecoaster.",
+    descripcion:"La rueda trasera incluye el hub trasero (cassette o freecoaster), el rim de aluminio, los radios de acero y el neumático. El hub determina si la rueda puede rodar hacia atrás sin que las bielas giren (freecoaster) o no (cassette). La mayoría de riders usan cassette por su menor mantenimiento.",
+    medidas:[
+      {medida:"Diámetro",rango:'20\" (estándar)',efecto:'Tamaño fijo BMX freestyle'},
+      {medida:"Ancho rim",rango:'30 – 42mm',efecto:'+ ancho = más fuerte'},
+      {medida:"Radios",rango:'36 radios',efecto:'Estándar industria'},
+      {medida:"Eje trasero",rango:'14mm (estándar)',efecto:'Compatibilidad dropouts'},
+    ],
+    estiloTexto:"El tipo de hub varía según el estilo:",
+    estilos:[{label:"Cassette (Street/Park)",color:"#e63946"},{label:"Freecoaster (Street)",color:"#f4a261"}],
+    mantenimiento:"Revisa la tensión de los radios regularmente. Ajusta los rodamientos del hub si sientes juego lateral. Reemplaza el neumático cuando la banda de rodadura está lisa.",
+  },
+  {
+    id:"rueda-delantera",nombre:"Rueda Delantera",nombreEn:"Front Wheel",categoria:"Sistema de rodaje",
+    subtitulo:"Más simple que la trasera — no tiene tracción. Se enfoca en resistencia y ligereza.",
+    descripcion:"La rueda delantera es estructuralmente similar a la trasera pero sin mecanismo de tracción. El hub delantero puede ser sólido (bolt-on) o con eje hueco. Algunos riders instalan un rotor para el freno delantero en sistemas de giro completo (detangler).",
+    medidas:[
+      {medida:"Diámetro",rango:'20\" (estándar)',efecto:'Tamaño fijo BMX freestyle'},
+      {medida:"Ancho rim",rango:'30 – 42mm',efecto:'+ ancho = más fuerte'},
+      {medida:"Eje delantero",rango:'10mm estándar',efecto:'Compatibilidad horquilla'},
+      {medida:"Radios",rango:'36 radios',efecto:'Estándar industria'},
+    ],
+    estiloTexto:"Consideraciones por estilo:",
+    estilos:[{label:"Street",color:"#f4a261"},{label:"Park",color:"#e63946"},{label:"Dirt",color:"#2ec4b6"}],
+    mantenimiento:"Verifica el estado de los rodamientos del hub. Revisa que los radios estén bien tensados y la rueda no esté «ocho». Inspecciona el neumático antes de cada sesión.",
+  },
+  {
+    id:"horquilla",nombre:"Horquilla",nombreEn:"Fork",categoria:"Dirección",
+    subtitulo:"Conecta la rueda delantera con el headtube. Afecta directamente la dirección y el feel del front-end.",
+    descripcion:"La horquilla soporta el impacto de la rueda delantera y define el comportamiento de la dirección. Las mejores son de acero cromoly 4130 con soldaduras reforzadas. El offset (desplazamiento) afecta directamente el trail y la estabilidad.",
+    medidas:[
+      {medida:"Offset",rango:'28 – 35mm',efecto:'+ offset = más estable'},
+      {medida:"Steerer tube",rango:'1\" o 1-1/8\"',efecto:'Compatibilidad headset'},
+      {medida:"Longitud legs",rango:'355 – 375mm',efecto:'Clearance del neumático'},
+      {medida:"Dropout gap",rango:'100mm (estándar)',efecto:'Compatibilidad eje'},
+    ],
+    estiloTexto:"Elección de offset según estilo:",
+    estilos:[{label:"Street (menor offset)",color:"#f4a261"},{label:"Park (offset medio)",color:"#e63946"},{label:"Race (mayor offset)",color:"#2ec4b6"}],
+    mantenimiento:"Inspecciona las soldaduras en los dropouts y en la corona. Si recibe impactos laterales fuertes, verifica que no esté doblada. Una horquilla doblada es peligrosa y debe reemplazarse.",
+  },
+  {
+    id:"manubrio",nombre:"Manubrio",nombreEn:"Handlebar",categoria:"Control",
+    subtitulo:"Define la postura del rider y el control de la bici. Segunda medida más importante después del toptube.",
+    descripcion:"Los manubrios de BMX son una sola pieza de tubo doblado. Se miden por altura (rise) y ancho. Un manubrio más alto da una postura más erguida, ideal para street. Uno más bajo y angosto es preferido para park y flatland.",
+    medidas:[
+      {medida:"Rise (altura)",rango:'7\" – 10.5\"',efecto:'+ rise = postura más alta'},
+      {medida:"Width (ancho)",rango:'26\" – 30\"',efecto:'+ ancho = más control'},
+      {medida:"Upsweep",rango:'0° – 5°',efecto:'Ángulo hacia arriba'},
+      {medida:"Backsweep",rango:'8° – 13°',efecto:'Ángulo hacia atrás'},
+      {medida:"Clamp diameter",rango:'22.2mm ó 25.4mm',efecto:'Compatibilidad stem'},
+    ],
+    estiloTexto:"Rise recomendado según estilo:",
+    estilos:[{label:'Street 8.5\"-10\"',color:"#f4a261"},{label:'Park 7.5\"-9\"',color:"#e63946"},{label:'Flatland 7\"-8\"',color:"#2ec4b6"}],
+    mantenimiento:"Verifica que el manubrio no tenga grietas en los dobleces. Asegúrate de que el stem esté bien apretado para evitar que el manubrio gire bajo carga.",
+  },
+  {
+    id:"stem",nombre:"Stem",nombreEn:"Stem",categoria:"Dirección",
+    subtitulo:"Conecta el manubrio con el steerer tube de la horquilla. Afina la posición del manubrio.",
+    descripcion:"El stem de BMX puede ser top-load (manubrio encima) o front-load (manubrio al frente). El top-load eleva el manubrio, ideal para riders más altos. El front-load baja el manubrio. La longitud afecta el reach (distancia al manubrio).",
+    medidas:[
+      {medida:"Longitud",rango:'48 – 55mm',efecto:'+ largo = manubrio más adelante'},
+      {medida:"Rise (top-load)",rango:'0 – 30mm',efecto:'Eleva el manubrio'},
+      {medida:"Clamp (barra)",rango:'22.2mm ó 25.4mm',efecto:'Compatibilidad manubrio'},
+      {medida:"Steerer clamp",rango:'22.2mm ó 1-1/8\"',efecto:'Compatibilidad horquilla'},
+    ],
+    estiloTexto:"Tipo de stem según preferencia:",
+    estilos:[{label:"Top-load (más popular)",color:"#e63946"},{label:"Front-load (clásico)",color:"#f4a261"}],
+    mantenimiento:"Aprieta los tornillos con el torque correcto (8-10 Nm). Un stem flojo puede hacer que el manubrio gire durante un truco. Inspecciona el stem después de caídas fuertes.",
+  },
+  {
+    id:"sillin",nombre:"Sillín",nombreEn:"Seat",categoria:"Contacto",
+    subtitulo:"En BMX freestyle el sillín es más estético que funcional — se usa en trucos como el seat grab.",
+    descripcion:"El sillín de BMX freestyle es delgado y bajo. Va unido al seat post (tija), cuyo diámetro debe coincidir con el seattube del cuadro. El seat post clamp fija la altura.",
+    medidas:[
+      {medida:"Seat post diam.",rango:'25.4mm ó 27.2mm',efecto:'Compatibilidad cuadro'},
+      {medida:"Seat post length",rango:'200 – 350mm',efecto:'Altura ajustable'},
+      {medida:"Clamp diam.",rango:'28.6mm – 35mm',efecto:'Compatibilidad seattube'},
+    ],
+    estiloTexto:"Preferencia por estilo:",
+    estilos:[{label:"Fat seat (Street)",color:"#f4a261"},{label:"Slim seat (Park/Flat)",color:"#e63946"}],
+    mantenimiento:"Asegúrate de que el seat post clamp esté bien apretado. Aplica grasa en el interior del seattube para evitar que el seat post se oxide y quede atascado.",
+  },
+  {
+    id:"bielas",nombre:"Bielas",nombreEn:"Cranks",categoria:"Transmisión",
+    subtitulo:"Transmiten la potencia del rider a la rueda trasera. Junto con el bottom bracket son el eje de la transmisión.",
+    descripcion:"Las bielas de BMX pueden ser de 3 piezas (las mejores, con eje separado) o de 1 pieza (antiguas, más pesadas). Las de 3 piezas permiten elegir el bottom bracket por separado y son más fáciles de mantener.",
+    medidas:[
+      {medida:"Longitud biela",rango:'165 – 175mm',efecto:'+ largo = más torque'},
+      {medida:"Spindle diam.",rango:'19mm ó 22mm (Mid)',efecto:'Compatibilidad BB'},
+      {medida:"Bolt circle diam.",rango:'104mm (estándar)',efecto:'Compatibilidad plato'},
+    ],
+    estiloTexto:"Configuración según estilo:",
+    estilos:[{label:"3 piezas (recomendado)",color:"#2ec4b6"},{label:"1 pieza (legacy)",color:"#666"}],
+    mantenimiento:"Verifica que los pernos de los pedales estén bien apretados (pedal izquierdo = rosca inversa). Revisa el juego lateral del bottom bracket — si hay movimiento, ajusta o reemplaza los rodamientos.",
+  },
+  {
+    id:"pedales",nombre:"Pedales",nombreEn:"Pedals",categoria:"Contacto",
+    subtitulo:"El punto de contacto entre el pie y la bici. En BMX se usan pedales planos (platform) casi exclusivamente.",
+    descripcion:"Los pedales de BMX freestyle son planos (platform) con pins para maximizar el agarre. Los hay de plástico (más económicos, más livianos) y de aluminio o magnesio (más resistentes). Recuerda: el pedal izquierdo tiene rosca inversa.",
+    medidas:[
+      {medida:"Rosca spindle",rango:'9/16\" (estándar)',efecto:'Universal en BMX'},
+      {medida:"Tamaño plataforma",rango:'100 – 115mm ancho',efecto:'Más grande = más grip'},
+      {medida:"Espesor",rango:'15 – 22mm',efecto:'Más delgado = menos golpes'},
+    ],
+    estiloTexto:"Material según preferencia:",
+    estilos:[{label:"Plástico (precio/peso)",color:"#f4a261"},{label:"Aluminio (durabilidad)",color:"#e63946"},{label:"Magnesio (premium)",color:"#2ec4b6"}],
+    mantenimiento:"Pedal IZQUIERDO tiene rosca INVERSA (se aprieta al revés). Aplica grasa en el spindle antes de instalar. Reemplaza los pins cuando estén desgastados.",
+  },
+  {
+    id:"cadena",nombre:"Cadena",nombreEn:"Chain",categoria:"Transmisión",
+    subtitulo:"Transmite la potencia de las bielas al hub trasero. En BMX se usan cadenas 1/8\" de eslabón simple.",
+    descripcion:"La cadena de BMX es de paso 1/2\" × 1/8\" (más gruesa que las de ruta). Las cadenas BMX premium son más resistentes a la rotura. La tensión correcta es crítica — ni muy tensa (daña hub y BB) ni muy floja (se puede salir).",
+    medidas:[
+      {medida:"Paso",rango:'1/2\" × 1/8\"',efecto:'Estándar BMX freestyle'},
+      {medida:"Links (eslabones)",rango:'96 – 112 links',efecto:'Se corta al largo necesario'},
+      {medida:"Tensión",rango:'6 – 10mm de juego',efecto:'Ni muy tensa ni floja'},
+    ],
+    estiloTexto:"Consideraciones:",
+    estilos:[{label:"Cadena estándar",color:"#666"},{label:"Cadena reforzada (recomendada)",color:"#e63946"},{label:"Cadena de color",color:"#f4a261"}],
+    mantenimiento:"Lubrica la cadena regularmente. Revisa la tensión antes de cada sesión. Una cadena estirada debe reemplazarse — puede saltarse del plato en el peor momento.",
+  },
+];
+
+const ORDEN = COMPONENTES.map(c => c.id);
+let componenteActual = null;
+
+function initChips() {
+  const chips = document.getElementById("comp-chips");
+  COMPONENTES.forEach(c => {
+    const btn = document.createElement("button");
+    btn.className = "comp-chip";
+    btn.dataset.id = c.id;
+    btn.textContent = c.nombre;
+    btn.onclick = () => seleccionar(c.id);
+    chips.appendChild(btn);
+  });
+}
+
+function seleccionar(id) {
+  const comp = COMPONENTES.find(c => c.id === id);
+  if (!comp) return;
+  componenteActual = id;
+
+  document.querySelectorAll(".zona-click, .etiqueta-grupo, .comp-chip").forEach(el => el.classList.remove("activo"));
+
+  const zona  = document.getElementById("zona-" + id);
+  const label = document.getElementById("label-" + id);
+  if (zona)  zona.classList.add("activo");
+  if (label) label.classList.add("activo");
+
+  const chip = document.querySelector(`.comp-chip[data-id="${id}"]`);
+  if (chip) chip.classList.add("activo");
+
+  document.getElementById("detalle-vacio").style.display = "none";
+  const contenido = document.getElementById("detalle-contenido");
+  contenido.classList.add("visible");
+
+  document.getElementById("det-categoria").textContent  = comp.categoria;
+  document.getElementById("det-nombre").textContent     = comp.nombre;
+  document.getElementById("det-subtitulo").textContent  = comp.subtitulo;
+  document.getElementById("det-descripcion").textContent = comp.descripcion;
+
+  document.getElementById("det-medidas").innerHTML = comp.medidas.map(m =>
+    `<tr><td>${m.medida}</td><td>${m.rango}</td><td>${m.efecto}</td></tr>`
+  ).join("");
+
+  document.getElementById("det-estilos-texto").textContent = comp.estiloTexto;
+  document.getElementById("det-estilos-tags").innerHTML = comp.estilos.map(e =>
+    `<span class="estilo-tag" style="background:${e.color}">${e.label}</span>`
+  ).join("");
+
+  document.getElementById("det-mantenimiento").textContent = comp.mantenimiento;
+
+  const idx = ORDEN.indexOf(id);
+  document.getElementById("btn-anterior").disabled  = idx === 0;
+  document.getElementById("btn-siguiente").disabled = idx === ORDEN.length - 1;
+
+  if (window.innerWidth <= 900) {
+    document.getElementById("detalle-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function navegarComponente(dir) {
+  const idx = ORDEN.indexOf(componenteActual);
+  const nuevo = idx + dir;
+  if (nuevo >= 0 && nuevo < ORDEN.length) seleccionar(ORDEN[nuevo]);
+}
+
+document.addEventListener("DOMContentLoaded", initChips);
+</script>
+</body>
+</html>
