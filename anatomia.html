@@ -139,6 +139,171 @@
       #bmx-svg{max-height:none;filter:brightness(1.4) contrast(1.1);}
       .detalle-panel{border-left:none;border-top:1px solid rgba(255,255,255,0.07);height:auto;max-height:none;}
     }
+
+    /* ══ SETUP BUILDER ══════════════════════════════════════════ */
+    .setup-builder {
+      background: var(--gris-900);
+      border-top: 2px solid rgba(230,57,70,0.3);
+      padding: 4rem 2rem 5rem;
+    }
+    .sb-header { text-align:center; margin-bottom: 3rem; }
+    .sb-eyebrow {
+      font-family: var(--font-display); font-size:0.8rem; font-weight:700;
+      letter-spacing:3px; text-transform:uppercase; color:var(--rojo);
+      margin-bottom:0.75rem; display:flex; align-items:center;
+      justify-content:center; gap:8px;
+    }
+    .sb-titulo {
+      font-family:var(--font-display); font-size:clamp(2.5rem,5vw,4rem);
+      font-weight:800; text-transform:uppercase; letter-spacing:2px; line-height:1;
+    }
+    .sb-titulo span { color:var(--rojo); }
+    .sb-subtitulo { font-size:0.88rem; color:var(--gris-400); margin-top:0.75rem; max-width:500px; margin-inline:auto; }
+
+    .sb-body { max-width:1100px; margin:0 auto; }
+
+    /* Inputs */
+    .sb-inputs {
+      display:grid; grid-template-columns:280px 1fr; gap:2rem;
+      background:var(--gris-800); border-radius:12px;
+      border:1px solid rgba(255,255,255,0.07); padding:2rem;
+      margin-bottom:2rem;
+    }
+    .sb-campo { display:flex; flex-direction:column; gap:0.75rem; }
+    .sb-label {
+      font-family:var(--font-display); font-size:0.82rem; font-weight:700;
+      letter-spacing:1.5px; text-transform:uppercase; color:var(--blanco);
+      display:flex; align-items:center; gap:8px;
+    }
+    .sb-label i { color:var(--rojo); }
+    .sb-label-hint { font-size:0.68rem; color:var(--gris-400); text-transform:none; letter-spacing:0; font-weight:400; }
+    .sb-campo-hint { font-size:0.72rem; color:var(--gris-400); }
+
+    .sb-altura-wrap { display:flex; align-items:center; gap:0; }
+    .sb-input-num {
+      width:120px; padding:12px 16px;
+      background:var(--gris-700); border:1.5px solid var(--gris-600);
+      border-radius:8px 0 0 8px; color:var(--blanco);
+      font-family:var(--font-display); font-size:1.8rem; font-weight:800;
+      text-align:center; outline:none; transition:border-color 0.2s;
+      -moz-appearance:textfield;
+    }
+    .sb-input-num::-webkit-inner-spin-button,
+    .sb-input-num::-webkit-outer-spin-button { -webkit-appearance:none; }
+    .sb-input-num:focus { border-color:var(--rojo); }
+    .sb-unidad {
+      padding:12px 14px; background:var(--rojo);
+      border-radius:0 8px 8px 0; color:#fff;
+      font-family:var(--font-display); font-size:1rem; font-weight:700;
+    }
+
+    /* Botones de estilo */
+    .sb-estilos { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+    .sb-estilo-btn {
+      display:flex; flex-direction:column; align-items:center; gap:4px;
+      padding:14px 8px; background:var(--gris-700);
+      border:1.5px solid var(--gris-600); border-radius:10px;
+      cursor:pointer; transition:all 0.2s; text-align:center;
+    }
+    .sb-estilo-btn:hover { border-color:var(--gris-200); transform:translateY(-1px); }
+    .sb-estilo-btn.activo { background:rgba(230,57,70,0.12); border-color:var(--rojo); }
+    .sb-estilo-icono { font-size:1.6rem; }
+    .sb-estilo-nombre {
+      font-family:var(--font-display); font-size:0.9rem; font-weight:800;
+      letter-spacing:1px; text-transform:uppercase; color:var(--blanco);
+    }
+    .sb-estilo-desc { font-size:0.68rem; color:var(--gris-400); line-height:1.3; }
+
+    /* Placeholder */
+    .sb-placeholder {
+      display:flex; flex-direction:column; align-items:center; gap:1rem;
+      padding:3rem; text-align:center; color:var(--gris-400);
+      background:var(--gris-800); border-radius:12px;
+      border:1px dashed var(--gris-600);
+    }
+    .sb-placeholder i { font-size:2.5rem; opacity:0.3; }
+    .sb-placeholder p { font-size:0.85rem; max-width:300px; }
+
+    /* Grid de resultados */
+    .sb-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1rem;
+    }
+    .sb-card {
+      background:var(--gris-800); border:1px solid rgba(255,255,255,0.07);
+      border-radius:10px; overflow:hidden;
+      transition:border-color 0.2s, transform 0.2s;
+    }
+    .sb-card:hover { border-color:rgba(230,57,70,0.3); transform:translateY(-2px); }
+    .sb-card-header {
+      padding:12px 14px 10px;
+      border-bottom:1px solid rgba(255,255,255,0.05);
+      display:flex; align-items:center; gap:8px;
+    }
+    .sb-card-icono {
+      width:32px; height:32px; border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.9rem; color:#fff; flex-shrink:0;
+    }
+    .sb-card-nombre {
+      font-family:var(--font-display); font-size:1rem; font-weight:800;
+      text-transform:uppercase; letter-spacing:0.5px; color:var(--blanco);
+    }
+    .sb-card-body { padding:12px 14px 14px; display:flex; flex-direction:column; gap:8px; }
+
+    .sb-rec {
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .sb-rec-label {
+      font-size:0.68rem; color:var(--gris-400);
+      text-transform:uppercase; letter-spacing:1px;
+      font-family:var(--font-display); font-weight:700;
+    }
+    .sb-rec-valor {
+      font-family:var(--font-display); font-size:1.15rem;
+      font-weight:800; color:var(--blanco); line-height:1.1;
+    }
+    .sb-rec-valor span { color:var(--rojo); }
+    .sb-rec-motivo {
+      font-size:0.72rem; color:var(--gris-400); line-height:1.5;
+      margin-top:2px;
+    }
+
+    /* Barra de rango */
+    .sb-rango-wrap { margin-top:4px; }
+    .sb-rango-barra {
+      height:4px; background:var(--gris-600); border-radius:2px;
+      position:relative; margin:4px 0;
+    }
+    .sb-rango-fill {
+      position:absolute; top:0; height:100%;
+      background:var(--rojo); border-radius:2px;
+      transition:width 0.4s ease;
+    }
+    .sb-rango-labels {
+      display:flex; justify-content:space-between;
+      font-size:0.62rem; color:var(--gris-400);
+    }
+
+    /* Disclaimer */
+    .sb-disclaimer {
+      max-width:1100px; margin:2rem auto 0;
+      background:rgba(46,196,182,0.06); border:1px solid rgba(46,196,182,0.2);
+      border-radius:10px; padding:1rem 1.5rem;
+      display:flex; gap:12px; align-items:flex-start;
+      font-size:0.78rem; color:var(--gris-200); line-height:1.6;
+    }
+    .sb-disclaimer i { color:var(--teal); font-size:1rem; margin-top:2px; flex-shrink:0; }
+    .sb-disclaimer strong { color:var(--blanco); }
+
+    @media(max-width:900px){
+      .sb-inputs { grid-template-columns:1fr; }
+      .sb-estilos { grid-template-columns:repeat(2,1fr); }
+      .sb-grid    { grid-template-columns:repeat(2,1fr); }
+    }
+    @media(max-width:560px){
+      .sb-grid { grid-template-columns:1fr; }
+      .setup-builder { padding:2.5rem 1.2rem 3rem; }
+    }
   </style>
 </head>
 <body>
@@ -359,7 +524,87 @@
   </aside>
 </div>
 
-<script>
+<!-- ══════════════════════════════════════════════
+     SETUP BUILDER
+══════════════════════════════════════════════ -->
+<section class="setup-builder" id="setup-builder">
+
+  <div class="sb-header">
+    <div class="sb-header-text">
+      <p class="sb-eyebrow"><i class="fa-solid fa-sliders"></i> Herramienta interactiva</p>
+      <h2 class="sb-titulo">Setup <span>Builder</span></h2>
+      <p class="sb-subtitulo">Ingresa tu estatura y estilo de riding para obtener recomendaciones técnicas personalizadas de cada componente.</p>
+    </div>
+  </div>
+
+  <div class="sb-body">
+
+    <!-- PASO 1 + 2: Inputs -->
+    <div class="sb-inputs">
+
+      <!-- Estatura -->
+      <div class="sb-campo">
+        <label class="sb-label">
+          <i class="fa-solid fa-ruler-vertical"></i> Tu estatura
+        </label>
+        <div class="sb-altura-wrap">
+          <input type="number" id="sb-altura" class="sb-input-num"
+                 min="120" max="220" placeholder="165"
+                 oninput="sbActualizar()">
+          <span class="sb-unidad">cm</span>
+        </div>
+        <p class="sb-campo-hint">Entre 120 y 220 cm</p>
+      </div>
+
+      <!-- Estilo -->
+      <div class="sb-campo">
+        <label class="sb-label">
+          <i class="fa-solid fa-bicycle"></i> Estilo de riding
+          <span class="sb-label-hint">(puedes elegir más de uno)</span>
+        </label>
+        <div class="sb-estilos">
+          <button class="sb-estilo-btn" data-estilo="street" onclick="sbToggleEstilo(this)">
+            <span class="sb-estilo-icono">🏙️</span>
+            <span class="sb-estilo-nombre">Street</span>
+            <span class="sb-estilo-desc">Grinds, barras, escaleras</span>
+          </button>
+          <button class="sb-estilo-btn" data-estilo="park" onclick="sbToggleEstilo(this)">
+            <span class="sb-estilo-icono">🏟️</span>
+            <span class="sb-estilo-nombre">Park</span>
+            <span class="sb-estilo-desc">Rampas, bowls, airs</span>
+          </button>
+          <button class="sb-estilo-btn" data-estilo="dirt" onclick="sbToggleEstilo(this)">
+            <span class="sb-estilo-icono">🌿</span>
+            <span class="sb-estilo-nombre">Dirt</span>
+            <span class="sb-estilo-desc">Saltos de tierra, trails</span>
+          </button>
+          <button class="sb-estilo-btn" data-estilo="flatland" onclick="sbToggleEstilo(this)">
+            <span class="sb-estilo-icono">⚡</span>
+            <span class="sb-estilo-nombre">Flatland</span>
+            <span class="sb-estilo-desc">Equilibrio, spinning</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RESULTADOS -->
+    <div class="sb-resultados" id="sb-resultados">
+      <div class="sb-placeholder">
+        <i class="fa-solid fa-sliders"></i>
+        <p>Ingresa tu estatura y selecciona al menos un estilo para ver las recomendaciones</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="sb-disclaimer">
+    <i class="fa-solid fa-circle-info"></i>
+    <p>Estas son <strong>recomendaciones técnicas basadas en estándares de la industria BMX</strong>. En BMX no hay reglas absolutas — muchos riders eligen medidas fuera de estos rangos según su preferencia personal. Úsalas como punto de partida, no como regla fija.</p>
+  </div>
+
+</section>
 const COMPONENTES = [
   // ── CUADRO ──────────────────────────────────────────────────
   {
@@ -714,6 +959,268 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("navLinks")?.classList.toggle("abierto");
   });
 });
+
+// ══════════════════════════════════════════════════════════════
+//  SETUP BUILDER — Lógica de recomendaciones
+// ══════════════════════════════════════════════════════════════
+
+let sbEstilos = new Set(); // estilos seleccionados
+
+function sbToggleEstilo(btn) {
+  const estilo = btn.dataset.estilo;
+  if (sbEstilos.has(estilo)) {
+    sbEstilos.delete(estilo);
+    btn.classList.remove("activo");
+  } else {
+    sbEstilos.add(estilo);
+    btn.classList.add("activo");
+  }
+  sbActualizar();
+}
+
+function sbActualizar() {
+  const altura = parseInt(document.getElementById("sb-altura").value);
+  const res    = document.getElementById("sb-resultados");
+
+  if (!altura || altura < 120 || altura > 220 || sbEstilos.size === 0) {
+    res.innerHTML = `
+      <div class="sb-placeholder">
+        <i class="fa-solid fa-sliders"></i>
+        <p>Ingresa tu estatura y selecciona al menos un estilo para ver las recomendaciones</p>
+      </div>`;
+    return;
+  }
+
+  const rec = sbCalcular(altura, [...sbEstilos]);
+  res.innerHTML = sbRenderResultados(rec, altura);
+}
+
+// ── Cálculo de recomendaciones ────────────────────────────────
+function sbCalcular(altura, estilos) {
+
+  const tieneStreet   = estilos.includes("street");
+  const tienePark     = estilos.includes("park");
+  const tieneDirt     = estilos.includes("dirt");
+  const tieneFlatland = estilos.includes("flatland");
+  const mixto         = estilos.length > 1;
+
+  // ── TOPTUBE ──────────────────────────────────────────────────
+  let ttBase;
+  if      (altura < 150) ttBase = { min:18.0,  rec:19.0,  max:20.25, label:'18\" – 20.25\"' };
+  else if (altura < 160) ttBase = { min:19.5,  rec:20.0,  max:20.5,  label:'19.5\" – 20.5\"' };
+  else if (altura < 168) ttBase = { min:20.0,  rec:20.25, max:20.5,  label:'20\" – 20.5\"' };
+  else if (altura < 175) ttBase = { min:20.25, rec:20.5,  max:20.75, label:'20.25\" – 20.75\"' };
+  else if (altura < 183) ttBase = { min:20.5,  rec:20.75, max:21.0,  label:'20.5\" – 21\"' };
+  else                   ttBase = { min:20.75, rec:21.0,  max:21.5,  label:'20.75\" – 21.5\"' };
+
+  // Ajuste por estilo dominante
+  let ttAjuste = 0;
+  if (tieneStreet && !tienePark)  ttAjuste = +0.25;
+  if (tieneDirt   && !tieneStreet) ttAjuste = +0.25;
+  if (tieneFlatland && estilos.length === 1) ttAjuste = -0.25;
+
+  const ttRec = (ttBase.rec + ttAjuste).toFixed(2);
+  const ttMotivo = tieneStreet
+    ? "Street: toptube más largo para mayor estabilidad en grinds y barandas"
+    : tieneDirt
+      ? "Dirt: toptube más largo para estabilidad en el aire durante saltos"
+      : tieneFlatland
+        ? "Flatland: toptube más corto para mayor maniobrabilidad"
+        : "Park: medida estándar para equilibrio entre agilidad y estabilidad";
+
+  // ── FORK OFFSET ──────────────────────────────────────────────
+  let forkOffset, forkMotivo;
+  if (tieneStreet && !tieneDirt && !tienePark) {
+    forkOffset = "18 – 20mm";
+    forkMotivo = "Street técnico: offset corto para bici más reactiva, ideal nose manuals y barspins";
+  } else if (tieneDirt || (tienePark && !tieneStreet)) {
+    forkOffset = "28 – 32mm";
+    forkMotivo = tieneDirt
+      ? "Dirt: offset mayor para más estabilidad en grandes saltos"
+      : "Park: offset equilibrado para bowls y rampas";
+  } else {
+    forkOffset = "25 – 28mm";
+    forkMotivo = "Rango universal — cómodo para todo tipo de riding";
+  }
+
+  // ── CRANKS ───────────────────────────────────────────────────
+  let cranksRec, cranksMotivo;
+  if      (altura < 160) { cranksRec = '160 – 165mm'; cranksMotivo = "Bielas cortas: rotación más rápida y saltos más altos para riders de menor estatura"; }
+  else if (altura < 175) { cranksRec = '165 – 170mm'; cranksMotivo = "Rango equilibrado: buena velocidad de rotación con suficiente potencia"; }
+  else if (altura < 183) { cranksRec = '170 – 175mm'; cranksMotivo = "Estándar industria: el punto de partida para la mayoría de riders"; }
+  else                   { cranksRec = '175 – 180mm'; cranksMotivo = "Bielas más largas: más potencia por pedaleada para riders de mayor estatura"; }
+
+  if (tieneDirt && altura >= 165) {
+    cranksRec    = cranksRec.replace(/\d+/g, n => parseInt(n) + 5) + '+';
+    cranksMotivo = "Dirt: +5mm adicionales para más potencia en saltos y aceleración en tierra";
+  }
+
+  // ── STEM ─────────────────────────────────────────────────────
+  let stemRec, stemTipo, stemMotivo;
+  if (tieneFlatland && estilos.length === 1) {
+    stemRec   = "48mm";
+    stemTipo  = "Front-load";
+    stemMotivo = "Flatland: stem corto y front-load para postura baja y máxima maniobrabilidad";
+  } else if (tieneStreet || tieneDirt) {
+    stemRec   = "50 – 53mm";
+    stemTipo  = "Top-load";
+    stemMotivo = "Street/Dirt: reach estándar-largo con top-load para postura erguida";
+  } else {
+    stemRec   = "48 – 50mm";
+    stemTipo  = "Top-load";
+    stemMotivo = "Park: reach más corto para maniobras rápidas en rampas";
+  }
+
+  // ── HANDLEBAR ────────────────────────────────────────────────
+  let barRise, barAncho, barMotivo;
+  if (altura < 160) {
+    barRise  = '7\" – 8.5\"'; barAncho = '26\" – 27.5\"';
+    barMotivo = "Bars más bajos y angostos para riders de menor estatura";
+  } else if (altura < 175) {
+    barRise  = '8\" – 9\"'; barAncho = '27\" – 28.5\"';
+    barMotivo = "Rango estándar — equilibrio entre control y confort";
+  } else {
+    barRise  = '8.5\" – 10\"'; barAncho = '28\" – 29.5\"';
+    barMotivo = "Bars más altos y anchos para riders de mayor estatura";
+  }
+  if (tieneFlatland) { barRise = '7\" – 8\"'; barAncho = '26\" – 27\"'; barMotivo = "Flatland: bars bajos y angostos para máxima maniobrabilidad"; }
+  if (tieneStreet)   { barRise = barRise.replace(/\d+(\.\d+)?/g, n => (parseFloat(n)+0.5).toFixed(0).replace('.0','')); }
+
+  // ── SPROCKET ─────────────────────────────────────────────────
+  let sproketDientes, sproketGuard, sproketMotivo;
+  if (tieneDirt && !tieneStreet) {
+    sproketDientes = "28T";
+    sproketGuard   = "Sin guard";
+    sproketMotivo  = "Dirt: 28T para mayor flow y pedaleo más suave en tierra · sin guard ya que no hay grinds";
+  } else if (tieneStreet) {
+    sproketDientes = "25T";
+    sproketGuard   = "Con guard";
+    sproketMotivo  = "Street: 25T para mejor control · guard protege los dientes en grinds y barandas";
+  } else if (tienePark) {
+    sproketDientes = "25T";
+    sproketGuard   = "Sin guard";
+    sproketMotivo  = "Park: 25T para buen control en rampas · sin guard por menor contacto con obstáculos";
+  } else {
+    sproketDientes = "25T";
+    sproketGuard   = "Opcional";
+    sproketMotivo  = "25T estándar para la mayoría de situaciones";
+  }
+
+  // ── NEUMÁTICOS ───────────────────────────────────────────────
+  let tirAncho, tirBead, tirMotivo;
+  if (tieneStreet && !tieneDirt) {
+    tirAncho = '2.4\" – 2.5\"'; tirBead = "Non-folding";
+    tirMotivo = "Street: más ancho para mayor tracción y balance · non-folding para más durabilidad en impactos";
+  } else if (tieneDirt) {
+    tirAncho = '2.3\" – 2.4\"'; tirBead = "Non-folding";
+    tirMotivo = "Dirt: ancho medio para tracción en tierra sin exceso de peso";
+  } else if (tienePark && !tieneStreet) {
+    tirAncho = '2.2\" – 2.3\"'; tirBead = "Folding";
+    tirMotivo = "Park: más delgado para mayor velocidad en rampas · folding para menor peso";
+  } else {
+    tirAncho = '2.3\" – 2.4\"'; tirBead = "Non-folding";
+    tirMotivo = "Rango versátil para uso mixto";
+  }
+
+  // ── HUB TRASERO ──────────────────────────────────────────────
+  let hubTipo, hubGuard, hubMotivo;
+  if (tieneStreet && estilos.length === 1) {
+    hubTipo  = "Cassette o Freecoaster";
+    hubGuard = tieneStreet ? "Sí (con pegs)" : "Opcional";
+    hubMotivo = "Street: freecoaster para fakie/switch · cassette para tracción directa · hub guards si usas pegs";
+  } else {
+    hubTipo  = "Cassette";
+    hubGuard = tieneStreet ? "Sí" : "No necesario";
+    hubMotivo = tieneDirt
+      ? "Dirt: cassette para tracción directa y menos mantenimiento"
+      : tienePark
+        ? "Park: cassette — tracción inmediata en rampas · hub guards solo si haces nose grinds"
+        : "Cassette: la opción más confiable y de menor mantenimiento";
+  }
+
+  return {
+    toptube:  { rec: `${ttRec}\"`,    rango: ttBase.label,    motivo: ttMotivo },
+    fork:     { rec: forkOffset,                              motivo: forkMotivo },
+    cranks:   { rec: cranksRec,                               motivo: cranksMotivo },
+    stem:     { rec: stemRec,         tipo: stemTipo,         motivo: stemMotivo },
+    bars:     { rec: barRise,         ancho: barAncho,        motivo: barMotivo },
+    sprocket: { rec: sproketDientes,  guard: sproketGuard,    motivo: sproketMotivo },
+    tires:    { rec: tirAncho,        bead: tirBead,          motivo: tirMotivo },
+    hub:      { rec: hubTipo,         guard: hubGuard,        motivo: hubMotivo },
+  };
+}
+
+// ── Render de resultados ──────────────────────────────────────
+function sbRenderResultados(r, altura) {
+  const estilosLabel = [...sbEstilos].map(e => e.charAt(0).toUpperCase() + e.slice(1)).join(" + ");
+
+  return `
+    <div style="margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+      <div>
+        <p style="font-family:var(--font-display);font-size:0.75rem;color:var(--gris-400);letter-spacing:2px;text-transform:uppercase;">Recomendaciones para</p>
+        <p style="font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:var(--blanco);">${altura}cm · ${estilosLabel}</p>
+      </div>
+    </div>
+    <div class="sb-grid">
+
+      ${sbCard("🔧","Cuadro (Frame)","#e63946",[
+        {label:"Toptube recomendado", valor:r.toptube.rec, motivo:r.toptube.motivo},
+        {label:"Rango según estatura", valor:r.toptube.rango, motivo:""},
+      ])}
+
+      ${sbCard("⑂","Horquilla (Fork)","#f4a261",[
+        {label:"Offset recomendado", valor:r.fork.rec, motivo:r.fork.motivo},
+      ])}
+
+      ${sbCard("⚙","Bielas (Cranks)","#2ec4b6",[
+        {label:"Longitud recomendada", valor:r.cranks.rec, motivo:r.cranks.motivo},
+      ])}
+
+      ${sbCard("▲","Stem","#a8dadc",[
+        {label:"Reach recomendado",  valor:r.stem.rec,  motivo:""},
+        {label:"Tipo",               valor:r.stem.tipo, motivo:r.stem.motivo},
+      ])}
+
+      ${sbCard("↕","Manubrio (Bars)","#e9c46a",[
+        {label:"Rise recomendado",   valor:r.bars.rec,   motivo:""},
+        {label:"Ancho recomendado",  valor:r.bars.ancho, motivo:r.bars.motivo},
+      ])}
+
+      ${sbCard("◎","Sprocket","#e63946",[
+        {label:"Dientes",  valor:r.sprocket.rec,   motivo:""},
+        {label:"Guard",    valor:r.sprocket.guard, motivo:r.sprocket.motivo},
+      ])}
+
+      ${sbCard("○","Neumáticos","#f4a261",[
+        {label:"Ancho recomendado", valor:r.tires.rec,  motivo:""},
+        {label:"Tipo de bead",      valor:r.tires.bead, motivo:r.tires.motivo},
+      ])}
+
+      ${sbCard("⊙","Hub Trasero","#2ec4b6",[
+        {label:"Tipo",        valor:r.hub.rec,   motivo:""},
+        {label:"Hub guards",  valor:r.hub.guard, motivo:r.hub.motivo},
+      ])}
+
+    </div>`;
+}
+
+function sbCard(icono, nombre, color, items) {
+  const itemsHTML = items.map(it => `
+    <div class="sb-rec">
+      <span class="sb-rec-label">${it.label}</span>
+      <span class="sb-rec-valor">${it.valor}</span>
+      ${it.motivo ? `<span class="sb-rec-motivo">${it.motivo}</span>` : ""}
+    </div>`).join("");
+
+  return `
+    <div class="sb-card">
+      <div class="sb-card-header">
+        <div class="sb-card-icono" style="background:${color}">${icono}</div>
+        <span class="sb-card-nombre">${nombre}</span>
+      </div>
+      <div class="sb-card-body">${itemsHTML}</div>
+    </div>`;
+}
 </script>
 </body>
 </html>
