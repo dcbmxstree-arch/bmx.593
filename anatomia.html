@@ -18,22 +18,48 @@
     *{box-sizing:border-box;margin:0;padding:0;}
     body{background:var(--negro);color:var(--blanco);font-family:var(--font-body);min-height:100vh;}
 
-    .anatomy-header{padding:2rem 2rem 1rem;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);}
+    /* Navbar */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(230,57,70,0.2);}
+    .navbar-logo{font-family:var(--font-display);font-size:1.7rem;font-weight:800;letter-spacing:2px;color:var(--blanco);text-decoration:none;}
+    .navbar-logo .punto,.navbar-logo .num{color:var(--rojo);}
+    .navbar-links{display:flex;gap:2rem;list-style:none;}
+    .navbar-links a{font-family:var(--font-display);font-size:0.9rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris-200);display:flex;align-items:center;gap:6px;position:relative;transition:color 0.2s;text-decoration:none;}
+    .navbar-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--rojo);transition:width 0.25s;}
+    .navbar-links a:hover,.navbar-links a.activo{color:var(--blanco);}
+    .navbar-links a:hover::after,.navbar-links a.activo::after{width:100%;}
+    .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+    .nav-toggle span{display:block;width:24px;height:2px;background:var(--blanco);}
+    @media(max-width:768px){
+      .navbar-links{display:none;position:absolute;top:60px;left:0;right:0;background:var(--gris-900);flex-direction:column;padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+      .navbar-links.abierto{display:flex;}
+      .nav-toggle{display:flex;}
+    }
+
+    .anatomy-header{padding:6rem 2rem 1.5rem;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);}
     .anatomy-header h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;text-transform:uppercase;letter-spacing:2px;}
     .anatomy-header h1 span{color:var(--rojo);}
     .anatomy-header p{font-size:0.88rem;color:var(--gris-400);margin-top:6px;}
 
-    .anatomy-layout{display:grid;grid-template-columns:1fr 380px;min-height:calc(100vh - 110px);}
+    /* Layout principal — altura fija para que el diagrama no se desplace */
+    .anatomy-layout{
+      display:grid;
+      grid-template-columns:1fr 400px;
+      height:calc(100vh - 130px);  /* viewport menos navbar + header */
+    }
 
-    /* Diagrama */
+    /* Diagrama — sticky dentro del layout */
     .diagrama-wrap{
       display:flex;align-items:center;justify-content:center;padding:2rem;
       background:var(--negro);
+      position:sticky;
+      top:0;
+      height:100%;
+      overflow:hidden;
     }
     .svg-container{width:100%;max-width:680px;}
     .diagrama-hint{text-align:center;font-size:0.75rem;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:6px;}
     .diagrama-hint i{color:var(--rojo);}
-    #bmx-svg{width:100%;height:auto;display:block;}
+    #bmx-svg{width:100%;height:auto;display:block;max-height:calc(100vh - 220px);object-fit:contain;}
 
     /* Zonas clicables SVG */
     .zona-click{cursor:pointer;}
@@ -48,8 +74,14 @@
     .punto-etiqueta{fill:rgba(255,255,255,0.5);transition:fill 0.2s;}
     .etiqueta-grupo:hover .punto-etiqueta,.etiqueta-grupo.activo .punto-etiqueta{fill:var(--rojo);}
 
-    /* Panel detalle */
-    .detalle-panel{background:var(--gris-800);border-left:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;overflow-y:auto;}
+    /* Panel detalle — scrollea independiente del diagrama */
+    .detalle-panel{
+      background:var(--gris-800);
+      border-left:1px solid rgba(255,255,255,0.07);
+      display:flex;flex-direction:column;
+      overflow-y:auto;
+      height:100%;
+    }
     .detalle-panel::-webkit-scrollbar{width:4px;}
     .detalle-panel::-webkit-scrollbar-thumb{background:var(--gris-600);border-radius:2px;}
 
@@ -95,12 +127,35 @@
     .comp-chip.activo{background:var(--rojo);border-color:var(--rojo);color:#fff;}
 
     @media(max-width:900px){
-      .anatomy-layout{grid-template-columns:1fr;}
-      .detalle-panel{border-left:none;border-top:1px solid rgba(255,255,255,0.07);max-height:60vh;}
+      .anatomy-layout{
+        grid-template-columns:1fr;
+        height:auto;
+      }
+      .diagrama-wrap{
+        position:relative;
+        height:auto;
+        padding:1.2rem;
+      }
+      #bmx-svg{max-height:none;filter:brightness(1.4) contrast(1.1);}
+      .detalle-panel{border-left:none;border-top:1px solid rgba(255,255,255,0.07);height:auto;max-height:none;}
     }
   </style>
 </head>
 <body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo">BMX<span class="punto">.</span><span class="num">593</span></a>
+  <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="navbar-links" id="navLinks">
+    <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+    <li><a href="spots.html"><i class="fa-solid fa-map-location-dot"></i> Spots</a></li>
+    <li><a href="anatomia.html" class="activo"><i class="fa-solid fa-bicycle"></i> Anatomía</a></li>
+    <li><a href="tutoriales.html"><i class="fa-solid fa-play-circle"></i> Tutoriales</a></li>
+    <li><a href="shop.html"><i class="fa-solid fa-bag-shopping"></i> Shop</a></li>
+  </ul>
+</nav>
 
 <div class="anatomy-header">
   <h1>BMX <span>Anatomy</span></h1>
@@ -529,7 +584,12 @@ function navegarComponente(dir) {
   if (nuevo >= 0 && nuevo < ORDEN.length) seleccionar(ORDEN[nuevo]);
 }
 
-document.addEventListener("DOMContentLoaded", initChips);
+document.addEventListener("DOMContentLoaded", () => {
+  initChips();
+  document.getElementById("navToggle")?.addEventListener("click", () => {
+    document.getElementById("navLinks")?.classList.toggle("abierto");
+  });
+});
 </script>
 </body>
 </html>
