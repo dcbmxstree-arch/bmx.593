@@ -28,12 +28,12 @@
     /* Diagrama */
     .diagrama-wrap{
       display:flex;align-items:center;justify-content:center;padding:2rem;
-      background: radial-gradient(ellipse 80% 80% at 50% 55%, #2a2a2a 0%, #111111 100%);
+      background:var(--negro);
     }
-    .svg-container{width:100%;max-width:620px;}
+    .svg-container{width:100%;max-width:680px;}
     .diagrama-hint{text-align:center;font-size:0.75rem;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:6px;}
     .diagrama-hint i{color:var(--rojo);}
-    #bmx-svg{width:100%;height:auto;display:block;mix-blend-mode:multiply;filter:contrast(1.05) saturate(1.1);}
+    #bmx-svg{width:100%;height:auto;display:block;}
 
     /* Zonas clicables SVG */
     .zona-click{cursor:pointer;}
@@ -41,9 +41,9 @@
     .zona-click:hover circle,.zona-click.activo circle{fill:rgba(230,57,70,0.15);stroke:rgba(230,57,70,0.85);}
 
     /* Etiquetas SVG */
-    .etiqueta-grupo text{font-family:var(--font-display);font-size:13px;font-weight:700;fill:var(--blanco);cursor:pointer;transition:fill 0.2s;}
+    .etiqueta-grupo text{font-family:var(--font-display);font-size:28px;font-weight:700;fill:var(--blanco);cursor:pointer;transition:fill 0.2s;}
     .etiqueta-grupo:hover text,.etiqueta-grupo.activo text{fill:var(--rojo);}
-    .etiqueta-grupo line{stroke:rgba(255,255,255,0.3);stroke-width:1.5;stroke-dasharray:4 3;transition:stroke 0.2s;}
+    .etiqueta-grupo line{stroke:rgba(255,255,255,0.35);stroke-width:2.5;stroke-dasharray:8 5;transition:stroke 0.2s;}
     .etiqueta-grupo:hover line,.etiqueta-grupo.activo line{stroke:var(--rojo);}
     .punto-etiqueta{fill:rgba(255,255,255,0.5);transition:fill 0.2s;}
     .etiqueta-grupo:hover .punto-etiqueta,.etiqueta-grupo.activo .punto-etiqueta{fill:var(--rojo);}
@@ -117,113 +117,113 @@
         Toca cualquier componente para ver sus detalles técnicos
       </div>
 
-      <svg id="bmx-svg" viewBox="0 0 557 430" xmlns="http://www.w3.org/2000/svg">
+      <svg id="bmx-svg" viewBox="0 0 1181 912" xmlns="http://www.w3.org/2000/svg">
 
         <!-- Imagen de fondo — sube bmx_bike.png a assets/img/ -->
-        <image href="assets/img/bmx_bike.png" x="0" y="0" width="557" height="430"/>
+        <image href="assets/img/bmx_bike.png" x="0" y="0" width="1181" height="912"/>
 
         <!-- RUEDA TRASERA -->
         <g class="zona-click" id="zona-rueda-trasera" onclick="seleccionar('rueda-trasera')">
-          <circle cx="115" cy="295" r="92"/>
+          <circle cx="243" cy="615" r="192"/>
         </g>
         <g class="etiqueta-grupo" id="label-rueda-trasera" onclick="seleccionar('rueda-trasera')">
-          <line x1="50" y1="188" x2="90" y2="222"/>
-          <circle class="punto-etiqueta" cx="90" cy="222" r="3"/>
-          <text x="2" y="183">Rueda</text>
-          <text x="2" y="198">Trasera</text>
+          <line x1="95" y1="390" x2="145" y2="450"/>
+          <circle class="punto-etiqueta" cx="145" cy="450" r="5"/>
+          <text x="10" y="382">Rueda</text>
+          <text x="10" y="405">Trasera</text>
         </g>
 
         <!-- RUEDA DELANTERA -->
         <g class="zona-click" id="zona-rueda-delantera" onclick="seleccionar('rueda-delantera')">
-          <circle cx="438" cy="298" r="92"/>
+          <circle cx="928" cy="620" r="192"/>
         </g>
         <g class="etiqueta-grupo" id="label-rueda-delantera" onclick="seleccionar('rueda-delantera')">
-          <line x1="516" y1="188" x2="476" y2="222"/>
-          <circle class="punto-etiqueta" cx="476" cy="222" r="3"/>
-          <text x="488" y="183">Rueda</text>
-          <text x="478" y="198">Delantera</text>
+          <line x1="1100" y1="390" x2="1042" y2="450"/>
+          <circle class="punto-etiqueta" cx="1042" cy="450" r="5"/>
+          <text x="1060" y="382">Rueda</text>
+          <text x="1048" y="405">Delantera</text>
         </g>
 
         <!-- CUADRO -->
         <g class="zona-click" id="zona-cuadro" onclick="seleccionar('cuadro')">
-          <circle cx="268" cy="240" r="52"/>
+          <circle cx="575" cy="490" r="108"/>
         </g>
         <g class="etiqueta-grupo" id="label-cuadro" onclick="seleccionar('cuadro')">
-          <line x1="228" y1="138" x2="255" y2="198"/>
-          <circle class="punto-etiqueta" cx="255" cy="198" r="3"/>
-          <text x="188" y="133">Cuadro</text>
-          <text x="195" y="148">(Frame)</text>
+          <line x1="480" y1="285" x2="540" y2="400"/>
+          <circle class="punto-etiqueta" cx="540" cy="400" r="5"/>
+          <text x="388" y="272">Cuadro</text>
+          <text x="400" y="295">(Frame)</text>
         </g>
 
         <!-- HORQUILLA -->
         <g class="zona-click" id="zona-horquilla" onclick="seleccionar('horquilla')">
-          <circle cx="408" cy="230" r="32"/>
+          <circle cx="868" cy="475" r="65"/>
         </g>
         <g class="etiqueta-grupo" id="label-horquilla" onclick="seleccionar('horquilla')">
-          <line x1="492" y1="228" x2="442" y2="228"/>
-          <circle class="punto-etiqueta" cx="442" cy="228" r="3"/>
-          <text x="490" y="225">Horquilla</text>
+          <line x1="1060" y1="480" x2="935" y2="480"/>
+          <circle class="punto-etiqueta" cx="935" cy="480" r="5"/>
+          <text x="1058" y="476">Horquilla</text>
         </g>
 
         <!-- MANUBRIO -->
         <g class="zona-click" id="zona-manubrio" onclick="seleccionar('manubrio')">
-          <circle cx="432" cy="88" r="32"/>
+          <circle cx="905" cy="210" r="65"/>
         </g>
         <g class="etiqueta-grupo" id="label-manubrio" onclick="seleccionar('manubrio')">
-          <line x1="510" y1="62" x2="465" y2="82"/>
-          <circle class="punto-etiqueta" cx="465" cy="82" r="3"/>
-          <text x="505" y="58">Manubrio</text>
+          <line x1="1060" y1="175" x2="972" y2="198"/>
+          <circle class="punto-etiqueta" cx="972" cy="198" r="5"/>
+          <text x="1055" y="170">Manubrio</text>
         </g>
 
         <!-- STEM -->
         <g class="zona-click" id="zona-stem" onclick="seleccionar('stem')">
-          <circle cx="418" cy="148" r="20"/>
+          <circle cx="878" cy="312" r="40"/>
         </g>
         <g class="etiqueta-grupo" id="label-stem" onclick="seleccionar('stem')">
-          <line x1="510" y1="118" x2="438" y2="142"/>
-          <circle class="punto-etiqueta" cx="438" cy="142" r="3"/>
-          <text x="506" y="115">Stem</text>
+          <line x1="1060" y1="318" x2="920" y2="318"/>
+          <circle class="punto-etiqueta" cx="920" cy="318" r="5"/>
+          <text x="1058" y="314">Stem</text>
         </g>
 
         <!-- SILLÍN -->
         <g class="zona-click" id="zona-sillin" onclick="seleccionar('sillin')">
-          <circle cx="196" cy="160" r="26"/>
+          <circle cx="408" cy="348" r="52"/>
         </g>
         <g class="etiqueta-grupo" id="label-sillin" onclick="seleccionar('sillin')">
-          <line x1="148" y1="115" x2="185" y2="148"/>
-          <circle class="punto-etiqueta" cx="185" cy="148" r="3"/>
-          <text x="110" y="112">Sillín</text>
+          <line x1="280" y1="272" x2="375" y2="322"/>
+          <circle class="punto-etiqueta" cx="375" cy="322" r="5"/>
+          <text x="215" y="265">Sillín</text>
         </g>
 
         <!-- BIELAS -->
         <g class="zona-click" id="zona-bielas" onclick="seleccionar('bielas')">
-          <circle cx="252" cy="308" r="28"/>
+          <circle cx="532" cy="638" r="58"/>
         </g>
         <g class="etiqueta-grupo" id="label-bielas" onclick="seleccionar('bielas')">
-          <line x1="192" y1="395" x2="242" y2="332"/>
-          <circle class="punto-etiqueta" cx="242" cy="332" r="3"/>
-          <text x="158" y="403">Bielas</text>
-          <text x="152" y="417">(Cranks)</text>
+          <line x1="390" y1="832" x2="505" y2="688"/>
+          <circle class="punto-etiqueta" cx="505" cy="688" r="5"/>
+          <text x="310" y="848">Bielas</text>
+          <text x="298" y="871">(Cranks)</text>
         </g>
 
         <!-- PEDALES -->
         <g class="zona-click" id="zona-pedales" onclick="seleccionar('pedales')">
-          <circle cx="293" cy="342" r="18"/>
+          <circle cx="618" cy="715" r="36"/>
         </g>
         <g class="etiqueta-grupo" id="label-pedales" onclick="seleccionar('pedales')">
-          <line x1="342" y1="405" x2="303" y2="356"/>
-          <circle class="punto-etiqueta" cx="303" cy="356" r="3"/>
-          <text x="332" y="418">Pedales</text>
+          <line x1="710" y1="848" x2="638" y2="748"/>
+          <circle class="punto-etiqueta" cx="638" cy="748" r="5"/>
+          <text x="695" y="862">Pedales</text>
         </g>
 
         <!-- CADENA -->
         <g class="zona-click" id="zona-cadena" onclick="seleccionar('cadena')">
-          <circle cx="183" cy="318" r="18"/>
+          <circle cx="385" cy="662" r="36"/>
         </g>
         <g class="etiqueta-grupo" id="label-cadena" onclick="seleccionar('cadena')">
-          <line x1="82" y1="378" x2="172" y2="328"/>
-          <circle class="punto-etiqueta" cx="172" cy="328" r="3"/>
-          <text x="45" y="390">Cadena</text>
+          <line x1="175" y1="800" x2="362" y2="690"/>
+          <circle class="punto-etiqueta" cx="362" cy="690" r="5"/>
+          <text x="95" y="815">Cadena</text>
         </g>
 
       </svg>
