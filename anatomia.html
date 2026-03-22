@@ -26,11 +26,14 @@
     .anatomy-layout{display:grid;grid-template-columns:1fr 380px;min-height:calc(100vh - 110px);}
 
     /* Diagrama */
-    .diagrama-wrap{display:flex;align-items:center;justify-content:center;padding:2rem;background:var(--gris-900);}
+    .diagrama-wrap{
+      display:flex;align-items:center;justify-content:center;padding:2rem;
+      background: radial-gradient(ellipse 80% 80% at 50% 55%, #2a2a2a 0%, #111111 100%);
+    }
     .svg-container{width:100%;max-width:620px;}
     .diagrama-hint{text-align:center;font-size:0.75rem;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:6px;}
     .diagrama-hint i{color:var(--rojo);}
-    #bmx-svg{width:100%;height:auto;display:block;}
+    #bmx-svg{width:100%;height:auto;display:block;mix-blend-mode:multiply;filter:contrast(1.05) saturate(1.1);}
 
     /* Zonas clicables SVG */
     .zona-click{cursor:pointer;}
