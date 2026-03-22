@@ -72,7 +72,7 @@ const FOTOS = [
     id: 2,
     titulo: "One handed x-up Calzado",
     autor: "@bmxec",
-    imagen: ""https://dcbmxstree-arch.github.io/bmx.593/assets/img/spots/carolina/carolina2.jpg",
+    imagen: "https://dcbmxstree-arch.github.io/bmx.593/assets/fotosprincipal/xup.jpg",
     fecha: "2024-10-18"
   },
   {
