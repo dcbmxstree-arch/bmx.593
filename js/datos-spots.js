@@ -301,6 +301,22 @@ const SPOTS = [
       "https://picsum.photos/seed/pomasqui2/800/500"
     ]
   },
+  {
+  id: 17,
+    nombre: "Parque España",
+    ciudad: "Quito",
+    tipo: "street",
+    dificultad: "principiante",
+    lat: -0.259192,
+    lng: -78.529670,
+    descripcion: "Spot ubicado al sur de la ciudad con bordes de concreto, gradas medianas, y una semicircunferencia de concreto en donde puedes mejorar tus combos ",
+
+    // FOTOS: agrega las imágenes en assets/img/spots/pomasqui/
+    fotos: [
+      "https://picsum.photos/seed/pomasqui1/800/500",
+      "https://picsum.photos/seed/pomasqui2/800/500"
+    ]
+  },
 
 
   // ──────────────────────────────────────────
@@ -308,7 +324,7 @@ const SPOTS = [
   // ──────────────────────────────────────────
 
   {
-    id: 16,
+    id: 18,
     nombre: "Skate Park Malecón 2000",
     ciudad: "Guayaquil",
     tipo: "parque",
@@ -326,7 +342,7 @@ const SPOTS = [
   },
 
   {
-    id: 17,
+    id: 19,
     nombre: "Spot Street Centro Histórico GYE",
     ciudad: "Guayaquil",
     tipo: "street",
@@ -343,7 +359,7 @@ const SPOTS = [
   },
 
   {
-    id: 18,
+    id: 20,
     nombre: "Dirt Park Cerro El Carmen",
     ciudad: "Guayaquil",
     tipo: "dirt",
@@ -364,7 +380,7 @@ const SPOTS = [
   // ──────────────────────────────────────────
 
   {
-    id: 19,
+    id: 21,
     nombre: "Skate Park Parque de la Madre",
     ciudad: "Cuenca",
     tipo: "parque",
@@ -381,7 +397,7 @@ const SPOTS = [
   },
 
   {
-    id: 20,
+    id: 22,
     nombre: "Spot Street Calle Larga",
     ciudad: "Cuenca",
     tipo: "street",
