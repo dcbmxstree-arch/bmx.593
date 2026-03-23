@@ -317,14 +317,29 @@ const SPOTS = [
       "https://picsum.photos/seed/pomasqui2/800/500"
     ]
   },
+{
+  id: 18,
+    nombre: "Mini street Solanda",
+    ciudad: "Quito",
+    tipo: "street",
+    dificultad: "principiante",
+    lat: -0.270013,
+    lng: -78.538510,
+    descripcion: "Mini spot ubicado en el parque ecologico de solanda, baranda de concreto con filo metálic, de camino al skatepark de turubamba",
 
+    // FOTOS: agrega las imágenes en assets/img/spots/pomasqui/
+    fotos: [
+      "https://picsum.photos/seed/pomasqui1/800/500",
+      "https://picsum.photos/seed/pomasqui2/800/500"
+    ]
+  },
 
   // ──────────────────────────────────────────
   //  GUAYAQUIL
   // ──────────────────────────────────────────
 
   {
-    id: 18,
+    id: 19,
     nombre: "Skate Park Malecón 2000",
     ciudad: "Guayaquil",
     tipo: "parque",
@@ -342,7 +357,7 @@ const SPOTS = [
   },
 
   {
-    id: 19,
+    id: 20,
     nombre: "Spot Street Centro Histórico GYE",
     ciudad: "Guayaquil",
     tipo: "street",
@@ -359,7 +374,7 @@ const SPOTS = [
   },
 
   {
-    id: 20,
+    id: 21,
     nombre: "Dirt Park Cerro El Carmen",
     ciudad: "Guayaquil",
     tipo: "dirt",
@@ -380,7 +395,7 @@ const SPOTS = [
   // ──────────────────────────────────────────
 
   {
-    id: 21,
+    id: 22,
     nombre: "Skate Park Parque de la Madre",
     ciudad: "Cuenca",
     tipo: "parque",
@@ -397,7 +412,7 @@ const SPOTS = [
   },
 
   {
-    id: 22,
+    id: 23,
     nombre: "Spot Street Calle Larga",
     ciudad: "Cuenca",
     tipo: "street",
