@@ -325,7 +325,7 @@ const SPOTS = [
     dificultad: "principiante",
     lat: -0.270013,
     lng: -78.538510,
-    descripcion: "Mini spot ubicado en el parque ecologico de solanda, baranda de concreto con filo metálic, de camino al skatepark de turubamba",
+    descripcion: "Mini spot ubicado en el parque ecologico de solanda, baranda de concreto con filo metálico, de camino al skatepark de turubamba",
 
     // FOTOS: agrega las imágenes en assets/img/spots/pomasqui/
     fotos: [
