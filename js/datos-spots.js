@@ -285,7 +285,22 @@ const SPOTS = [
       "https://picsum.photos/seed/pomasqui2/800/500"
     ]
   },
+{
+  id: 16,
+    nombre: "Tribuna del sur",
+    ciudad: "Quito",
+    tipo: "street",
+    dificultad: "principiante",
+    lat: -0.247916,
+    lng: -78.530705,
+    descripcion: "Al sur de la ciudad, spot de street con filos de concreto, gradas y bordes altos en donde puedes practicar tus combos, además si caminas unos metros en la direccion de las canchas encontraras un buen spot de street",
 
+    // FOTOS: agrega las imágenes en assets/img/spots/pomasqui/
+    fotos: [
+      "https://picsum.photos/seed/pomasqui1/800/500",
+      "https://picsum.photos/seed/pomasqui2/800/500"
+    ]
+  },
 
 
   // ──────────────────────────────────────────
