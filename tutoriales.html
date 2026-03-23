@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BMX.593 — Tutoriales de BMX Freestyle: trucos, mantenimiento y setup para todos los niveles.">
+  <title>BMX.593 — Tutoriales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Variables locales ─────────────────────────────────── */
+    :root {
+      --color-truco:        #e63946;
+      --color-mantenimiento:#2ec4b6;
+      --color-setup:        #f4a261;
+      --color-principiante: #2ec4b6;
+      --color-intermedio:   #f4a261;
+      --color-avanzado:     #e63946;
+    }
+
+    /* ── Hero ──────────────────────────────────────────────── */
+    .tut-hero {
+      padding: 100px 2rem 3rem;
+      background: var(--gris-900);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .tut-hero-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+    }
+    .tut-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800; text-transform: uppercase;
+      letter-spacing: 2px; line-height: 0.9;
+    }
+    .tut-hero h1 span { color: var(--rojo); }
+    .tut-hero p {
+      font-size: 0.9rem; color: var(--gris-400);
+      margin-top: 0.75rem; max-width: 420px; line-height: 1.6;
+    }
+    .tut-stats {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+    }
+    .tut-stat {
+      text-align: center;
+    }
+    .tut-stat-num {
+      font-family: var(--font-display);
+      font-size: 2.5rem; font-weight: 800; line-height: 1;
+    }
+    .tut-stat-label {
+      font-size: 0.72rem; color: var(--gris-400);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+
+    /* ── Tabs de tipo ──────────────────────────────────────── */
+    .tut-tabs-wrap {
+      background: var(--gris-900);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky; top: 60px; z-index: 100;
+    }
+    .tut-tabs {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 2rem;
+      display: flex; gap: 0;
+    }
+    .tut-tab {
+      font-family: var(--font-display);
+      font-size: 0.88rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 1.1rem 1.8rem;
+      background: transparent; border: none;
+      color: var(--gris-400); cursor: pointer;
+      position: relative; transition: color 0.2s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tut-tab::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 3px;
+      background: transparent; transition: background 0.2s;
+    }
+    .tut-tab:hover { color: var(--blanco); }
+    .tut-tab.activo { color: var(--blanco); }
+    .tut-tab[data-tipo="truco"].activo::after        { background: var(--color-truco); }
+    .tut-tab[data-tipo="mantenimiento"].activo::after{ background: var(--color-mantenimiento); }
+    .tut-tab[data-tipo="setup"].activo::after        { background: var(--color-setup); }
+    .tut-tab-count {
+      font-size: 0.7rem; padding: 2px 7px;
+      border-radius: 20px; background: rgba(255,255,255,0.08);
+      color: var(--gris-200);
+    }
+    .tut-tab[data-tipo="truco"].activo .tut-tab-count        { background: var(--color-truco); color: #fff; }
+    .tut-tab[data-tipo="mantenimiento"].activo .tut-tab-count{ background: var(--color-mantenimiento); color: #000; }
+    .tut-tab[data-tipo="setup"].activo .tut-tab-count        { background: var(--color-setup); color: #000; }
+
+    /* ── Filtros de nivel ──────────────────────────────────── */
+    .tut-filtros-wrap {
+      max-width: 1280px; margin: 0 auto;
+      padding: 1.5rem 2rem 0;
+      display: flex; align-items: center;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .tut-filtros-label {
+      font-family: var(--font-display);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--gris-400);
+    }
+    .tut-filtros { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tut-filtro-btn {
+      font-family: var(--font-display);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 40px;
+      border: 1.5px solid var(--gris-600);
+      background: transparent; color: var(--gris-200);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .tut-filtro-btn:hover { border-color: var(--gris-200); color: var(--blanco); }
+    .tut-filtro-btn.activo[data-nivel="todos"]          { background: var(--blanco);  border-color: var(--blanco);  color: var(--negro); }
+    .tut-filtro-btn.activo[data-nivel="principiante"]   { background: var(--color-principiante); border-color: var(--color-principiante); color: #000; }
+    .tut-filtro-btn.activo[data-nivel="intermedio"]     { background: var(--color-intermedio);   border-color: var(--color-intermedio);   color: #000; }
+    .tut-filtro-btn.activo[data-nivel="avanzado"]       { background: var(--color-avanzado);     border-color: var(--color-avanzado);     color: #fff; }
+
+    /* ── Grid de cards ─────────────────────────────────────── */
+    .tut-contenido {
+      max-width: 1280px; margin: 0 auto;
+      padding: 2rem 2rem 5rem;
+    }
+    .tut-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+    }
+    .tut-card {
+      background: var(--gris-800);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .tut-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      border-color: rgba(230,57,70,0.3);
+    }
+
+    /* Miniatura del video */
+    .tut-card-thumb {
+      position: relative; aspect-ratio: 16/9;
+      overflow: hidden; background: var(--gris-700);
+      cursor: pointer;
+    }
+    .tut-card-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.8);
+      transition: transform 0.3s, filter 0.3s;
+    }
+    .tut-card:hover .tut-card-thumb img { transform: scale(1.04); filter: brightness(0.95); }
+    .tut-card-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
+    .tut-card:hover .tut-card-play { background: rgba(0,0,0,0.1); }
+    .tut-card-play svg { width: 52px; height: 36px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+    .tut-card-play .play-bg    { fill: rgba(230,57,70,0.88); }
+    .tut-card-play .play-arrow { fill: #fff; }
+    .tut-card-no-video {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px; color: var(--gris-400);
+      font-size: 0.75rem;
+    }
+    .tut-card-no-video i { font-size: 1.5rem; opacity: 0.3; }
+
+    /* Badges en la miniatura */
+    .tut-card-badges {
+      position: absolute; top: 10px; left: 10px;
+      display: flex; gap: 5px;
+    }
+    .tut-badge {
+      font-family: var(--font-display);
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 4px; color: #fff;
+    }
+
+    /* Cuerpo de la card */
+    .tut-card-body {
+      padding: 1rem 1.2rem 1.2rem;
+      display: flex; flex-direction: column; flex: 1; gap: 8px;
+    }
+    .tut-card-titulo {
+      font-family: var(--font-display);
+      font-size: 1.2rem; font-weight: 800;
+      letter-spacing: 0.5px; color: var(--blanco); line-height: 1.1;
+    }
+    .tut-card-desc {
+      font-size: 0.78rem; color: var(--gris-200);
+      line-height: 1.6; flex: 1;
+      display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .tut-card-footer {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .tut-card-meta {
+      display: flex; gap: 10px; align-items: center;
+      font-size: 0.72rem; color: var(--gris-400);
+    }
+    .tut-card-meta i { font-size: 0.65rem; }
+    .tut-card-btn {
+      font-family: var(--font-display);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: var(--blanco); cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .tut-card-btn:hover { background: var(--rojo); border-color: var(--rojo); }
+
+    /* Estado vacío */
+    .tut-vacio {
+      grid-column: 1 / -1;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 1rem;
+      padding: 4rem; text-align: center; color: var(--gris-400);
+    }
+    .tut-vacio i { font-size: 2.5rem; opacity: 0.2; }
+    .tut-vacio p { font-size: 0.88rem; }
+
+    /* ── Modal de detalle ──────────────────────────────────── */
+    #tut-modal {
+      display: none; position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,0.92);
+      align-items: flex-start; justify-content: center;
+      padding: 80px 1.5rem 2rem; overflow-y: auto;
+    }
+    #tut-modal.activo { display: flex; }
+    .tut-modal-inner {
+      width: 100%; max-width: 860px;
+      background: var(--gris-800);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; overflow: hidden;
+      animation: modalEntrada 0.25s ease;
+    }
+    @keyframes modalEntrada {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Video en el modal */
+    .tut-modal-video {
+      position: relative; width: 100%;
+      padding-bottom: 52%; background: #000;
+    }
+    .tut-modal-video iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; border: none;
+    }
+    .tut-modal-sin-video {
+      aspect-ratio: 16/9;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.75rem; color: var(--gris-400);
+      background: var(--gris-700); font-size: 0.85rem;
+    }
+    .tut-modal-sin-video i { font-size: 2rem; opacity: 0.3; }
+
+    /* Header del modal */
+    .tut-modal-header {
+      padding: 1.5rem 1.8rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .tut-modal-badges { display: flex; gap: 6px; margin-bottom: 10px; }
+    .tut-modal-titulo {
+      font-family: var(--font-display);
+      font-size: 1.8rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: var(--blanco); line-height: 1;
+    }
+    .tut-modal-desc {
+      font-size: 0.85rem; color: var(--gris-200);
+      line-height: 1.7; margin-top: 0.75rem;
+    }
+
+    /* Contenido del modal */
+    .tut-modal-body { padding: 1.5rem 1.8rem; display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .tut-seccion-titulo {
+      font-family: var(--font-display);
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--rojo); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* Pasos */
+    .tut-pasos { display: flex; flex-direction: column; gap: 10px; }
+    .tut-paso {
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .tut-paso-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--rojo); color: #fff;
+      font-family: var(--font-display); font-size: 0.85rem;
+      font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; margin-top: 1px;
+    }
+    .tut-paso-texto {
+      font-size: 0.85rem; color: var(--gris-200);
+      line-height: 1.65; padding-top: 4px;
+    }
+
+    /* Herramientas */
+    .tut-herramientas {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tut-herramienta {
+      font-family: var(--font-display);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.5px; padding: 5px 12px;
+      border-radius: 6px; background: var(--gris-700);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--gris-200); display: flex;
+      align-items: center; gap: 6px;
+    }
+    .tut-herramienta i { color: var(--naranja); font-size: 0.7rem; }
+
+    /* Seguridad */
+    .tut-seguridad-box {
+      background: rgba(230,57,70,0.07);
+      border: 1px solid rgba(230,57,70,0.2);
+      border-radius: 8px; padding: 1rem 1.2rem;
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 0.82rem; color: var(--gris-200); line-height: 1.6;
+    }
+    .tut-seguridad-box i { color: var(--rojo); font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
+
+    /* Botón cerrar */
+    .tut-modal-cerrar {
+      position: fixed; top: 1.5rem; right: 1.5rem; z-index: 2001;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--blanco); font-size: 1rem;
+      cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .tut-modal-cerrar:hover { background: var(--rojo); border-color: var(--rojo); }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .tut-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .tut-grid { grid-template-columns: 1fr; }
+      .tut-hero  { padding-top: 80px; }
+      .tut-tabs  { overflow-x: auto; padding-bottom: 2px; }
+      .tut-tab   { padding: 1rem 1.2rem; font-size: 0.78rem; white-space: nowrap; }
+      .tut-contenido { padding: 1.5rem 1.2rem 3rem; }
+      .tut-filtros-wrap { padding: 1.2rem 1.2rem 0; }
+      #tut-modal { padding: 70px 0.75rem 1.5rem; }
+      .tut-modal-body { padding: 1.2rem; }
+      .tut-modal-header { padding: 1.2rem; }
+    }
+    @media (max-width: 480px) {
+      .tut-stats { gap: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-logo">BMX<span class="punto">.</span><span class="num">593</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+      <li><a href="spots.html"><i class="fa-solid fa-map-location-dot"></i> Spots</a></li>
+      <li><a href="anatomia.html"><i class="fa-solid fa-bicycle"></i> Anatomía</a></li>
+      <li><a href="tutoriales.html" class="activo"><i class="fa-solid fa-play-circle"></i> Tutoriales</a></li>
+      <li><a href="shop.html"><i class="fa-solid fa-bag-shopping"></i> Shop</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="tut-hero">
+    <div class="tut-hero-inner">
+      <div>
+        <h1>Tuto<span>riales</span></h1>
+        <p>Aprende trucos, mantén tu bici y optimiza tu setup con guías paso a paso y videos.</p>
+      </div>
+      <div class="tut-stats" id="tut-stats"></div>
+    </div>
+  </div>
+
+  <!-- TABS DE TIPO -->
+  <div class="tut-tabs-wrap">
+    <div class="tut-tabs" role="tablist">
+      <button class="tut-tab activo" data-tipo="truco" onclick="cambiarTipo('truco')" role="tab">
+        <i class="fa-solid fa-star"></i> Trucos
+        <span class="tut-tab-count" id="count-truco">0</span>
+      </button>
+      <button class="tut-tab" data-tipo="mantenimiento" onclick="cambiarTipo('mantenimiento')" role="tab">
+        <i class="fa-solid fa-wrench"></i> Mantenimiento
+        <span class="tut-tab-count" id="count-mantenimiento">0</span>
+      </button>
+      <button class="tut-tab" data-tipo="setup" onclick="cambiarTipo('setup')" role="tab">
+        <i class="fa-solid fa-screwdriver-wrench"></i> Setup
+        <span class="tut-tab-count" id="count-setup">0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTROS DE NIVEL (solo visible en Trucos) -->
+  <div class="tut-filtros-wrap" id="filtros-nivel-wrap">
+    <span class="tut-filtros-label">Nivel:</span>
+    <div class="tut-filtros" role="group">
+      <button class="tut-filtro-btn activo" data-nivel="todos"        onclick="cambiarNivel('todos')">Todos</button>
+      <button class="tut-filtro-btn"        data-nivel="principiante" onclick="cambiarNivel('principiante')">🟢 Principiante</button>
+      <button class="tut-filtro-btn"        data-nivel="intermedio"   onclick="cambiarNivel('intermedio')">🟡 Intermedio</button>
+      <button class="tut-filtro-btn"        data-nivel="avanzado"     onclick="cambiarNivel('avanzado')">🔴 Avanzado</button>
+    </div>
+  </div>
+
+  <!-- GRID DE TUTORIALES -->
+  <div class="tut-contenido">
+    <div class="tut-grid" id="tut-grid"></div>
+  </div>
+
+  <!-- MODAL DE DETALLE -->
+  <div id="tut-modal" role="dialog" aria-modal="true" aria-label="Detalle del tutorial"
+       onclick="if(event.target===this) cerrarModal()">
+    <button class="tut-modal-cerrar" onclick="cerrarModal()" aria-label="Cerrar">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="tut-modal-inner" id="tut-modal-inner"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">BMX<span>.</span>593</div>
+        <p class="footer-tagline">Comunidad de BMX Freestyle en Ecuador.</p>
+        <p class="footer-contact">📧 <a href="mailto:hola@bmx593.ec">hola@bmx593.ec</a></p>
+      </div>
+      <div class="footer-social">
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://youtube.com"   target="_blank" rel="noopener" aria-label="YouTube">  <i class="fa-brands fa-youtube"></i></a>
+        <a href="https://tiktok.com"    target="_blank" rel="noopener" aria-label="TikTok">   <i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://facebook.com"  target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-brands fa-facebook"></i></a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 BMX.593 — Todos los derechos reservados</span>
+      <span>Hecho con 🚲 en Ecuador</span>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="js/tutoriales.js"></script>
+  <script>
+    // ── Estado ────────────────────────────────────────────────
+    let tipoActivo  = "truco";
+    let nivelActivo = "todos";
+
+    const COLORES_TIPO  = { truco:"#e63946", mantenimiento:"#2ec4b6", setup:"#f4a261" };
+    const COLORES_NIVEL = { principiante:"#2ec4b6", intermedio:"#f4a261", avanzado:"#e63946" };
+    const LABELS_TIPO   = { truco:"Truco", mantenimiento:"Mantenimiento", setup:"Setup" };
+    const LABELS_NIVEL  = { principiante:"Principiante", intermedio:"Intermedio", avanzado:"Avanzado" };
+    const ICONS_TIPO    = { truco:"fa-star", mantenimiento:"fa-wrench", setup:"fa-screwdriver-wrench" };
+
+    // ── Init ─────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", () => {
+      actualizarContadores();
+      renderGrid();
+      renderStats();
+
+      document.getElementById("navToggle").addEventListener("click", () => {
+        document.getElementById("navLinks").classList.toggle("abierto");
+      });
+
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape") cerrarModal();
+      });
+    });
+
+    // ── Contadores de tabs ────────────────────────────────────
+    function actualizarContadores() {
+      ["truco","mantenimiento","setup"].forEach(tipo => {
+        const n = TUTORIALES.filter(t => t.tipo === tipo).length;
+        document.getElementById("count-" + tipo).textContent = n;
+      });
+    }
+
+    // ── Stats del hero ────────────────────────────────────────
+    function renderStats() {
+      const total   = TUTORIALES.length;
+      const trucos  = TUTORIALES.filter(t => t.tipo === "truco").length;
+      const mant    = TUTORIALES.filter(t => t.tipo === "mantenimiento").length;
+      const setup   = TUTORIALES.filter(t => t.tipo === "setup").length;
+      document.getElementById("tut-stats").innerHTML = `
+        <div class="tut-stat">
+          <div class="tut-stat-num" style="color:var(--rojo)">${trucos}</div>
+          <div class="tut-stat-label">Trucos</div>
+        </div>
+        <div class="tut-stat">
+          <div class="tut-stat-num" style="color:var(--teal)">${mant}</div>
+          <div class="tut-stat-label">Mantenimiento</div>
+        </div>
+        <div class="tut-stat">
+          <div class="tut-stat-num" style="color:var(--naranja)">${setup}</div>
+          <div class="tut-stat-label">Setup</div>
+        </div>`;
+    }
+
+    // ── Cambiar tipo (tab) ────────────────────────────────────
+    function cambiarTipo(tipo) {
+      tipoActivo  = tipo;
+      nivelActivo = "todos";
+
+      document.querySelectorAll(".tut-tab").forEach(t => t.classList.toggle("activo", t.dataset.tipo === tipo));
+      document.querySelectorAll(".tut-filtro-btn").forEach(b => b.classList.toggle("activo", b.dataset.nivel === "todos"));
+
+      // Filtros de nivel solo visibles en Trucos
+      document.getElementById("filtros-nivel-wrap").style.display =
+        tipo === "truco" ? "flex" : "none";
+
+      renderGrid();
+    }
+
+    // ── Cambiar nivel (filtro) ────────────────────────────────
+    function cambiarNivel(nivel) {
+      nivelActivo = nivel;
+      document.querySelectorAll(".tut-filtro-btn").forEach(b =>
+        b.classList.toggle("activo", b.dataset.nivel === nivel));
+      renderGrid();
+    }
+
+    // ── Render del grid ───────────────────────────────────────
+    function renderGrid() {
+      const grid = document.getElementById("tut-grid");
+      let filtrados = TUTORIALES.filter(t => t.tipo === tipoActivo);
+      if (tipoActivo === "truco" && nivelActivo !== "todos") {
+        filtrados = filtrados.filter(t => t.nivel === nivelActivo);
+      }
+
+      if (filtrados.length === 0) {
+        grid.innerHTML = `
+          <div class="tut-vacio">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <p>No hay tutoriales en esta categoría aún.<br>¡Pronto se agregarán más!</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtrados.map(t => renderCard(t)).join("");
+    }
+
+    // ── Card individual ───────────────────────────────────────
+    function renderCard(t) {
+      const colorTipo  = COLORES_TIPO[t.tipo]  || "#e63946";
+      const colorNivel = COLORES_NIVEL[t.nivel] || "#666";
+      const labelTipo  = LABELS_TIPO[t.tipo]   || t.tipo;
+      const labelNivel = LABELS_NIVEL[t.nivel]  || t.nivel;
+
+      const thumbHTML = t.video
+        ? `<img src="https://img.youtube.com/vi/${t.video}/mqdefault.jpg"
+               alt="${t.titulo}"
+               onerror="this.parentElement.innerHTML='<div class=tut-card-no-video><i class=\\'fa-solid fa-video-slash\\'></i><span>Sin video</span></div>'">
+           <div class="tut-card-play">
+             <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
+               <path class="play-bg"    d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.8 0 34 0 34 0S12.2 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.4 0 24 0 24s0 11.6 1.7 16.3a8.5 8.5 0 0 0 6 6C12.2 48 34 48 34 48s21.8 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.6 68 24 68 24s0-11.6-1.5-16.3z"/>
+               <path class="play-arrow" d="M45 24 27 14v20z"/>
+             </svg>
+           </div>`
+        : `<div class="tut-card-no-video">
+             <i class="fa-solid fa-screwdriver-wrench"></i>
+             <span>Tutorial paso a paso</span>
+           </div>`;
+
+      const nivelBadge = t.tipo === "truco"
+        ? `<span class="tut-badge" style="background:${colorNivel}">${labelNivel}</span>`
+        : "";
+
+      const metaEstilo = t.estilo !== "todos"
+        ? `<span><i class="fa-solid fa-tag"></i> ${t.estilo}</span>`
+        : "";
+
+      return `
+        <div class="tut-card" onclick="abrirModal(${t.id})">
+          <div class="tut-card-thumb">
+            ${thumbHTML}
+            <div class="tut-card-badges">
+              <span class="tut-badge" style="background:${colorTipo}">${labelTipo}</span>
+              ${nivelBadge}
+            </div>
+          </div>
+          <div class="tut-card-body">
+            <h3 class="tut-card-titulo">${t.titulo}</h3>
+            <p class="tut-card-desc">${t.descripcion}</p>
+            <div class="tut-card-footer">
+              <div class="tut-card-meta">
+                <span><i class="fa-solid fa-list-ol"></i> ${t.pasos.length} pasos</span>
+                ${metaEstilo}
+              </div>
+              <button class="tut-card-btn">Ver tutorial</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // ── Modal ─────────────────────────────────────────────────
+    function abrirModal(id) {
+      const t = TUTORIALES.find(x => x.id === id);
+      if (!t) return;
+
+      const colorTipo  = COLORES_TIPO[t.tipo]  || "#e63946";
+      const colorNivel = COLORES_NIVEL[t.nivel] || "#666";
+      const labelTipo  = LABELS_TIPO[t.tipo]   || t.tipo;
+      const labelNivel = LABELS_NIVEL[t.nivel]  || t.nivel;
+
+      // Video o placeholder
+      const videoHTML = t.video
+        ? `<div class="tut-modal-video">
+             <iframe src="https://www.youtube-nocookie.com/embed/${t.video}?autoplay=1&rel=0&modestbranding=1"
+               title="${t.titulo}" frameborder="0"
+               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+               allowfullscreen></iframe>
+           </div>`
+        : `<div class="tut-modal-sin-video">
+             <i class="fa-solid fa-screwdriver-wrench"></i>
+             <span>Tutorial paso a paso — sin video disponible</span>
+           </div>`;
+
+      // Pasos
+      const pasosHTML = t.pasos.map((paso, i) => `
+        <div class="tut-paso">
+          <div class="tut-paso-num">${i + 1}</div>
+          <p class="tut-paso-texto">${paso}</p>
+        </div>`).join("");
+
+      // Herramientas (solo mantenimiento/setup)
+      const herramientasHTML = t.herramientas && t.herramientas.length > 0
+        ? `<div>
+             <div class="tut-seccion-titulo">
+               <i class="fa-solid fa-toolbox"></i> Herramientas necesarias
+             </div>
+             <div class="tut-herramientas">
+               ${t.herramientas.map(h =>
+                 `<span class="tut-herramienta"><i class="fa-solid fa-wrench"></i>${h}</span>`
+               ).join("")}
+             </div>
+           </div>`
+        : "";
+
+      // Badge de nivel (solo trucos)
+      const nivelBadge = t.tipo === "truco"
+        ? `<span class="tut-badge" style="background:${colorNivel}">${labelNivel}</span>`
+        : "";
+
+      document.getElementById("tut-modal-inner").innerHTML = `
+        ${videoHTML}
+        <div class="tut-modal-header">
+          <div class="tut-modal-badges">
+            <span class="tut-badge" style="background:${colorTipo}">${labelTipo}</span>
+            ${nivelBadge}
+            ${t.estilo !== "todos" ? `<span class="tut-badge" style="background:var(--gris-600)">${t.estilo}</span>` : ""}
+          </div>
+          <h2 class="tut-modal-titulo">${t.titulo}</h2>
+          <p class="tut-modal-desc">${t.descripcion}</p>
+        </div>
+        <div class="tut-modal-body">
+          <div>
+            <div class="tut-seccion-titulo">
+              <i class="fa-solid fa-list-ol"></i> Paso a paso
+            </div>
+            <div class="tut-pasos">${pasosHTML}</div>
+          </div>
+          ${herramientasHTML}
+          <div>
+            <div class="tut-seccion-titulo">
+              <i class="fa-solid fa-shield-halved"></i>
+              ${t.tipo === "setup" ? "Errores comunes" : "Seguridad"}
+            </div>
+            <div class="tut-seguridad-box">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>${t.seguridad}</span>
+            </div>
+          </div>
+        </div>`;
+
+      const modal = document.getElementById("tut-modal");
+      modal.classList.add("activo");
+      document.body.style.overflow = "hidden";
+      modal.scrollTop = 0;
+    }
+
+    function cerrarModal() {
+      const modal = document.getElementById("tut-modal");
+      // Detener video limpiando el iframe
+      const iframe = modal.querySelector("iframe");
+      if (iframe) iframe.src = "";
+      modal.classList.remove("activo");
+      document.body.style.overflow = "";
+    }
+
+    // Menú hamburguesa
+    document.getElementById("navToggle")?.addEventListener("click", () => {
+      document.getElementById("navLinks")?.classList.toggle("abierto");
+    });
+  </script>
+
+</body>
+</html>
