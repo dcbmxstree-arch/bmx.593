@@ -50,7 +50,7 @@ const TUTORIALES = [
     tipo: "truco",
     nivel: "principiante",
     estilo: "todos",
-    titulo: "Manual",
+    titulo: "Bunny hop",
     descripcion: "El manual es rodar en la rueda trasera sin pedalear. Es uno de los movimientos más importantes en BMX — dominar el balance del manual abre la puerta a trucos más avanzados como el nose manual y combinaciones de tricks.",
     pasos: [
       "Rueda a velocidad media y coloca los pies en posición neutral sobre los pedales.",
@@ -60,7 +60,7 @@ const TUTORIALES = [
       "Mantén los brazos ligeramente doblados para hacer ajustes finos con el manubrio.",
       "Para salir del manual, simplemente deja caer la rueda delantera con control."
     ],
-    video: "1pBFnGqsmHo",
+    video: "Wd_7YZccfYY",
     seguridad: "Practica cerca de una pared o baranda para apoyarte al inicio. Las caídas hacia atrás son las más comunes — aprende a saltar de la bici antes de intentarlo en velocidad.",
     herramientas: []
   },
