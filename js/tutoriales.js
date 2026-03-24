@@ -168,7 +168,7 @@ const TUTORIALES = [
       "Atrapa el manubrio con ambas manos antes de aterrizar.",
       "Aterriza con control — si no atrapaste el manubrio, suéltate de la bici."
     ],
-    video: "0JRGUTJhWF0",
+    video: "Z_kiRjTixgM",
     seguridad: "NUNCA intentes un barspin sin dominar completamente el bunny hop. Si no atrapas el manubrio, es mejor caer que intentar aterrizar sin control. Casco y protecciones completas.",
     herramientas: []
   },
