@@ -178,17 +178,17 @@ const TUTORIALES = [
     tipo: "truco",
     nivel: "avanzado",
     estilo: "todos",
-    titulo: "360°",
+    titulo: "360° barspin (truck driver)",
     descripcion: "El 360 es una rotación completa en el aire. Es la evolución natural del 180 y uno de los trucos más satisfactorios de dominar. En rampas se puede hacer con más tiempo en el aire; en street requiere mucha potencia en el bunny hop.",
     pasos: [
-      "Domina completamente el 180 antes de intentar el 360.",
+      "Domina completamente el 180 bar antes de intentar el 360 bar.",
       "Necesitas más velocidad y potencia que para el 180.",
       "Inicia el giro desde los pies — es importante el movimiento de todo el cuerpo.",
-      "Gira la cabeza primero para 'ver' a donde vas a aterrizar.",
+      "Gira la cabeza con la posicion adecuada, cerrando las piernas y soltando el bar",
       "Comprométete completamente con la rotación — a medio camino no se puede parar.",
       "Aterriza rodando hacia adelante con ambas ruedas y absorbe el impacto."
     ],
-    video: "nPt8_TEa5O8",
+    video: "ywNUJE362OE",
     seguridad: "El mayor peligro es comprometerse a medias. Si inicias el giro, complétalo. Usa siempre casco, rodilleras y coderas. Practica en rampas antes de intentarlo en plano.",
     herramientas: []
   },
