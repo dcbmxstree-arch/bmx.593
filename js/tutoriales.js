@@ -299,7 +299,7 @@ const TUTORIALES = [
       "Deja secar 24 horas antes de rodar si usaste adhesivo.",
       "Verifica que los end caps (tapas) estén instalados — protegen en caídas."
     ],
-    video: "bNtsTCUqIaA",
+    video: "tHYzw8V3tuM&t=3s",
     seguridad: "Siempre usa end caps en los extremos del manubrio — en una caída pueden evitar una herida seria en la muñeca o costilla.",
     herramientas: ["Aire comprimido (recomendado)", "Alcohol isopropílico", "Trapo limpio"]
   },
@@ -319,7 +319,7 @@ const TUTORIALES = [
       "Aprieta con una llave de 15mm o llave Allen según el tipo de pedal.",
       "Verifica que ambos pedales estén bien apretados jalando lateralmente con fuerza."
     ],
-    video: "0OL6PtEMGNU",
+    video: "RdMBfOnI594",
     seguridad: "⚠️ Un pedal mal instalado puede salirse mientras ruedas. Verifica siempre antes de una sesión. Si sientes que un pedal está flojo mientras ruedas, detente inmediatamente.",
     herramientas: ["Llave de 15mm o llave Allen 6mm", "Grasa para rosca"]
   },
@@ -340,7 +340,7 @@ const TUTORIALES = [
       "Verifica que el peg no gire jalándolo con fuerza.",
       "Verifica la tensión de la cadena después — montar pegs puede mover la rueda."
     ],
-    video: "nSp6rG9yN0E",
+    video: "oVLRa_tjAFo",
     seguridad: "Verifica los pegs antes de cada sesión de grinds. Un peg flojo puede hacer que la rueda se mueva durante un grind. Usa siempre casco y protecciones.",
     herramientas: ["Llave de 17mm", "Llave Allen 5mm (según modelo de peg)"]
   },
@@ -360,7 +360,7 @@ const TUTORIALES = [
       "Si el seat post baja solo al rodar, aplica grasa al tubo y aprieta más el clamp.",
       "Verifica que el sillín esté apuntando hacia adelante y paralelo al toptube."
     ],
-    video: "placeholder",
+    video: "fPmIMASLIpc",
     seguridad: "En BMX freestyle nunca pongas el sillín muy alto — dificulta los trucos y aumenta el riesgo de impacto. Un sillín giratorio puede desorientarte durante un truco.",
     herramientas: ["Llave Allen 4mm o 5mm", "Grasa (opcional)"]
   }
