@@ -40,7 +40,7 @@ const TUTORIALES = [
       "Ambas ruedas deben estar en el aire al mismo tiempo en el punto más alto.",
       "Aterriza con ambas ruedas al mismo tiempo, absorbiendo el impacto con las piernas dobladas."
     ],
-    video: "r3nkQVE",
+    video: "Ve37jrBDALpbCCvo",
     seguridad: "Usa casco siempre. Practica primero en pasto o superficie blanda para amortiguar las caídas. Comienza con alturas muy bajas (un palo en el suelo) antes de intentar obstáculos reales.",
     herramientas: []
   },
