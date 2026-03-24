@@ -30,9 +30,8 @@ const TUTORIALES = [
     tipo: "truco",
     nivel: "principiante",
     estilo: "todos",
-    titulo: "Bunny Hop",
-    descripcion: "El bunny hop es el truco fundamental del BMX. Consiste en levantar la bici del suelo sin rampas usando únicamente el movimiento del cuerpo y los brazos. Es la base para aprender prácticamente todos los demás trucos.",
-    pasos: [
+    titulo: "Drop BMX",
+    descripcion: "El DROP es un truco basico que consiste en bajar veredas y mientras sigues subiendo de nivel, gradas, obstaculos y bordes altos: [
       "Rueda a velocidad moderada en posición neutral — rodillas ligeramente dobladas, peso equilibrado.",
       "Comprime el cuerpo hacia abajo: dobla las rodillas y baja los hombros hacia el manubrio.",
       "Jala el manubrio hacia arriba y hacia atrás con fuerza mientras extiendes las piernas.",
@@ -40,7 +39,7 @@ const TUTORIALES = [
       "Ambas ruedas deben estar en el aire al mismo tiempo en el punto más alto.",
       "Aterriza con ambas ruedas al mismo tiempo, absorbiendo el impacto con las piernas dobladas."
     ],
-    video: "TnbRJWJRsYM",
+    video: "g9Vfe4QC",
     seguridad: "Usa casco siempre. Practica primero en pasto o superficie blanda para amortiguar las caídas. Comienza con alturas muy bajas (un palo en el suelo) antes de intentar obstáculos reales.",
     herramientas: []
   },
