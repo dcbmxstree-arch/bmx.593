@@ -212,7 +212,7 @@ const TUTORIALES = [
       "Aprieta el eje trasero con fuerza uniforme en ambos lados.",
       "Verifica la alineación del neumático con el cuadro y ajusta si es necesario."
     ],
-    video: "yE77JN2UBk8",
+    video: "PLNrIZbTwBo5rGPmAUZKQeI3z3Z5UlQEFj&index=11",
     seguridad: "Asegúrate de que el eje esté bien apretado antes de rodar. Un eje flojo puede causar que la rueda salga mientras ruedas.",
     herramientas: ["Llave de 15mm", "Regla o medidor (opcional)"]
   },
@@ -234,7 +234,7 @@ const TUTORIALES = [
       "Termina de montar el otro lado del neumático — verifica que la cámara no quede atrapada.",
       "Infla a la presión recomendada (marcada en el flanco del neumático) y remonta la rueda."
     ],
-    video: "CGclFaFfJ3c",
+    video: "oNgrdWSljLU",
     seguridad: "No uses herramientas metálicas para montar el neumático — pueden perforar la cámara. Verifica siempre la presión de inflado indicada en el neumático.",
     herramientas: ["Palancas de neumático (2-3)", "Bomba de aire", "Llave de 15mm"]
   },
@@ -254,7 +254,7 @@ const TUTORIALES = [
       "Una vez sin golpeteo, verifica que el manubrio gire suave y sin resistencia.",
       "Aprieta los tornillos del stem en el steerer tube manteniendo el manubrio centrado."
     ],
-    video: "XMoGHSOYkS4",
+    video: "4GBRsM9br9s",
     seguridad: "Un headset flojo es peligroso — nunca ignores el golpeteo en la dirección. Verifica el headset antes de cada sesión de riding.",
     herramientas: ["Llave Allen 5mm y 6mm", "Llave de tubo (para threadless)"]
   },
@@ -274,7 +274,7 @@ const TUTORIALES = [
       "Con un trapo limpio, retira el exceso de lubricante — el exceso acumula suciedad.",
       "La cadena debe verse ligeramente brillante pero no chorrear lubricante."
     ],
-    video: "TaCS1Tim-4c",
+    video: "vhgtOPUSiLE",
     seguridad: "Usa lubricante específico para cadenas — el aceite de cocina o el WD-40 no son sustitutos adecuados. Lubrica después de cada sesión en lluvia o tierra.",
     herramientas: ["Lubricante para cadenas", "Trapos limpios", "Desengrasante (opcional)"]
   },
