@@ -80,7 +80,7 @@ const TUTORIALES = [
       "Mira hacia el punto de aterrizaje durante la rotación para controlar la distancia.",
       "Aterriza en fakie (hacia atrás) con ambas ruedas y rueda suavemente hasta detenerte o hacer un pivot para regresar."
     ],
-    video: "Gg7GRzijJnQ",
+    video: "UPji_u0ErJU",
     seguridad: "Practica el fakie antes de intentar el 180 completo. Usa protecciones de rodilla y muñeca ya que las caídas laterales son frecuentes al aprender.",
     herramientas: []
   },
@@ -104,7 +104,7 @@ const TUTORIALES = [
       "Mantén el peso ligeramente hacia atrás para mantener el grind.",
       "Para salir, jala el manubrio y empuja para liberar la horquilla y el peg."
     ],
-    video: "pKLPZaXmaKo",
+    video: "cuNqgrxqqpA",
     seguridad: "Usa pegs resistentes y verifica que estén bien apretados antes de cada sesión. Practica sobre obstáculos bajos primero. Usa casco y protecciones de rodilla.",
     herramientas: []
   },
@@ -124,7 +124,7 @@ const TUTORIALES = [
       "Usa los tobillos y las rodillas para ajustar micro-correcciones de balance.",
       "Para salir, tira del manubrio hacia atrás suavemente para bajar la rueda trasera."
     ],
-    video: "QgaRSMqTcxQ",
+    video: "H2WOrJN7vh0",
     seguridad: "Las caídas hacia adelante son peligrosas. Usa siempre casco y considera protecciones de muñeca. Practica sobre superficies planas y lisas.",
     herramientas: []
   },
@@ -144,7 +144,7 @@ const TUTORIALES = [
       "La bici debe quedar completamente horizontal — paralela al suelo.",
       "Antes de aterrizar, trae la bici de vuelta a la posición vertical y aterriza limpio."
     ],
-    video: "6rqglCIAd5s",
+    video: "XL7xW0hRIVQ",
     seguridad: "Practica primero el truco mentalmente (visualización). Usa una rampa de altura apropiada a tu nivel. Casco y protecciones son obligatorios.",
     herramientas: []
   },
