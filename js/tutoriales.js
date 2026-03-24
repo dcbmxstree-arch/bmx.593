@@ -299,7 +299,7 @@ const TUTORIALES = [
       "Deja secar 24 horas antes de rodar si usaste adhesivo.",
       "Verifica que los end caps (tapas) estén instalados — protegen en caídas."
     ],
-    video: "tHYzw8V3tuM&t",
+    video: "eFxz88dsMEs",
     seguridad: "Siempre usa end caps en los extremos del manubrio — en una caída pueden evitar una herida seria en la muñeca o costilla.",
     herramientas: ["Aire comprimido (recomendado)", "Alcohol isopropílico", "Trapo limpio"]
   },
