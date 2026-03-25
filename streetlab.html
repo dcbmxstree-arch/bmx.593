@@ -9,910 +9,914 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <!-- jsPDF para generación de PDF en el navegador -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     :root {
-      --lab-rojo:    #e63946;
-      --lab-teal:    #2ec4b6;
-      --lab-naranja: #f4a261;
-      --lab-verde:   #57cc99;
-      --lab-amarillo:#f9c74f;
+      --lab-rojo:#e63946;--lab-teal:#2ec4b6;--lab-naranja:#f4a261;
+      --lab-verde:#57cc99;--lab-amarillo:#f9c74f;--lab-purp:#c77dff;
     }
+    .lab-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 60px);margin-top:60px;}
+    .lab-hero{grid-column:1/-1;padding:3rem 2rem 2.5rem;background:var(--negro);border-bottom:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;}
+    .lab-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(230,57,70,0.09) 0%,transparent 70%);}
+    .lab-hero-inner{max-width:1280px;margin:0 auto;position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+    .lab-hero-eyebrow{font-family:var(--font-display);font-size:0.78rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--rojo);margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;}
+    .lab-hero h1{font-family:var(--font-display);font-size:clamp(3rem,8vw,6rem);font-weight:800;text-transform:uppercase;letter-spacing:2px;line-height:0.9;}
+    .lab-hero h1 span{color:var(--rojo);}
+    .lab-hero-desc{font-size:0.88rem;color:var(--gris-400);max-width:540px;line-height:1.75;margin-top:1rem;}
+    .lab-hero-desc strong{color:var(--blanco);}
+    .lab-hero-pillars{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1.2rem;}
+    .lab-pillar{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:40px;padding:6px 14px;font-size:0.75rem;color:var(--gris-200);font-family:var(--font-display);font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+    .lab-pillar i{color:var(--rojo);}
 
-    /* ── Layout principal ──────────────────────────────────── */
-    .lab-layout {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      min-height: calc(100vh - 60px);
-      margin-top: 60px;
-    }
+    /* Sidebar */
+    .lab-sidebar{background:var(--gris-900);border-right:1px solid rgba(255,255,255,0.06);padding:1.5rem 0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+    .lab-sidebar-titulo{font-family:var(--font-display);font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris-400);padding:0 1.5rem;margin-bottom:0.75rem;}
+    .lab-tab{width:100%;display:flex;align-items:center;gap:10px;padding:0.9rem 1.5rem;background:transparent;border:none;color:var(--gris-400);cursor:pointer;font-family:var(--font-display);font-size:0.88rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:left;transition:color 0.2s,background 0.2s;border-left:3px solid transparent;}
+    .lab-tab:hover{color:var(--blanco);background:rgba(255,255,255,0.03);}
+    .lab-tab.activo{color:var(--blanco);background:rgba(230,57,70,0.08);border-left-color:var(--rojo);}
+    .lab-tab i{width:18px;text-align:center;font-size:0.9rem;}
+    .lab-tab.activo i{color:var(--rojo);}
 
-    /* ── Hero ──────────────────────────────────────────────── */
-    .lab-hero {
-      grid-column: 1 / -1;
-      padding: 3rem 2rem 2.5rem;
-      background: var(--negro);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      position: relative; overflow: hidden;
-    }
-    .lab-hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(230,57,70,0.08) 0%, transparent 70%);
-    }
-    .lab-hero-inner {
-      max-width: 1280px; margin: 0 auto;
-      position: relative; z-index: 1;
-      display: flex; align-items: flex-end;
-      justify-content: space-between; gap: 2rem; flex-wrap: wrap;
-    }
-    .lab-hero-eyebrow {
-      font-family: var(--font-display); font-size: 0.78rem;
-      font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
-      color: var(--rojo); margin-bottom: 0.5rem;
-    }
-    .lab-hero h1 {
-      font-family: var(--font-display);
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 800; text-transform: uppercase;
-      letter-spacing: 2px; line-height: 0.9;
-    }
-    .lab-hero h1 span { color: var(--rojo); }
-    .lab-hero-desc {
-      font-size: 0.88rem; color: var(--gris-400);
-      max-width: 480px; line-height: 1.7; margin-top: 1rem;
-    }
-    .lab-hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(230,57,70,0.1); border: 1px solid rgba(230,57,70,0.25);
-      border-radius: 40px; padding: 8px 16px; margin-top: 1.2rem;
-      font-size: 0.78rem; color: var(--rojo);
-      font-family: var(--font-display); font-weight: 700;
-      letter-spacing: 1px; text-transform: uppercase;
-    }
+    /* Contenido */
+    .lab-contenido{padding:2.5rem 2rem 5rem;max-width:1060px;}
+    .lab-seccion{display:none;}
+    .lab-seccion.activa{display:block;}
+    .lab-seccion-titulo{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;text-transform:uppercase;letter-spacing:2px;line-height:1;margin-bottom:0.5rem;}
+    .lab-seccion-titulo span{color:var(--rojo);}
+    .lab-seccion-sub{font-size:0.85rem;color:var(--gris-400);margin-bottom:2.5rem;line-height:1.65;max-width:600px;}
+    .lab-divider{width:48px;height:3px;background:var(--rojo);margin:0.75rem 0 2rem;}
 
-    /* ── Sidebar de tabs ───────────────────────────────────── */
-    .lab-sidebar {
-      background: var(--gris-900);
-      border-right: 1px solid rgba(255,255,255,0.06);
-      padding: 1.5rem 0;
-      position: sticky; top: 60px;
-      height: calc(100vh - 60px);
-      overflow-y: auto;
-    }
-    .lab-sidebar-titulo {
-      font-family: var(--font-display); font-size: 0.65rem;
-      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--gris-400); padding: 0 1.5rem; margin-bottom: 0.75rem;
-    }
-    .lab-tab {
-      width: 100%; display: flex; align-items: center; gap: 10px;
-      padding: 0.9rem 1.5rem;
-      background: transparent; border: none;
-      color: var(--gris-400); cursor: pointer;
-      font-family: var(--font-display); font-size: 0.88rem;
-      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-      text-align: left; position: relative;
-      transition: color 0.2s, background 0.2s;
-      border-left: 3px solid transparent;
-    }
-    .lab-tab:hover { color: var(--blanco); background: rgba(255,255,255,0.03); }
-    .lab-tab.activo {
-      color: var(--blanco);
-      background: rgba(230,57,70,0.08);
-      border-left-color: var(--rojo);
-    }
-    .lab-tab i { width: 18px; text-align: center; font-size: 0.9rem; }
-    .lab-tab.activo i { color: var(--rojo); }
+    /* HardWork selector */
+    .hw-selector-label{font-family:var(--font-display);font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+    .hw-metas{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2rem;}
+    .hw-meta-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:1.2rem 0.75rem;background:var(--gris-800);border:1.5px solid var(--gris-600);border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:center;}
+    .hw-meta-btn:hover{border-color:var(--gris-200);transform:translateY(-1px);}
+    .hw-meta-btn.activo{background:rgba(230,57,70,0.1);border-color:var(--rojo);}
+    .hw-meta-icono{font-size:1.8rem;}
+    .hw-meta-nombre{font-family:var(--font-display);font-size:0.85rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--blanco);}
+    .hw-meta-trucos{font-size:0.65rem;color:var(--gris-400);line-height:1.4;}
 
-    /* ── Contenido principal ───────────────────────────────── */
-    .lab-contenido {
-      padding: 2.5rem 2rem 5rem;
-      max-width: 1060px;
-    }
-    .lab-seccion { display: none; }
-    .lab-seccion.activa { display: block; }
+    /* Calendario 30 días */
+    .cal-wrap{display:none;}
+    .cal-wrap.visible{display:block;}
 
-    .lab-seccion-titulo {
-      font-family: var(--font-display);
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800; text-transform: uppercase;
-      letter-spacing: 2px; line-height: 1; margin-bottom: 0.5rem;
-    }
-    .lab-seccion-titulo span { color: var(--rojo); }
-    .lab-seccion-sub {
-      font-size: 0.85rem; color: var(--gris-400);
-      margin-bottom: 2.5rem; line-height: 1.6; max-width: 600px;
-    }
-    .lab-divider {
-      width: 48px; height: 3px;
-      background: var(--rojo); margin: 0.75rem 0 2rem;
-    }
+    .cal-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;}
+    .cal-info h3{font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:var(--blanco);}
+    .cal-info p{font-size:0.78rem;color:var(--gris-400);margin-top:3px;}
 
-    /* ── LESIONES ──────────────────────────────────────────── */
-    .lesiones-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-    .lesion-card {
-      background: var(--gris-800);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px; overflow: hidden;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.15s;
-    }
-    .lesion-card:hover { border-color: rgba(230,57,70,0.3); transform: translateY(-2px); }
-    .lesion-card.expandida { border-color: var(--rojo); }
+    .btn-descargar{font-family:var(--font-display);font-size:0.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 22px;background:var(--rojo);color:#fff;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s,transform 0.1s;}
+    .btn-descargar:hover{background:var(--rojo-hover);}
+    .btn-descargar:active{transform:scale(0.97);}
+    .btn-descargar i{font-size:0.9rem;}
 
-    .lesion-header {
-      padding: 1rem 1.2rem;
-      display: flex; align-items: center;
-      justify-content: space-between; gap: 1rem;
-    }
-    .lesion-header-left { display: flex; align-items: center; gap: 10px; }
-    .lesion-zona-badge {
-      font-family: var(--font-display); font-size: 0.62rem;
-      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-      padding: 3px 8px; border-radius: 4px; color: #fff; flex-shrink: 0;
-    }
-    .lesion-nombre {
-      font-family: var(--font-display); font-size: 1rem; font-weight: 800;
-      color: var(--blanco); line-height: 1.2;
-    }
-    .lesion-gravedad {
-      font-size: 0.68rem; font-family: var(--font-display);
-      font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; flex-shrink: 0;
-    }
-    .lesion-chevron { color: var(--gris-400); font-size: 0.75rem; transition: transform 0.2s; flex-shrink: 0; }
-    .lesion-card.expandida .lesion-chevron { transform: rotate(180deg); }
+    /* Leyenda */
+    .cal-leyenda{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem;}
+    .cal-ley-item{display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--gris-200);font-family:var(--font-display);font-weight:600;letter-spacing:0.5px;}
+    .cal-ley-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
 
-    .lesion-body {
-      display: none; padding: 0 1.2rem 1.2rem;
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-    .lesion-card.expandida .lesion-body { display: block; }
+    /* Grid del calendario */
+    .cal-semanas{display:flex;flex-direction:column;gap:6px;margin-bottom:2rem;}
+    .cal-semana-row{display:grid;grid-template-columns:60px repeat(7,1fr);gap:4px;align-items:center;}
+    .cal-semana-label{font-family:var(--font-display);font-size:0.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gris-400);text-align:right;padding-right:8px;}
+    .cal-dia-header{font-family:var(--font-display);font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gris-400);text-align:center;padding:4px 0;}
+    .cal-dia{border-radius:8px;padding:8px 4px;text-align:center;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1px solid rgba(255,255,255,0.06);transition:transform 0.15s;}
+    .cal-dia:hover{transform:scale(1.05);}
+    .cal-dia-num{font-family:var(--font-display);font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.5);}
+    .cal-dia-icono{font-size:1.1rem;line-height:1;}
+    .cal-dia-tipo{font-family:var(--font-display);font-size:0.55rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:rgba(255,255,255,0.6);line-height:1.2;text-align:center;}
 
-    .lesion-grid-info {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 0.75rem; margin-top: 1rem;
-    }
-    .lesion-info-bloque { display: flex; flex-direction: column; gap: 4px; }
-    .lesion-info-label {
-      font-family: var(--font-display); font-size: 0.65rem;
-      font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--rojo);
-    }
-    .lesion-info-texto { font-size: 0.78rem; color: var(--gris-200); line-height: 1.6; }
-    .lesion-senales {
-      display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px;
-    }
-    .lesion-senal {
-      font-size: 0.7rem; padding: 3px 8px;
-      background: rgba(255,255,255,0.06); border-radius: 4px;
-      color: var(--gris-200);
-    }
-    .lesion-recuperacion {
-      margin-top: 0.75rem; padding: 8px 12px;
-      background: rgba(46,196,182,0.08);
-      border: 1px solid rgba(46,196,182,0.2);
-      border-radius: 6px; font-size: 0.75rem;
-      color: var(--teal); display: flex; gap: 8px; align-items: center;
-    }
+    /* Detalle de sesiones */
+    .cal-detalle{margin-top:2rem;}
+    .cal-detalle-titulo{font-family:var(--font-display);font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+    .cal-detalle-titulo i{color:var(--rojo);}
+    .cal-sesiones-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+    .cal-sesion-card{background:var(--gris-800);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;}
+    .cal-sesion-header{padding:10px 14px;display:flex;align-items:center;gap:10px;}
+    .cal-sesion-nombre{font-family:var(--font-display);font-size:0.95rem;font-weight:800;color:var(--blanco);}
+    .cal-sesion-count{font-size:0.72rem;color:var(--gris-400);margin-top:2px;}
+    .cal-sesion-ejs{padding:0 14px 14px;}
+    .cal-ej-item{padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+    .cal-ej-item:last-child{border-bottom:none;}
+    .cal-ej-nombre{font-size:0.78rem;color:var(--blanco);font-weight:600;}
+    .cal-ej-meta{font-size:0.68rem;color:var(--gris-400);}
+    .cal-ej-stats{font-size:0.68rem;color:var(--rojo);font-family:var(--font-display);font-weight:700;white-space:nowrap;}
 
-    /* ── PREVENCIÓN ────────────────────────────────────────── */
-    .prev-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 1rem; margin-bottom: 2.5rem;
-    }
-    .prev-equipo-card {
-      background: var(--gris-800);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px; padding: 1.2rem 1.4rem;
-    }
-    .prev-equipo-header {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem;
-    }
-    .prev-equipo-icono {
-      width: 36px; height: 36px; border-radius: 8px;
-      background: rgba(230,57,70,0.12);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--rojo); font-size: 0.9rem; flex-shrink: 0;
-    }
-    .prev-equipo-nombre {
-      font-family: var(--font-display); font-size: 1rem;
-      font-weight: 800; color: var(--blanco);
-    }
-    .prev-obligatorio {
-      font-family: var(--font-display); font-size: 0.6rem;
-      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-      padding: 2px 7px; border-radius: 4px;
-      background: var(--rojo); color: #fff;
-    }
-    .prev-equipo-desc { font-size: 0.78rem; color: var(--gris-200); line-height: 1.65; }
-    .prev-equipo-cuando {
-      margin-top: 0.75rem; font-size: 0.72rem;
-      color: var(--teal); display: flex; gap: 6px; align-items: flex-start;
-    }
-    .prev-equipo-cuando i { margin-top: 2px; flex-shrink: 0; }
+    /* Ejercicios cards */
+    .hw-bloque{margin-bottom:2rem;}
+    .hw-bloque-titulo{font-family:var(--font-display);font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+    .hw-bloque-titulo i{color:var(--rojo);}
+    .hw-ejercicio-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+    .hw-ej-card{background:var(--gris-800);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color 0.2s;}
+    .hw-ej-card:hover{border-color:rgba(230,57,70,0.3);}
+    .hw-ej-card.expandido{border-color:var(--rojo);}
+    .hw-ej-header{padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+    .hw-ej-nombre{font-family:var(--font-display);font-size:0.95rem;font-weight:800;color:var(--blanco);line-height:1.2;}
+    .hw-ej-stats{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;}
+    .hw-ej-stat{font-size:0.65rem;padding:2px 7px;background:rgba(255,255,255,0.06);border-radius:4px;color:var(--gris-200);white-space:nowrap;}
+    .hw-ej-stat.s{background:rgba(230,57,70,0.12);color:var(--rojo);}
+    .hw-ej-stat.d{background:rgba(46,196,182,0.1);color:var(--teal);}
+    .hw-ej-body{display:none;padding:0 14px 14px;border-top:1px solid rgba(255,255,255,0.05);}
+    .hw-ej-card.expandido .hw-ej-body{display:block;}
+    .hw-ej-desc{font-size:0.78rem;color:var(--gris-200);line-height:1.65;margin-top:10px;}
+    .hw-ej-beneficio{margin-top:10px;padding:8px 10px;background:rgba(46,196,182,0.07);border-left:3px solid var(--teal);border-radius:0 6px 6px 0;font-size:0.75rem;color:var(--gris-200);line-height:1.6;}
+    .hw-ej-beneficio strong{color:var(--teal);}
+    .hw-ej-prog{margin-top:8px;font-size:0.72rem;color:var(--gris-400);display:flex;gap:6px;align-items:flex-start;}
+    .hw-ej-prog i{color:var(--naranja);margin-top:2px;flex-shrink:0;}
 
-    .prev-subtitulo {
-      font-family: var(--font-display); font-size: 1.1rem;
-      font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-      margin: 2rem 0 1rem; color: var(--blanco);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .prev-subtitulo i { color: var(--rojo); }
+    /* Motivación */
+    .hw-motivacion{background:rgba(230,57,70,0.07);border:1px solid rgba(230,57,70,0.2);border-radius:10px;padding:1.2rem 1.5rem;margin-top:2rem;display:flex;gap:14px;align-items:flex-start;}
+    .hw-motivacion i{color:var(--rojo);font-size:1.1rem;margin-top:2px;flex-shrink:0;}
+    .hw-motivacion p{font-size:0.82rem;color:var(--gris-200);line-height:1.7;}
+    .hw-motivacion strong{color:var(--blanco);}
 
-    .calentamiento-list {
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .calentamiento-item {
-      display: flex; align-items: center; gap: 12px;
-      background: var(--gris-800); border-radius: 8px; padding: 10px 14px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-    .calentamiento-duracion {
-      font-family: var(--font-display); font-size: 0.78rem;
-      font-weight: 800; color: var(--rojo); min-width: 80px;
-    }
-    .calentamiento-nombre {
-      font-family: var(--font-display); font-size: 0.9rem;
-      font-weight: 700; color: var(--blanco); min-width: 200px;
-    }
-    .calentamiento-desc { font-size: 0.75rem; color: var(--gris-400); line-height: 1.5; }
+    /* Placeholder */
+    .hw-placeholder{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:3rem;text-align:center;color:var(--gris-400);background:var(--gris-800);border-radius:12px;border:1px dashed var(--gris-600);}
+    .hw-placeholder i{font-size:2.5rem;opacity:0.2;}
 
-    .caida-list { display: flex; flex-direction: column; gap: 8px; }
-    .caida-item {
-      display: flex; gap: 12px; align-items: flex-start;
-      background: var(--gris-800); border-radius: 8px; padding: 12px 14px;
-    }
-    .caida-num {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--rojo); color: #fff;
-      font-family: var(--font-display); font-size: 0.78rem; font-weight: 800;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .caida-texto { font-size: 0.82rem; color: var(--gris-200); line-height: 1.65; }
+    /* LESIONES */
+    .lesiones-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+    .lesion-card{background:var(--gris-800);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.15s;}
+    .lesion-card:hover{border-color:rgba(230,57,70,0.3);transform:translateY(-2px);}
+    .lesion-card.expandida{border-color:var(--rojo);}
+    .lesion-header{padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+    .lesion-zona-badge{font-family:var(--font-display);font-size:0.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px;color:#fff;flex-shrink:0;}
+    .lesion-nombre{font-family:var(--font-display);font-size:1rem;font-weight:800;color:var(--blanco);line-height:1.2;}
+    .lesion-gravedad{font-size:0.68rem;font-family:var(--font-display);font-weight:700;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
+    .lesion-chevron{color:var(--gris-400);font-size:0.75rem;transition:transform 0.2s;flex-shrink:0;}
+    .lesion-card.expandida .lesion-chevron{transform:rotate(180deg);}
+    .lesion-body{display:none;padding:0 1.2rem 1.2rem;border-top:1px solid rgba(255,255,255,0.05);}
+    .lesion-card.expandida .lesion-body{display:block;}
+    .lesion-grid-info{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1rem;}
+    .lesion-info-bloque{display:flex;flex-direction:column;gap:4px;}
+    .lesion-info-label{font-family:var(--font-display);font-size:0.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--rojo);}
+    .lesion-info-texto{font-size:0.78rem;color:var(--gris-200);line-height:1.6;}
+    .lesion-senales{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+    .lesion-senal{font-size:0.7rem;padding:3px 8px;background:rgba(255,255,255,0.06);border-radius:4px;color:var(--gris-200);}
+    .lesion-recuperacion{margin-top:0.75rem;padding:8px 12px;background:rgba(46,196,182,0.08);border:1px solid rgba(46,196,182,0.2);border-radius:6px;font-size:0.75rem;color:var(--teal);display:flex;gap:8px;align-items:center;}
 
-    /* ── HARDWORK BMX ──────────────────────────────────────── */
-    .hw-selector { margin-bottom: 2.5rem; }
-    .hw-selector-label {
-      font-family: var(--font-display); font-size: 0.78rem;
-      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--gris-400); margin-bottom: 1rem;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .hw-metas {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
-    }
-    .hw-meta-btn {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 6px; padding: 1.2rem 0.75rem;
-      background: var(--gris-800);
-      border: 1.5px solid var(--gris-600);
-      border-radius: 10px; cursor: pointer;
-      transition: all 0.2s; text-align: center;
-    }
-    .hw-meta-btn:hover { border-color: var(--gris-200); transform: translateY(-1px); }
-    .hw-meta-btn.activo { background: rgba(230,57,70,0.1); border-color: var(--rojo); }
-    .hw-meta-icono { font-size: 1.8rem; }
-    .hw-meta-nombre {
-      font-family: var(--font-display); font-size: 0.85rem;
-      font-weight: 800; text-transform: uppercase;
-      letter-spacing: 1px; color: var(--blanco);
-    }
-    .hw-meta-trucos {
-      font-size: 0.65rem; color: var(--gris-400); line-height: 1.4;
-    }
+    /* PREVENCIÓN */
+    .prev-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:2.5rem;}
+    .prev-card{background:var(--gris-800);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:1.2rem 1.4rem;}
+    .prev-header{display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;}
+    .prev-icono{width:36px;height:36px;border-radius:8px;background:rgba(230,57,70,0.12);display:flex;align-items:center;justify-content:center;color:var(--rojo);font-size:0.9rem;flex-shrink:0;}
+    .prev-nombre{font-family:var(--font-display);font-size:1rem;font-weight:800;color:var(--blanco);}
+    .prev-oblig{font-family:var(--font-display);font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:var(--rojo);color:#fff;}
+    .prev-desc{font-size:0.78rem;color:var(--gris-200);line-height:1.65;}
+    .prev-cuando{margin-top:0.75rem;font-size:0.72rem;color:var(--teal);display:flex;gap:6px;align-items:flex-start;}
+    .prev-subtitulo{font-family:var(--font-display);font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin:2rem 0 1rem;color:var(--blanco);display:flex;align-items:center;gap:8px;}
+    .prev-subtitulo i{color:var(--rojo);}
+    .cal-item{display:flex;align-items:center;gap:12px;background:var(--gris-800);border-radius:8px;padding:10px 14px;border:1px solid rgba(255,255,255,0.05);margin-bottom:6px;}
+    .cal-dur{font-family:var(--font-display);font-size:0.78rem;font-weight:800;color:var(--rojo);min-width:80px;}
+    .cal-ej-n{font-family:var(--font-display);font-size:0.9rem;font-weight:700;color:var(--blanco);min-width:180px;}
+    .cal-ej-d{font-size:0.75rem;color:var(--gris-400);line-height:1.5;}
+    .caida-item{display:flex;gap:12px;align-items:flex-start;background:var(--gris-800);border-radius:8px;padding:12px 14px;margin-bottom:6px;}
+    .caida-num{width:24px;height:24px;border-radius:50%;background:var(--rojo);color:#fff;font-family:var(--font-display);font-size:0.78rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .caida-texto{font-size:0.82rem;color:var(--gris-200);line-height:1.65;}
 
-    .hw-resultado { display: none; }
-    .hw-resultado.visible { display: block; }
+    /* LAB SESSIONS */
+    .sessions-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;}
+    .session-card{background:var(--gris-800);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform 0.2s,border-color 0.2s;}
+    .session-card:hover{transform:translateY(-3px);border-color:rgba(230,57,70,0.3);}
+    .session-thumb{position:relative;aspect-ratio:16/9;overflow:hidden;}
+    .session-thumb img{width:100%;height:100%;object-fit:cover;filter:brightness(0.75);transition:transform 0.3s;}
+    .session-card:hover .session-thumb img{transform:scale(1.04);}
+    .session-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+    .session-play svg{width:52px;height:36px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5));}
+    .session-play .play-bg{fill:rgba(230,57,70,0.88);}
+    .session-play .play-arrow{fill:#fff;}
+    .res-badge{position:absolute;top:10px;left:10px;font-family:var(--font-display);font-size:0.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:4px;color:#000;}
+    .trk-badge{position:absolute;top:10px;right:10px;font-family:var(--font-display);font-size:0.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(0,0,0,0.6);color:var(--blanco);}
+    .session-body{padding:1rem 1.2rem 1.2rem;}
+    .session-titulo{font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--blanco);margin-bottom:6px;line-height:1.2;}
+    .session-desc{font-size:0.78rem;color:var(--gris-200);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .session-meta{display:flex;gap:12px;margin-top:10px;font-size:0.72rem;color:var(--gris-400);padding-top:10px;border-top:1px solid rgba(255,255,255,0.05);}
 
-    .hw-bloque { margin-bottom: 2rem; }
-    .hw-bloque-titulo {
-      font-family: var(--font-display); font-size: 0.78rem;
-      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--gris-400); margin-bottom: 1rem;
-      display: flex; align-items: center; gap: 8px; padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .hw-bloque-titulo i { color: var(--rojo); }
+    /* Modal video */
+    #lab-vm{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.96);align-items:center;justify-content:center;padding:1.5rem;}
+    #lab-vm.activo{display:flex;}
+    .lvm-inner{position:relative;max-width:960px;width:100%;}
+    .lvm-cerrar{position:absolute;top:-2.8rem;right:0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:var(--blanco);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:background 0.2s;}
+    .lvm-cerrar:hover{background:var(--rojo);}
+    .lvm-titulo{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--blanco);margin-bottom:0.75rem;}
+    .lvm-wrap{position:relative;padding-bottom:56.25%;background:#000;border-radius:8px;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,0.8);}
+    .lvm-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 
-    .hw-ejercicio-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-    }
-    .hw-ejercicio-card {
-      background: var(--gris-800);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px; overflow: hidden; cursor: pointer;
-      transition: border-color 0.2s;
-    }
-    .hw-ejercicio-card:hover { border-color: rgba(230,57,70,0.3); }
-    .hw-ejercicio-card.expandido { border-color: var(--rojo); }
-
-    .hw-ej-header {
-      padding: 12px 14px;
-      display: flex; justify-content: space-between;
-      align-items: flex-start; gap: 10px;
-    }
-    .hw-ej-nombre {
-      font-family: var(--font-display); font-size: 0.95rem;
-      font-weight: 800; color: var(--blanco); line-height: 1.2;
-    }
-    .hw-ej-stats {
-      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px;
-    }
-    .hw-ej-stat {
-      font-size: 0.68rem; padding: 2px 7px;
-      background: rgba(255,255,255,0.06); border-radius: 4px;
-      color: var(--gris-200); white-space: nowrap;
-    }
-    .hw-ej-stat.series { background: rgba(230,57,70,0.12); color: var(--rojo); }
-    .hw-ej-stat.descanso { background: rgba(46,196,182,0.1); color: var(--teal); }
-
-    .hw-ej-body {
-      display: none; padding: 0 14px 14px;
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-    .hw-ejercicio-card.expandido .hw-ej-body { display: block; }
-    .hw-ej-desc {
-      font-size: 0.78rem; color: var(--gris-200);
-      line-height: 1.65; margin-top: 10px;
-    }
-    .hw-ej-beneficio {
-      margin-top: 10px; padding: 8px 10px;
-      background: rgba(46,196,182,0.07);
-      border-left: 3px solid var(--teal);
-      border-radius: 0 6px 6px 0;
-      font-size: 0.75rem; color: var(--gris-200); line-height: 1.6;
-    }
-    .hw-ej-beneficio strong { color: var(--teal); }
-    .hw-ej-progresion {
-      margin-top: 8px; font-size: 0.72rem;
-      color: var(--gris-400); display: flex; gap: 6px; align-items: flex-start;
-    }
-    .hw-ej-progresion i { color: var(--naranja); margin-top: 2px; flex-shrink: 0; }
-
-    .hw-placeholder {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 1rem; padding: 3rem; text-align: center; color: var(--gris-400);
-      background: var(--gris-800); border-radius: 12px;
-      border: 1px dashed var(--gris-600);
-    }
-    .hw-placeholder i { font-size: 2.5rem; opacity: 0.2; }
-    .hw-placeholder p { font-size: 0.85rem; max-width: 300px; }
-
-    /* ── LAB SESSIONS ──────────────────────────────────────── */
-    .lab-sessions-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;
-    }
-    .lab-session-card {
-      background: var(--gris-800);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px; overflow: hidden; cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .lab-session-card:hover { transform: translateY(-3px); border-color: rgba(230,57,70,0.3); }
-
-    .lab-session-thumb {
-      position: relative; aspect-ratio: 16/9; overflow: hidden;
-    }
-    .lab-session-thumb img {
-      width: 100%; height: 100%; object-fit: cover;
-      filter: brightness(0.75); transition: transform 0.3s;
-    }
-    .lab-session-card:hover .lab-session-thumb img { transform: scale(1.04); }
-    .lab-session-play {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .lab-session-play svg { width: 52px; height: 36px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
-    .lab-session-play .play-bg    { fill: rgba(230,57,70,0.88); }
-    .lab-session-play .play-arrow { fill: #fff; }
-
-    .lab-resultado-badge {
-      position: absolute; top: 10px; left: 10px;
-      font-family: var(--font-display); font-size: 0.62rem;
-      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-      padding: 3px 9px; border-radius: 4px; color: #fff;
-    }
-    .lab-truco-badge {
-      position: absolute; top: 10px; right: 10px;
-      font-family: var(--font-display); font-size: 0.62rem;
-      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-      padding: 3px 9px; border-radius: 4px;
-      background: rgba(0,0,0,0.6); color: var(--blanco);
-    }
-    .lab-session-body { padding: 1rem 1.2rem 1.2rem; }
-    .lab-session-titulo {
-      font-family: var(--font-display); font-size: 1.05rem;
-      font-weight: 800; color: var(--blanco); margin-bottom: 6px; line-height: 1.2;
-    }
-    .lab-session-desc {
-      font-size: 0.78rem; color: var(--gris-200); line-height: 1.6;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .lab-session-meta {
-      display: flex; gap: 12px; margin-top: 10px;
-      font-size: 0.72rem; color: var(--gris-400);
-      padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);
-    }
-    .lab-session-meta i { font-size: 0.65rem; }
-
-    /* Modal de video */
-    #lab-video-modal {
-      display: none; position: fixed; inset: 0; z-index: 3000;
-      background: rgba(0,0,0,0.96);
-      align-items: center; justify-content: center; padding: 1.5rem;
-    }
-    #lab-video-modal.activo { display: flex; }
-    .lvm-inner { position: relative; max-width: 960px; width: 100%; }
-    .lvm-cerrar {
-      position: absolute; top: -2.8rem; right: 0;
-      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-      color: var(--blanco); width: 38px; height: 38px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; cursor: pointer; transition: background 0.2s;
-    }
-    .lvm-cerrar:hover { background: var(--rojo); }
-    .lvm-titulo {
-      font-family: var(--font-display); font-size: 1rem; font-weight: 700;
-      color: var(--blanco); margin-bottom: 0.75rem;
-    }
-    .lvm-video-wrap {
-      position: relative; padding-bottom: 56.25%;
-      background: #000; border-radius: 8px; overflow: hidden;
-      box-shadow: 0 12px 60px rgba(0,0,0,0.8);
-    }
-    .lvm-video-wrap iframe {
-      position: absolute; inset: 0; width: 100%; height: 100%; border: none;
-    }
-
-    /* ── Responsive ────────────────────────────────────────── */
-    @media (max-width: 1024px) {
-      .hw-metas { grid-template-columns: repeat(2, 1fr); }
-      .hw-ejercicio-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 768px) {
-      .lab-layout { grid-template-columns: 1fr; }
-      .lab-hero { padding-top: 80px; }
-      .lab-sidebar {
-        position: static; height: auto;
-        display: flex; overflow-x: auto; padding: 0.75rem 0;
-        border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06);
-      }
-      .lab-sidebar-titulo { display: none; }
-      .lab-tab {
-        flex-direction: column; gap: 4px; padding: 0.75rem 1.2rem;
-        white-space: nowrap; border-left: none;
-        border-bottom: 3px solid transparent; font-size: 0.72rem;
-      }
-      .lab-tab.activo { border-left-color: transparent; border-bottom-color: var(--rojo); }
-      .lab-contenido { padding: 1.5rem 1.2rem 3rem; }
-      .lesiones-grid { grid-template-columns: 1fr; }
-      .prev-grid { grid-template-columns: 1fr; }
-      .lab-sessions-grid { grid-template-columns: 1fr; }
-      .hw-metas { grid-template-columns: repeat(2, 1fr); }
-      .lvm-inner { max-width: 100%; }
+    /* Responsive */
+    @media(max-width:1024px){.hw-metas{grid-template-columns:repeat(2,1fr);}.hw-ejercicio-grid{grid-template-columns:1fr;}.cal-sesiones-grid{grid-template-columns:1fr;}}
+    @media(max-width:768px){
+      .lab-layout{grid-template-columns:1fr;}
+      .lab-hero{padding-top:80px;}
+      .lab-sidebar{position:static;height:auto;display:flex;overflow-x:auto;padding:0.75rem 0;border-right:none;border-bottom:1px solid rgba(255,255,255,0.06);}
+      .lab-sidebar-titulo{display:none;}
+      .lab-tab{flex-direction:column;gap:4px;padding:0.75rem 1rem;white-space:nowrap;border-left:none;border-bottom:3px solid transparent;font-size:0.7rem;}
+      .lab-tab.activo{border-left-color:transparent;border-bottom-color:var(--rojo);}
+      .lab-contenido{padding:1.5rem 1.2rem 3rem;}
+      .lesiones-grid,.prev-grid,.sessions-grid{grid-template-columns:1fr;}
+      .hw-metas{grid-template-columns:repeat(2,1fr);}
+      .cal-semana-row{grid-template-columns:42px repeat(7,1fr);}
+      .cal-dia{min-height:46px;padding:5px 2px;}
+      .cal-dia-tipo{display:none;}
     }
   </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <a href="index.html" class="navbar-logo">BMX<span class="punto">.</span><span class="num">593</span></a>
-    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="navbar-links" id="navLinks">
-      <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
-      <li><a href="spots.html"><i class="fa-solid fa-map-location-dot"></i> Spots</a></li>
-      <li><a href="anatomia.html"><i class="fa-solid fa-bicycle"></i> Anatomía</a></li>
-      <li><a href="tutoriales.html"><i class="fa-solid fa-play-circle"></i> Tutoriales</a></li>
-      <li><a href="streetlab.html" class="activo"><i class="fa-solid fa-flask"></i> Street Lab</a></li>
-    </ul>
-  </nav>
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo">BMX<span class="punto">.</span><span class="num">593</span></a>
+  <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  <ul class="navbar-links" id="navLinks">
+    <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+    <li><a href="spots.html"><i class="fa-solid fa-map-location-dot"></i> Spots</a></li>
+    <li><a href="anatomia.html"><i class="fa-solid fa-bicycle"></i> Anatomía</a></li>
+    <li><a href="tutoriales.html"><i class="fa-solid fa-play-circle"></i> Tutoriales</a></li>
+    <li><a href="streetlab.html" class="activo"><i class="fa-solid fa-flask"></i> Street Lab</a></li>
+    <li><a href="shop.html"><i class="fa-solid fa-bag-shopping"></i> Shop</a></li>
+  </ul>
+</nav>
 
-  <div class="lab-layout">
+<div class="lab-layout">
 
-    <!-- HERO -->
-    <div class="lab-hero">
-      <div class="lab-hero-inner">
-        <div>
-          <p class="lab-hero-eyebrow"><i class="fa-solid fa-flask"></i> Laboratorio BMX</p>
-          <h1>Street <span>Lab</span></h1>
-          <p class="lab-hero-desc">El espacio donde el BMX se encuentra con la ciencia del movimiento. Lesiones, prevención, entrenamiento físico y experimentación en video — todo lo que los otros sitios no te cuentan.</p>
-          <div class="lab-hero-badge">
-            <i class="fa-solid fa-dna"></i> Conocimiento + Entrenamiento + Experimentación
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SIDEBAR -->
-    <aside class="lab-sidebar">
-      <p class="lab-sidebar-titulo">Secciones</p>
-      <button class="lab-tab activo" data-tab="lesiones" onclick="cambiarTab('lesiones')">
-        <i class="fa-solid fa-kit-medical"></i> Lesiones
-      </button>
-      <button class="lab-tab" data-tab="prevencion" onclick="cambiarTab('prevencion')">
-        <i class="fa-solid fa-shield-halved"></i> Prevención
-      </button>
-      <button class="lab-tab" data-tab="hardwork" onclick="cambiarTab('hardwork')">
-        <i class="fa-solid fa-dumbbell"></i> HardWork BMX
-      </button>
-      <button class="lab-tab" data-tab="sessions" onclick="cambiarTab('sessions')">
-        <i class="fa-solid fa-clapperboard"></i> Lab Sessions
-      </button>
-    </aside>
-
-    <!-- CONTENIDO -->
-    <main class="lab-contenido">
-
-      <!-- ══ LESIONES ══ -->
-      <section class="lab-seccion activa" id="tab-lesiones">
-        <h2 class="lab-seccion-titulo">Lesiones <span>Comunes</span></h2>
-        <p class="lab-seccion-sub">El BMX es un deporte de riesgo calculado. Conocer las lesiones más frecuentes, cómo ocurren y qué hacer cuando suceden puede marcar la diferencia entre una recuperación rápida y una crónica.</p>
-        <div class="lab-divider"></div>
-        <div class="lesiones-grid" id="lesiones-grid"></div>
-      </section>
-
-      <!-- ══ PREVENCIÓN ══ -->
-      <section class="lab-seccion" id="tab-prevencion">
-        <h2 class="lab-seccion-titulo">Pre<span>vención</span></h2>
-        <p class="lab-seccion-sub">La mejor sesión de BMX es la que termina sin lesiones. El equipamiento correcto, el calentamiento adecuado y la técnica de caída son los tres pilares que separan a los riders que progresan de los que se quedan en el banco.</p>
-        <div class="lab-divider"></div>
-        <div id="prevencion-contenido"></div>
-      </section>
-
-      <!-- ══ HARDWORK BMX ══ -->
-      <section class="lab-seccion" id="tab-hardwork">
-        <h2 class="lab-seccion-titulo">Hard<span>Work</span> BMX</h2>
-        <p class="lab-seccion-sub">¿Quieres girar más rápido? ¿Saltar más alto? ¿Hacer grinds más limpios? Selecciona tu meta y genera una rutina de ejercicios que puedes hacer en casa, diseñada específicamente para las exigencias físicas del BMX.</p>
-        <div class="lab-divider"></div>
-        <div class="hw-selector">
-          <p class="hw-selector-label"><i class="fa-solid fa-crosshairs"></i> ¿En qué quieres mejorar? (puedes elegir más de uno)</p>
-          <div class="hw-metas">
-            <button class="hw-meta-btn" data-meta="rotacion" onclick="hwToggleMeta(this)">
-              <span class="hw-meta-icono">⚡</span>
-              <span class="hw-meta-nombre">Rotación</span>
-              <span class="hw-meta-trucos">Barspin · 360 · Tailwhip</span>
-            </button>
-            <button class="hw-meta-btn" data-meta="potencia" onclick="hwToggleMeta(this)">
-              <span class="hw-meta-icono">🚀</span>
-              <span class="hw-meta-nombre">Potencia</span>
-              <span class="hw-meta-trucos">Tabletop · 540 · Dirt jumps</span>
-            </button>
-            <button class="hw-meta-btn" data-meta="equilibrio" onclick="hwToggleMeta(this)">
-              <span class="hw-meta-icono">⚖️</span>
-              <span class="hw-meta-nombre">Equilibrio</span>
-              <span class="hw-meta-trucos">Manual · Nose Manual · Track Stand</span>
-            </button>
-            <button class="hw-meta-btn" data-meta="grinds" onclick="hwToggleMeta(this)">
-              <span class="hw-meta-icono">🔩</span>
-              <span class="hw-meta-nombre">Grinds</span>
-              <span class="hw-meta-trucos">Feeble · Smith · Crooked</span>
-            </button>
-          </div>
-        </div>
-        <div class="hw-resultado" id="hw-resultado"></div>
-      </section>
-
-      <!-- ══ LAB SESSIONS ══ -->
-      <section class="lab-seccion" id="tab-sessions">
-        <h2 class="lab-seccion-titulo">Lab <span>Sessions</span></h2>
-        <p class="lab-seccion-sub">Videos reales del equipo BMX.593 — fallos, análisis y logros. El proceso completo de aprender un truco, no solo el resultado final.</p>
-        <div class="lab-divider"></div>
-        <div class="lab-sessions-grid" id="sessions-grid"></div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- Modal de video Lab Sessions -->
-  <div id="lab-video-modal" onclick="if(event.target===this) cerrarVideoLab()">
-    <div class="lvm-inner">
-      <button class="lvm-cerrar" onclick="cerrarVideoLab()"><i class="fa-solid fa-xmark"></i></button>
-      <p class="lvm-titulo" id="lvm-titulo"></p>
-      <div class="lvm-video-wrap">
-        <iframe id="lvm-iframe" src="" frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
+  <!-- HERO -->
+  <div class="lab-hero">
+    <div class="lab-hero-inner">
       <div>
-        <div class="footer-logo">BMX<span>.</span>593</div>
-        <p class="footer-tagline">Comunidad de BMX Freestyle en Ecuador.</p>
-        <p class="footer-contact">📧 <a href="mailto:hola@bmx593.ec">hola@bmx593.ec</a></p>
-      </div>
-      <div class="footer-social">
-        <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://youtube.com"   target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://tiktok.com"    target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i></a>
-        <a href="https://facebook.com"  target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i></a>
+        <p class="lab-hero-eyebrow"><i class="fa-solid fa-flask"></i> Laboratorio BMX</p>
+        <h1>Street <span>Lab</span></h1>
+        <p class="lab-hero-desc">
+          El BMX freestyle es un deporte de <strong>riesgo calculado</strong>: la exposición a impactos, caídas y cargas asimétricas es inherente a la práctica. Sin embargo, <strong>la evidencia deportiva es clara</strong> — un rider con preparación física específica reduce significativamente su tasa de lesión, absorbe mejor los impactos y progresa técnicamente a mayor velocidad.<br><br>
+          Street Lab es el espacio donde el BMX se encuentra con la ciencia del movimiento. <strong>Entrenamiento físico estructurado, conciencia de lesiones y experimentación real en video</strong> — las herramientas que los riders de élite usan y que la mayoría de sitios no documentan.
+        </p>
+        <div class="lab-hero-pillars">
+          <span class="lab-pillar"><i class="fa-solid fa-dumbbell"></i> Preparación física</span>
+          <span class="lab-pillar"><i class="fa-solid fa-shield-halved"></i> Prevención de lesiones</span>
+          <span class="lab-pillar"><i class="fa-solid fa-arrow-trend-up"></i> Progresión técnica</span>
+          <span class="lab-pillar"><i class="fa-solid fa-clapperboard"></i> Experimentación real</span>
+        </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2025 BMX.593 — Todos los derechos reservados</span>
-      <span>Hecho con 🚲 en Ecuador</span>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="lab-sidebar">
+    <p class="lab-sidebar-titulo">Secciones</p>
+    <button class="lab-tab activo" data-tab="hardwork" onclick="cambiarTab('hardwork')">
+      <i class="fa-solid fa-dumbbell"></i> HardWork BMX
+    </button>
+    <button class="lab-tab" data-tab="lesiones" onclick="cambiarTab('lesiones')">
+      <i class="fa-solid fa-kit-medical"></i> Lesiones
+    </button>
+    <button class="lab-tab" data-tab="prevencion" onclick="cambiarTab('prevencion')">
+      <i class="fa-solid fa-shield-halved"></i> Prevención
+    </button>
+    <button class="lab-tab" data-tab="sessions" onclick="cambiarTab('sessions')">
+      <i class="fa-solid fa-clapperboard"></i> Lab Sessions
+    </button>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="lab-contenido">
+
+    <!-- ══ HARDWORK BMX ══ -->
+    <section class="lab-seccion activa" id="tab-hardwork">
+      <h2 class="lab-seccion-titulo">Hard<span>Work</span> BMX</h2>
+      <p class="lab-seccion-sub">Selecciona tu objetivo de entrenamiento y el sistema genera un <strong style="color:var(--blanco)">plan estructurado de 30 días</strong> con sesiones diarias diseñadas para las exigencias físicas del BMX. Máximo 8–9 ejercicios por sesión para evitar la fatiga acumulada.</p>
+      <div class="lab-divider"></div>
+
+      <p class="hw-selector-label"><i class="fa-solid fa-crosshairs"></i> ¿En qué quieres mejorar?</p>
+      <div class="hw-metas">
+        <button class="hw-meta-btn" data-meta="rotacion" onclick="hwToggle(this)">
+          <span class="hw-meta-icono">⚡</span>
+          <span class="hw-meta-nombre">Rotación</span>
+          <span class="hw-meta-trucos">Barspin · 360 · Tailwhip</span>
+        </button>
+        <button class="hw-meta-btn" data-meta="potencia" onclick="hwToggle(this)">
+          <span class="hw-meta-icono">🚀</span>
+          <span class="hw-meta-nombre">Potencia</span>
+          <span class="hw-meta-trucos">Tabletop · 540 · Dirt jumps</span>
+        </button>
+        <button class="hw-meta-btn" data-meta="equilibrio" onclick="hwToggle(this)">
+          <span class="hw-meta-icono">⚖️</span>
+          <span class="hw-meta-nombre">Equilibrio</span>
+          <span class="hw-meta-trucos">Manual · Nose Manual · Track Stand</span>
+        </button>
+        <button class="hw-meta-btn" data-meta="grinds" onclick="hwToggle(this)">
+          <span class="hw-meta-icono">🔩</span>
+          <span class="hw-meta-nombre">Grinds</span>
+          <span class="hw-meta-trucos">Feeble · Smith · Crooked</span>
+        </button>
+      </div>
+
+      <div class="hw-placeholder" id="hw-placeholder">
+        <i class="fa-solid fa-dumbbell"></i>
+        <p>Selecciona al menos un objetivo para generar tu plan de 30 días</p>
+      </div>
+
+      <div class="cal-wrap" id="cal-wrap">
+        <div class="cal-header">
+          <div class="cal-info">
+            <h3 id="cal-titulo">Plan 30 días</h3>
+            <p id="cal-subtitulo"></p>
+          </div>
+          <button class="btn-descargar" onclick="descargarPDF()">
+            <i class="fa-solid fa-file-pdf"></i> Descargar PDF
+          </button>
+        </div>
+
+        <div class="cal-leyenda" id="cal-leyenda"></div>
+        <div id="cal-semanas-headers" class="cal-semana-row" style="margin-bottom:4px"></div>
+        <div class="cal-semanas" id="cal-semanas"></div>
+
+        <div class="cal-detalle">
+          <p class="cal-detalle-titulo"><i class="fa-solid fa-list-check"></i> Detalle de sesiones por tipo</p>
+          <div class="cal-sesiones-grid" id="cal-sesiones-detalle"></div>
+        </div>
+
+        <div class="hw-motivacion">
+          <i class="fa-solid fa-fire"></i>
+          <p><strong>¡Comprométete con el plan!</strong> 30 días es el tiempo mínimo para que el cuerpo adapte sus patrones neuromusculares. Los primeros 10 días son los más difíciles — la constancia en esa etapa es lo que separa a los riders que mejoran de los que se quedan estancados. <strong>Comparte tus resultados con la comunidad BMX.593 y motiva a otros riders.</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ LESIONES ══ -->
+    <section class="lab-seccion" id="tab-lesiones">
+      <h2 class="lab-seccion-titulo">Lesiones <span>Comunes</span></h2>
+      <p class="lab-seccion-sub">Conocer cómo ocurren las lesiones y qué hacer cuando suceden puede marcar la diferencia entre una recuperación rápida y una crónica. Haz clic en cada lesión para ver el detalle.</p>
+      <div class="lab-divider"></div>
+      <div class="lesiones-grid" id="lesiones-grid"></div>
+    </section>
+
+    <!-- ══ PREVENCIÓN ══ -->
+    <section class="lab-seccion" id="tab-prevencion">
+      <h2 class="lab-seccion-titulo">Pre<span>vención</span></h2>
+      <p class="lab-seccion-sub">Equipamiento correcto, calentamiento adecuado y técnica de caída — los tres pilares que separan a los riders que progresan de los que se quedan en el banco.</p>
+      <div class="lab-divider"></div>
+      <div id="prev-contenido"></div>
+    </section>
+
+    <!-- ══ LAB SESSIONS ══ -->
+    <section class="lab-seccion" id="tab-sessions">
+      <h2 class="lab-seccion-titulo">Lab <span>Sessions</span></h2>
+      <p class="lab-seccion-sub">Videos del equipo BMX.593 — el proceso completo: fallos, análisis y logros. No solo el resultado final.</p>
+      <div class="lab-divider"></div>
+      <div class="sessions-grid" id="sessions-grid"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Modal video -->
+<div id="lab-vm" onclick="if(event.target===this)cerrarVM()">
+  <div class="lvm-inner">
+    <button class="lvm-cerrar" onclick="cerrarVM()"><i class="fa-solid fa-xmark"></i></button>
+    <p class="lvm-titulo" id="lvm-titulo"></p>
+    <div class="lvm-wrap"><iframe id="lvm-iframe" src="" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">BMX<span>.</span>593</div>
+      <p class="footer-tagline">Comunidad de BMX Freestyle en Ecuador.</p>
+      <p class="footer-contact">📧 <a href="mailto:hola@bmx593.ec">hola@bmx593.ec</a></p>
     </div>
-  </footer>
+    <div class="footer-social">
+      <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://youtube.com" target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i></a>
+      <a href="https://tiktok.com" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="https://facebook.com" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 BMX.593</span><span>Hecho con 🚲 en Ecuador</span>
+  </div>
+</footer>
 
-  <script src="js/streetlab.js"></script>
-  <script>
-    // ── Estado ────────────────────────────────────────────────
-    let hwMetas = new Set();
+<script src="js/streetlab.js"></script>
+<script>
+// ── Estado ───────────────────────────────────────────────────
+let hwMetas = new Set();
 
-    const ZONA_COLORES = {
-      cabeza:"#e63946", hombro:"#f4a261", muneca:"#2ec4b6",
-      codo:"#f9c74f", espalda:"#a8dadc", cadera:"#c77dff",
-      rodilla:"#57cc99", tobillo:"#f4a261", pie:"#e63946"
-    };
-    const GRAVEDAD_CONFIG = {
-      leve:     { color:"#57cc99", label:"Leve" },
-      moderada: { color:"#f9c74f", label:"Moderada" },
-      grave:    { color:"#e63946", label:"Grave" }
-    };
-    const RESULTADO_CONFIG = {
-      "logrado":     { color:"#57cc99", label:"✅ Logrado" },
-      "en-progreso": { color:"#f9c74f", label:"🔄 En progreso" },
-      "wip":         { color:"#a8dadc", label:"🧪 WIP" }
-    };
+// Colores y configuración del calendario
+const CAL_CONFIG = {
+  rotacion:    { color:"#e63946", bg:"rgba(230,57,70,0.18)",   icono:"⚡", label:"Rotación" },
+  potencia:    { color:"#f4a261", bg:"rgba(244,162,97,0.18)",  icono:"🚀", label:"Potencia" },
+  equilibrio:  { color:"#2ec4b6", bg:"rgba(46,196,182,0.18)",  icono:"⚖️", label:"Equilibrio" },
+  grinds:      { color:"#c77dff", bg:"rgba(199,125,255,0.18)", icono:"🔩", label:"Grinds" },
+  combinado:   { color:"#f9c74f", bg:"rgba(249,199,79,0.18)",  icono:"🟡", label:"Combinado" },
+  bmx:         { color:"#57cc99", bg:"rgba(87,204,153,0.18)",  icono:"🚲", label:"Sesión BMX" },
+  descanso:    { color:"#444",    bg:"rgba(60,60,60,0.5)",     icono:"😴", label:"Descanso" },
+  movilidad:   { color:"#a8dadc", bg:"rgba(168,218,220,0.18)", icono:"🧘", label:"Movilidad" },
+};
 
-    // ── Init ─────────────────────────────────────────────────
-    document.addEventListener("DOMContentLoaded", () => {
-      renderLesiones();
-      renderPrevencion();
-      renderSessions();
-      document.getElementById("navToggle").addEventListener("click", () => {
-        document.getElementById("navLinks").classList.toggle("abierto");
-      });
-      document.addEventListener("keydown", e => {
-        if (e.key === "Escape") cerrarVideoLab();
-      });
-    });
+const ZONA_COLORES = { cabeza:"#e63946",hombro:"#f4a261",muneca:"#2ec4b6",codo:"#f9c74f",espalda:"#a8dadc",cadera:"#c77dff",rodilla:"#57cc99",tobillo:"#f4a261",pie:"#e63946" };
+const GRAV_CFG = { leve:{color:"#57cc99",label:"Leve"},moderada:{color:"#f9c74f",label:"Moderada"},grave:{color:"#e63946",label:"Grave"} };
+const RES_CFG  = { logrado:{color:"#57cc99",label:"✅ Logrado"},"en-progreso":{color:"#f9c74f",label:"🔄 En progreso"},wip:{color:"#a8dadc",label:"🧪 WIP"} };
 
-    // ── Tabs ─────────────────────────────────────────────────
-    function cambiarTab(tab) {
-      document.querySelectorAll(".lab-tab").forEach(t =>
-        t.classList.toggle("activo", t.dataset.tab === tab));
-      document.querySelectorAll(".lab-seccion").forEach(s =>
-        s.classList.toggle("activa", s.id === "tab-" + tab));
-    }
+// ── Init ─────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+  renderLesiones();
+  renderPrevencion();
+  renderSessions();
+  document.getElementById("navToggle").addEventListener("click", () =>
+    document.getElementById("navLinks").classList.toggle("abierto"));
+  document.addEventListener("keydown", e => { if(e.key==="Escape") cerrarVM(); });
+});
 
-    // ── LESIONES ─────────────────────────────────────────────
-    function renderLesiones() {
-      const grid = document.getElementById("lesiones-grid");
-      grid.innerHTML = LESIONES.map(l => {
-        const color   = ZONA_COLORES[l.zona]    || "#666";
-        const gravCfg = GRAVEDAD_CONFIG[l.gravedad] || { color:"#666", label:l.gravedad };
-        const senalesHTML = l.senales.map(s =>
-          `<span class="lesion-senal">${s}</span>`).join("");
+// ── Tabs ─────────────────────────────────────────────────────
+function cambiarTab(tab) {
+  document.querySelectorAll(".lab-tab").forEach(t => t.classList.toggle("activo", t.dataset.tab===tab));
+  document.querySelectorAll(".lab-seccion").forEach(s => s.classList.toggle("activa", s.id==="tab-"+tab));
+}
 
-        return `
-          <div class="lesion-card" id="lesion-${l.id}" onclick="toggleLesion(${l.id})">
-            <div class="lesion-header">
-              <div class="lesion-header-left">
-                <span class="lesion-zona-badge" style="background:${color}">${l.zona}</span>
-                <span class="lesion-nombre">${l.nombre}</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:8px">
-                <span class="lesion-gravedad" style="color:${gravCfg.color}">${gravCfg.label}</span>
-                <i class="fa-solid fa-chevron-down lesion-chevron"></i>
-              </div>
-            </div>
-            <div class="lesion-body">
-              <div class="lesion-grid-info">
-                <div class="lesion-info-bloque">
-                  <span class="lesion-info-label">¿Cómo ocurre?</span>
-                  <span class="lesion-info-texto">${l.mecanismo}</span>
-                </div>
-                <div class="lesion-info-bloque">
-                  <span class="lesion-info-label">Señales de alerta</span>
-                  <div class="lesion-senales">${senalesHTML}</div>
-                </div>
-                <div class="lesion-info-bloque">
-                  <span class="lesion-info-label">¿Qué hacer?</span>
-                  <span class="lesion-info-texto">${l.quéHacer}</span>
-                </div>
-                <div class="lesion-info-bloque">
-                  <span class="lesion-info-label">Cómo prevenirla</span>
-                  <span class="lesion-info-texto">${l.prevención}</span>
-                </div>
-              </div>
-              <div class="lesion-recuperacion">
-                <i class="fa-solid fa-clock"></i>
-                <span>Recuperación estimada: <strong>${l.tiempoRecuperacion}</strong></span>
-              </div>
-            </div>
-          </div>`;
-      }).join("");
-    }
+// ── HardWork toggle ──────────────────────────────────────────
+function hwToggle(btn) {
+  const meta = btn.dataset.meta;
+  hwMetas.has(meta) ? hwMetas.delete(meta) : hwMetas.add(meta);
+  btn.classList.toggle("activo");
+  if (hwMetas.size > 0) generarCalendario(); else mostrarPlaceholder();
+}
 
-    function toggleLesion(id) {
-      const card = document.getElementById("lesion-" + id);
-      card.classList.toggle("expandida");
-    }
+function mostrarPlaceholder() {
+  document.getElementById("hw-placeholder").style.display = "flex";
+  document.getElementById("cal-wrap").classList.remove("visible");
+}
 
-    // ── PREVENCIÓN ───────────────────────────────────────────
-    function renderPrevencion() {
-      const cont = document.getElementById("prevencion-contenido");
+// ── Generación del calendario de 30 días ─────────────────────
+function generarCalendario() {
+  const metas = [...hwMetas];
+  document.getElementById("hw-placeholder").style.display = "none";
+  document.getElementById("cal-wrap").classList.add("visible");
 
-      const equipHTML = PREVENCION.equipamiento.map(e => `
-        <div class="prev-equipo-card">
-          <div class="prev-equipo-header">
-            <div class="prev-equipo-icono"><i class="fa-solid ${e.icon}"></i></div>
-            <span class="prev-equipo-nombre">${e.nombre}</span>
-            ${e.obligatorio ? '<span class="prev-obligatorio">Obligatorio</span>' : ''}
-          </div>
-          <p class="prev-equipo-desc">${e.descripcion}</p>
-          <div class="prev-equipo-cuando">
-            <i class="fa-solid fa-circle-check"></i>
-            <span>${e.cuando}</span>
-          </div>
-        </div>`).join("");
+  const metasLabel = metas.map(m => CAL_CONFIG[m].label).join(" + ");
+  document.getElementById("cal-titulo").textContent = `Plan 30 días — ${metasLabel}`;
+  document.getElementById("cal-subtitulo").textContent =
+    `Inicio: ${new Date().toLocaleDateString("es-EC",{day:"numeric",month:"long",year:"numeric"})} · Máx. 9 ejercicios/sesión`;
 
-      const calHTML = PREVENCION.calenamiento.map(e => `
-        <div class="calentamiento-item">
-          <span class="calentamiento-duracion">${e.duracion}</span>
-          <span class="calentamiento-nombre">${e.ejercicio}</span>
-          <span class="calentamiento-desc">${e.desc}</span>
-        </div>`).join("");
+  // Construir leyenda
+  const leySets = [...metas, "combinado", "bmx", "movilidad", "descanso"];
+  document.getElementById("cal-leyenda").innerHTML = leySets.map(k => `
+    <div class="cal-ley-item">
+      <div class="cal-ley-dot" style="background:${CAL_CONFIG[k].color}"></div>
+      ${CAL_CONFIG[k].icono} ${CAL_CONFIG[k].label}
+    </div>`).join("");
 
-      const caidaHTML = PREVENCION.tecnicaCaida.map((t, i) => `
-        <div class="caida-item">
-          <div class="caida-num">${i + 1}</div>
-          <p class="caida-texto">${t}</p>
-        </div>`).join("");
+  // Construir patrón de 30 días
+  const patron = buildPatron(metas);
 
-      cont.innerHTML = `
-        <div class="prev-grid">${equipHTML}</div>
-        <p class="prev-subtitulo"><i class="fa-solid fa-fire"></i> Calentamiento pre-sesión (10 min)</p>
-        <div class="calentamiento-list">${calHTML}</div>
-        <p class="prev-subtitulo"><i class="fa-solid fa-person-falling"></i> Técnica de caída segura</p>
-        <div class="caida-list">${caidaHTML}</div>`;
-    }
+  // Headers de días
+  const dias = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+  document.getElementById("cal-semanas-headers").innerHTML =
+    `<div class="cal-semana-label"></div>` +
+    dias.map(d => `<div class="cal-dia-header">${d}</div>`).join("");
 
-    // ── HARDWORK BMX ─────────────────────────────────────────
-    function hwToggleMeta(btn) {
-      const meta = btn.dataset.meta;
-      hwMetas.has(meta) ? hwMetas.delete(meta) : hwMetas.add(meta);
-      btn.classList.toggle("activo");
-      renderRutina();
-    }
-
-    function renderRutina() {
-      const res = document.getElementById("hw-resultado");
-      if (hwMetas.size === 0) {
-        res.classList.remove("visible");
-        res.innerHTML = "";
-        return;
-      }
-
-      const metasArr = [...hwMetas];
-      const BLOQUES = {
-        calentamiento: { label:"Calentamiento", icon:"fa-fire" },
-        principal:     { label:"Trabajo principal", icon:"fa-dumbbell" },
-        enfriamiento:  { label:"Enfriamiento", icon:"fa-snowflake" }
-      };
-
-      let html = `
-        <div style="margin-bottom:1.5rem;padding:1rem 1.2rem;background:rgba(230,57,70,0.07);
-             border:1px solid rgba(230,57,70,0.2);border-radius:10px;">
-          <p style="font-family:var(--font-display);font-size:0.72rem;color:var(--gris-400);
-             letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Tu rutina para</p>
-          <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:800;color:var(--blanco)">
-            ${metasArr.map(m => m.charAt(0).toUpperCase() + m.slice(1)).join(" + ")}
-          </p>
+  // Renderizar semanas
+  const hoy = new Date();
+  let html = "";
+  for (let sem = 0; sem < 5; sem++) {
+    html += `<div class="cal-semana-row"><div class="cal-semana-label">SEM ${sem+1}</div>`;
+    for (let d = 0; d < 7; d++) {
+      const diaNum = sem * 7 + d;
+      if (diaNum >= 30) { html += `<div></div>`; continue; }
+      const fecha = new Date(hoy); fecha.setDate(hoy.getDate() + diaNum);
+      const tipo  = patron[diaNum];
+      const cfg   = CAL_CONFIG[tipo];
+      html += `
+        <div class="cal-dia" style="background:${cfg.bg};border-color:${cfg.color}22"
+             title="Día ${diaNum+1}: ${cfg.label}">
+          <span class="cal-dia-num">${fecha.getDate()}</span>
+          <span class="cal-dia-icono">${cfg.icono}</span>
+          <span class="cal-dia-tipo">${cfg.label}</span>
         </div>`;
+    }
+    html += `</div>`;
+  }
+  document.getElementById("cal-semanas").innerHTML = html;
 
-      Object.entries(BLOQUES).forEach(([bloque, cfg]) => {
-        // Filtrar ejercicios: del bloque y que tengan al menos una meta seleccionada
-        // Para calentamiento y enfriamiento: incluir siempre
-        let ejercs;
-        if (bloque === "calentamiento" || bloque === "enfriamiento") {
-          ejercs = EJERCICIOS.filter(e => e.bloque === bloque);
-        } else {
-          ejercs = EJERCICIOS.filter(e =>
-            e.bloque === bloque &&
-            metasArr.some(m => e.capacidad.includes(m))
-          );
-        }
-        if (ejercs.length === 0) return;
+  // Renderizar detalle de sesiones
+  renderDetalleSesiones(metas);
+}
 
-        const cardsHTML = ejercs.map(e => `
-          <div class="hw-ejercicio-card" id="hwej-${e.id}" onclick="hwToggleEj(${e.id})">
-            <div class="hw-ej-header">
-              <div>
-                <div class="hw-ej-nombre">${e.nombre}</div>
-                <div class="hw-ej-stats">
-                  <span class="hw-ej-stat series">${e.series} series × ${e.reps}</span>
-                  <span class="hw-ej-stat descanso"><i class="fa-solid fa-clock"></i> ${e.descanso}</span>
-                </div>
-              </div>
-              <i class="fa-solid fa-chevron-down" style="color:var(--gris-400);font-size:0.75rem;margin-top:4px;flex-shrink:0"></i>
-            </div>
-            <div class="hw-ej-body">
-              <p class="hw-ej-desc">${e.descripcion}</p>
-              <div class="hw-ej-beneficio">
-                <strong>¿Por qué en BMX?</strong> ${e.beneficio}
-              </div>
-              <div class="hw-ej-progresion">
-                <i class="fa-solid fa-arrow-trend-up"></i>
-                <span>${e.progresion}</span>
-              </div>
-            </div>
-          </div>`).join("");
+// ── Patrón de 30 días según número de metas ─────────────────
+function buildPatron(metas) {
+  const n = metas.length;
+  const patron = [];
 
-        html += `
-          <div class="hw-bloque">
-            <div class="hw-bloque-titulo">
-              <i class="fa-solid ${cfg.icon}"></i> ${cfg.label}
-            </div>
-            <div class="hw-ejercicio-grid">${cardsHTML}</div>
-          </div>`;
+  if (n === 1) {
+    // 1 meta: Lun trabajo, Mar movilidad, Mié trabajo, Jue descanso,
+    //         Vie trabajo, Sáb BMX, Dom descanso
+    const template = [metas[0],"movilidad",metas[0],"descanso",metas[0],"bmx","descanso"];
+    for (let i = 0; i < 30; i++) patron.push(template[i % 7]);
+  } else if (n === 2) {
+    // 2 metas: alternar por semana
+    // Sem 1-2: base (una meta/día) · Sem 3-4: combinado
+    const [a, b] = metas;
+    const sem12 = [a,"movilidad",b,"descanso",a,"bmx","descanso"];
+    const sem34 = [a,"movilidad",b,"descanso","combinado","bmx","descanso"];
+    for (let i = 0; i < 30; i++) {
+      const sem = Math.floor(i / 7);
+      patron.push(sem < 2 ? sem12[i % 7] : sem34[i % 7]);
+    }
+  } else if (n === 3) {
+    const [a, b, c] = metas;
+    const sem12 = [a,"movilidad",b,"descanso",c,"bmx","descanso"];
+    const sem34 = [a,b,"movilidad",c,"combinado","bmx","descanso"];
+    for (let i = 0; i < 30; i++) {
+      const sem = Math.floor(i / 7);
+      patron.push(sem < 2 ? sem12[i % 7] : sem34[i % 7]);
+    }
+  } else {
+    // 4 metas: rotar las 4, combinado el viernes
+    const [a, b, c, d] = metas;
+    const sem12 = [a,"movilidad",b,c,"descanso","bmx","descanso"];
+    const sem34 = [a,b,"movilidad",c,d,"bmx","descanso"];
+    // día 28 es especial: combinado
+    for (let i = 0; i < 30; i++) {
+      const sem = Math.floor(i / 7);
+      if (i === 28) { patron.push("combinado"); continue; }
+      if (i === 29) { patron.push("descanso"); continue; }
+      patron.push(sem < 2 ? sem12[i % 7] : sem34[i % 7]);
+    }
+  }
+  return patron;
+}
+
+// ── Detalle de sesiones ──────────────────────────────────────
+function renderDetalleSesiones(metas) {
+  const cont = document.getElementById("cal-sesiones-detalle");
+  const sesionTypes = [...new Set([...metas, metas.length > 1 ? "combinado" : null].filter(Boolean))];
+
+  cont.innerHTML = sesionTypes.map(tipo => {
+    const cfg = CAL_CONFIG[tipo];
+    let ejercs;
+    if (tipo === "combinado") {
+      // Para combinado: 2-3 ejercicios principales de cada meta (sin calentamiento/enfriamiento)
+      ejercs = [];
+      metas.forEach(m => {
+        const ejsMeta = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(m));
+        ejercs.push(...ejsMeta.slice(0,2));
       });
-
-      res.innerHTML = html;
-      res.classList.add("visible");
+    } else {
+      ejercs = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(tipo));
     }
 
-    function hwToggleEj(id) {
-      document.getElementById("hwej-" + id)?.classList.toggle("expandido");
+    // Calentamiento + principal (max 6) + enfriamiento = ~9 bloques
+    const ejsCalent = EJERCICIOS.filter(e => e.bloque==="calentamiento").slice(0,1);
+    const ejsPrinc  = ejercs.slice(0, tipo==="combinado" ? 6 : 5);
+    const ejsEnfr   = EJERCICIOS.filter(e => e.bloque==="enfriamiento").slice(0,2);
+    const todos     = [...ejsCalent, ...ejsPrinc, ...ejsEnfr];
+
+    const ejsHTML = todos.map(e => `
+      <div class="cal-ej-item">
+        <div>
+          <div class="cal-ej-nombre">${e.nombre}</div>
+          <div class="cal-ej-meta">${e.bloque}</div>
+        </div>
+        <div class="cal-ej-stats">${e.series}×${e.reps.toString().split(' ')[0]}</div>
+      </div>`).join("");
+
+    return `
+      <div class="cal-sesion-card">
+        <div class="cal-sesion-header" style="border-bottom:2px solid ${cfg.color}">
+          <div style="width:10px;height:10px;border-radius:50%;background:${cfg.color};flex-shrink:0"></div>
+          <div>
+            <div class="cal-sesion-nombre">${cfg.icono} Sesión ${cfg.label}</div>
+            <div class="cal-sesion-count">${todos.length} ejercicios · ~45–55 min</div>
+          </div>
+        </div>
+        <div class="cal-sesion-ejs">${ejsHTML}</div>
+      </div>`;
+  }).join("");
+}
+
+// ── Generación del PDF (2 hojas) ─────────────────────────────
+function descargarPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const metas = [...hwMetas];
+  const patron = buildPatron(metas);
+  const hoy = new Date();
+  const metasLabel = metas.map(m => CAL_CONFIG[m].label).join(" + ");
+
+  // ── HOJA 1: Calendario ──────────────────────────────────────
+  // Fondo oscuro
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, 210, 297, "F");
+
+  // Header
+  doc.setFillColor(230, 57, 70);
+  doc.rect(0, 0, 210, 22, "F");
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(18);
+  doc.setFont("helvetica", "bold");
+  doc.text("BMX.593 — HardWork BMX", 14, 10);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Plan 30 días · ${metasLabel}`, 14, 17);
+  doc.text(`Inicio: ${hoy.toLocaleDateString("es-EC",{day:"numeric",month:"long",year:"numeric"})}`, 196, 17, { align:"right" });
+
+  // Leyenda
+  let lx = 14; const ly = 28;
+  doc.setFontSize(7);
+  const leySets = [...metas, "combinado", "bmx", "movilidad", "descanso"];
+  leySets.forEach(k => {
+    const cfg = CAL_CONFIG[k];
+    const rgb = hexToRgb(cfg.color);
+    doc.setFillColor(rgb.r, rgb.g, rgb.b);
+    doc.roundedRect(lx, ly-3, 3.5, 3.5, 0.5, 0.5, "F");
+    doc.setTextColor(rgb.r, rgb.g, rgb.b);
+    doc.text(`${cfg.icono} ${cfg.label}`, lx+5, ly);
+    lx += 32;
+  });
+
+  // Días de la semana header
+  const dias = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+  const startX = 14, startY = 38;
+  const cellW = 26, cellH = 36;
+  doc.setTextColor(150, 150, 150);
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "bold");
+  dias.forEach((d, i) => {
+    doc.text(d, startX + 8 + i * cellW, startY, { align:"center" });
+  });
+
+  // Celdas del calendario
+  for (let sem = 0; sem < 5; sem++) {
+    const y = startY + 6 + sem * (cellH + 3);
+    // Label semana
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(7);
+    doc.setFont("helvetica", "normal");
+    doc.text(`SEM ${sem+1}`, 4, y + cellH/2, { align:"center" });
+
+    for (let d = 0; d < 7; d++) {
+      const diaIdx = sem * 7 + d;
+      if (diaIdx >= 30) continue;
+      const x = startX + d * cellW;
+      const tipo = patron[diaIdx];
+      const cfg  = CAL_CONFIG[tipo];
+      const rgb  = hexToRgb(cfg.color);
+      const fecha = new Date(hoy); fecha.setDate(hoy.getDate() + diaIdx);
+
+      // Fondo celda
+      doc.setFillColor(rgb.r * 0.25, rgb.g * 0.25, rgb.b * 0.25);
+      doc.roundedRect(x, y, cellW - 1, cellH, 2, 2, "F");
+      // Borde
+      doc.setDrawColor(rgb.r, rgb.g, rgb.b);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(x, y, cellW - 1, cellH, 2, 2, "S");
+
+      // Número del día
+      doc.setTextColor(180, 180, 180);
+      doc.setFontSize(7);
+      doc.setFont("helvetica", "normal");
+      doc.text(String(fecha.getDate()), x + 2, y + 5);
+
+      // Ícono
+      doc.setFontSize(14);
+      doc.setTextColor(255, 255, 255);
+      doc.text(cfg.icono, x + cellW/2 - 1, y + 20, { align:"center" });
+
+      // Label
+      doc.setFontSize(6);
+      doc.setTextColor(rgb.r, rgb.g, rgb.b);
+      doc.text(cfg.label, x + cellW/2 - 1, y + cellH - 4, { align:"center" });
+    }
+  }
+
+  // Footer hoja 1
+  doc.setFontSize(7);
+  doc.setTextColor(100, 100, 100);
+  doc.text("bmx593.ec · Street Lab — HardWork BMX · Hoja 1/2", 105, 290, { align:"center" });
+
+  // ── HOJA 2: Rutinas detalladas ──────────────────────────────
+  doc.addPage();
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, 210, 297, "F");
+
+  // Header hoja 2
+  doc.setFillColor(230, 57, 70);
+  doc.rect(0, 0, 210, 22, "F");
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text("Rutinas Detalladas", 14, 10);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${metasLabel} · Máx. 9 ejercicios/sesión · ~45–55 min`, 14, 17);
+
+  let yPos = 28;
+  const sesionTypes = [...new Set([...metas, metas.length > 1 ? "combinado" : null].filter(Boolean))];
+
+  sesionTypes.forEach(tipo => {
+    if (yPos > 260) { doc.addPage(); yPos = 20; }
+    const cfg = CAL_CONFIG[tipo];
+    const rgb = hexToRgb(cfg.color);
+
+    let ejercs;
+    if (tipo === "combinado") {
+      ejercs = [];
+      metas.forEach(m => {
+        const ejsMeta = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(m));
+        ejercs.push(...ejsMeta.slice(0,2));
+      });
+    } else {
+      ejercs = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(tipo));
     }
 
-    // ── LAB SESSIONS ─────────────────────────────────────────
-    function renderSessions() {
-      const grid = document.getElementById("sessions-grid");
-      grid.innerHTML = LAB_SESSIONS.map(s => {
-        const resCfg = RESULTADO_CONFIG[s.resultado] || { color:"#666", label:s.resultado };
-        return `
-          <div class="lab-session-card" onclick="abrirVideoLab('${s.video}','${s.titulo.replace(/'/g,"\\'")}')">
-            <div class="lab-session-thumb">
-              <img src="https://img.youtube.com/vi/${s.video}/mqdefault.jpg"
-                   alt="${s.titulo}"
-                   onerror="this.src='https://picsum.photos/seed/lab${s.id}/480/270'">
-              <div class="lab-session-play">
-                <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
-                  <path class="play-bg"    d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.8 0 34 0 34 0S12.2 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.4 0 24 0 24s0 11.6 1.7 16.3a8.5 8.5 0 0 0 6 6C12.2 48 34 48 34 48s21.8 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.6 68 24 68 24s0-11.6-1.5-16.3z"/>
-                  <path class="play-arrow" d="M45 24 27 14v20z"/>
-                </svg>
-              </div>
-              <span class="lab-resultado-badge" style="background:${resCfg.color};color:${s.resultado==='logrado'?'#000':'#000'}">${resCfg.label}</span>
-              <span class="lab-truco-badge">${s.truco}</span>
-            </div>
-            <div class="lab-session-body">
-              <h3 class="lab-session-titulo">${s.titulo}</h3>
-              <p class="lab-session-desc">${s.descripcion}</p>
-              <div class="lab-session-meta">
-                <span><i class="fa-solid fa-user"></i> ${s.rider}</span>
-                <span><i class="fa-solid fa-calendar"></i> ${new Date(s.fecha+'T12:00:00').toLocaleDateString('es-EC',{day:'numeric',month:'short',year:'numeric'})}</span>
-              </div>
-            </div>
-          </div>`;
-      }).join("");
-    }
+    const ejsCalent = EJERCICIOS.filter(e => e.bloque==="calentamiento").slice(0,1);
+    const ejsPrinc  = ejercs.slice(0, tipo==="combinado" ? 6 : 5);
+    const ejsEnfr   = EJERCICIOS.filter(e => e.bloque==="enfriamiento").slice(0,2);
+    const todos     = [...ejsCalent, ...ejsPrinc, ...ejsEnfr];
 
-    function abrirVideoLab(videoId, titulo) {
-      document.getElementById("lvm-titulo").textContent = titulo;
-      document.getElementById("lvm-iframe").src =
-        `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
-      document.getElementById("lab-video-modal").classList.add("activo");
-      document.body.style.overflow = "hidden";
-    }
+    // Título de sesión
+    doc.setFillColor(rgb.r * 0.2, rgb.g * 0.2, rgb.b * 0.2);
+    doc.roundedRect(14, yPos, 182, 9, 1.5, 1.5, "F");
+    doc.setFillColor(rgb.r, rgb.g, rgb.b);
+    doc.rect(14, yPos, 3, 9, "F");
+    doc.setTextColor(rgb.r, rgb.g, rgb.b);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${cfg.icono} Sesión ${cfg.label}  ·  ${todos.length} ejercicios`, 20, yPos + 6);
+    doc.setTextColor(150,150,150);
+    doc.setFontSize(7);
+    doc.text("~45–55 min", 186, yPos + 6, { align:"right" });
+    yPos += 12;
 
-    function cerrarVideoLab() {
-      document.getElementById("lvm-iframe").src = "";
-      document.getElementById("lab-video-modal").classList.remove("activo");
-      document.body.style.overflow = "";
-    }
-  </script>
+    // Tabla de ejercicios
+    const cols = { nombre:80, series:25, reps:35, descanso:25, bloque:20 };
+    // Header tabla
+    doc.setFillColor(30, 30, 30);
+    doc.rect(14, yPos, 182, 6, "F");
+    doc.setTextColor(120, 120, 120);
+    doc.setFontSize(6.5);
+    doc.setFont("helvetica", "bold");
+    doc.text("EJERCICIO", 16, yPos + 4);
+    doc.text("SERIES", 96, yPos + 4);
+    doc.text("REPS", 121, yPos + 4);
+    doc.text("DESCANSO", 156, yPos + 4);
+    yPos += 6;
+
+    todos.forEach((e, idx) => {
+      if (yPos > 270) { doc.addPage(); yPos = 20; }
+      const bg = idx % 2 === 0 ? [22,22,22] : [28,28,28];
+      doc.setFillColor(bg[0], bg[1], bg[2]);
+      doc.rect(14, yPos, 182, 7, "F");
+
+      // Bloque badge
+      const bloqueRgb = e.bloque==="calentamiento" ? [230,57,70] : e.bloque==="enfriamiento" ? [46,196,182] : [100,100,200];
+      doc.setFillColor(bloqueRgb[0]*0.3, bloqueRgb[1]*0.3, bloqueRgb[2]*0.3);
+      doc.rect(14, yPos, 2.5, 7, "F");
+
+      doc.setTextColor(220, 220, 220);
+      doc.setFontSize(7.5);
+      doc.setFont("helvetica", "normal");
+      doc.text(e.nombre, 18, yPos + 4.5);
+      doc.setTextColor(200, 200, 200);
+      doc.text(String(e.series), 98, yPos + 4.5);
+      doc.setTextColor(200, 200, 200);
+      doc.text(e.reps.toString().length > 18 ? e.reps.toString().substring(0,18)+"..." : e.reps.toString(), 123, yPos + 4.5);
+      doc.setTextColor(46, 196, 182);
+      doc.text(e.descanso, 158, yPos + 4.5);
+      yPos += 7;
+    });
+    yPos += 6;
+  });
+
+  // Mensaje motivacional
+  if (yPos < 250) {
+    doc.setFillColor(50, 20, 20);
+    doc.roundedRect(14, yPos, 182, 20, 2, 2, "F");
+    doc.setDrawColor(230, 57, 70);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(14, yPos, 182, 20, 2, 2, "S");
+    doc.setTextColor(230, 57, 70);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.text("🔥 ¡Comprométete con el plan!", 18, yPos + 7);
+    doc.setTextColor(180, 180, 180);
+    doc.setFontSize(7.5);
+    doc.setFont("helvetica", "normal");
+    doc.text("30 días es el tiempo mínimo para adaptar patrones neuromusculares.", 18, yPos + 13);
+    doc.text("Comparte tus resultados con la comunidad #BMX593HardWork", 18, yPos + 18);
+  }
+
+  // Footer hoja 2
+  doc.setFontSize(7);
+  doc.setTextColor(100, 100, 100);
+  doc.text("bmx593.ec · Street Lab — HardWork BMX · Hoja 2/2", 105, 290, { align:"center" });
+
+  // Guardar
+  doc.save(`BMX593-HardWork-${metas.join("-")}-30dias.pdf`);
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return { r, g, b };
+}
+
+// ── LESIONES ─────────────────────────────────────────────────
+function renderLesiones() {
+  document.getElementById("lesiones-grid").innerHTML = LESIONES.map(l => {
+    const color = ZONA_COLORES[l.zona] || "#666";
+    const gcfg  = GRAV_CFG[l.gravedad] || {color:"#666",label:l.gravedad};
+    return `
+      <div class="lesion-card" id="lc-${l.id}" onclick="toggleLesion(${l.id})">
+        <div class="lesion-header">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="lesion-zona-badge" style="background:${color}">${l.zona}</span>
+            <span class="lesion-nombre">${l.nombre}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="lesion-gravedad" style="color:${gcfg.color}">${gcfg.label}</span>
+            <i class="fa-solid fa-chevron-down lesion-chevron"></i>
+          </div>
+        </div>
+        <div class="lesion-body">
+          <div class="lesion-grid-info">
+            <div class="lesion-info-bloque"><span class="lesion-info-label">¿Cómo ocurre?</span><span class="lesion-info-texto">${l.mecanismo}</span></div>
+            <div class="lesion-info-bloque"><span class="lesion-info-label">Señales</span><div class="lesion-senales">${l.senales.map(s=>`<span class="lesion-senal">${s}</span>`).join("")}</div></div>
+            <div class="lesion-info-bloque"><span class="lesion-info-label">¿Qué hacer?</span><span class="lesion-info-texto">${l.quéHacer}</span></div>
+            <div class="lesion-info-bloque"><span class="lesion-info-label">Prevención</span><span class="lesion-info-texto">${l.prevención}</span></div>
+          </div>
+          <div class="lesion-recuperacion"><i class="fa-solid fa-clock"></i> Recuperación: <strong>${l.tiempoRecuperacion}</strong></div>
+        </div>
+      </div>`;
+  }).join("");
+}
+function toggleLesion(id) { document.getElementById("lc-"+id)?.classList.toggle("expandida"); }
+
+// ── PREVENCIÓN ───────────────────────────────────────────────
+function renderPrevencion() {
+  const c = document.getElementById("prev-contenido");
+  c.innerHTML = `
+    <div class="prev-grid">${PREVENCION.equipamiento.map(e=>`
+      <div class="prev-card">
+        <div class="prev-header">
+          <div class="prev-icono"><i class="fa-solid ${e.icon}"></i></div>
+          <span class="prev-nombre">${e.nombre}</span>
+          ${e.obligatorio?'<span class="prev-oblig">Obligatorio</span>':''}
+        </div>
+        <p class="prev-desc">${e.descripcion}</p>
+        <div class="prev-cuando"><i class="fa-solid fa-circle-check"></i><span>${e.cuando}</span></div>
+      </div>`).join("")}</div>
+    <p class="prev-subtitulo"><i class="fa-solid fa-fire"></i> Calentamiento pre-sesión (10 min)</p>
+    ${PREVENCION.calenamiento.map(e=>`
+      <div class="cal-item">
+        <span class="cal-dur">${e.duracion}</span>
+        <span class="cal-ej-n">${e.ejercicio}</span>
+        <span class="cal-ej-d">${e.desc}</span>
+      </div>`).join("")}
+    <p class="prev-subtitulo"><i class="fa-solid fa-person-falling"></i> Técnica de caída segura</p>
+    ${PREVENCION.tecnicaCaida.map((t,i)=>`
+      <div class="caida-item">
+        <div class="caida-num">${i+1}</div>
+        <p class="caida-texto">${t}</p>
+      </div>`).join("")}`;
+}
+
+// ── LAB SESSIONS ─────────────────────────────────────────────
+function renderSessions() {
+  document.getElementById("sessions-grid").innerHTML = LAB_SESSIONS.map(s => {
+    const rcfg = RES_CFG[s.resultado] || {color:"#666",label:s.resultado};
+    return `
+      <div class="session-card" onclick="abrirVM('${s.video}','${s.titulo.replace(/'/g,"\\'")}')">
+        <div class="session-thumb">
+          <img src="https://img.youtube.com/vi/${s.video}/mqdefault.jpg" alt="${s.titulo}"
+               onerror="this.src='https://picsum.photos/seed/lab${s.id}/480/270'">
+          <div class="session-play">
+            <svg viewBox="0 0 68 48"><path class="play-bg" d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.8 0 34 0 34 0S12.2 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.4 0 24 0 24s0 11.6 1.7 16.3a8.5 8.5 0 0 0 6 6C12.2 48 34 48 34 48s21.8 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.6 68 24 68 24s0-11.6-1.5-16.3z"/><path class="play-arrow" d="M45 24 27 14v20z"/></svg>
+          </div>
+          <span class="res-badge" style="background:${rcfg.color}">${rcfg.label}</span>
+          <span class="trk-badge">${s.truco}</span>
+        </div>
+        <div class="session-body">
+          <h3 class="session-titulo">${s.titulo}</h3>
+          <p class="session-desc">${s.descripcion}</p>
+          <div class="session-meta">
+            <span><i class="fa-solid fa-user"></i> ${s.rider}</span>
+            <span><i class="fa-solid fa-calendar"></i> ${new Date(s.fecha+"T12:00:00").toLocaleDateString("es-EC",{day:"numeric",month:"short",year:"numeric"})}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function abrirVM(id, titulo) {
+  document.getElementById("lvm-titulo").textContent = titulo;
+  document.getElementById("lvm-iframe").src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+  document.getElementById("lab-vm").classList.add("activo");
+  document.body.style.overflow = "hidden";
+}
+function cerrarVM() {
+  document.getElementById("lvm-iframe").src = "";
+  document.getElementById("lab-vm").classList.remove("activo");
+  document.body.style.overflow = "";
+}
+</script>
 </body>
 </html>
