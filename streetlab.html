@@ -9,9 +9,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <!-- jsPDF para generación de PDF en el navegador -->
+  <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
+    /* (todos los estilos originales, sin cambios) */
     :root {
       --lab-rojo:#e63946;--lab-teal:#2ec4b6;--lab-naranja:#f4a261;
       --lab-verde:#57cc99;--lab-amarillo:#f9c74f;--lab-purp:#c77dff;
@@ -280,7 +281,8 @@
     <!-- ══ HARDWORK BMX ══ -->
     <section class="lab-seccion activa" id="tab-hardwork">
       <h2 class="lab-seccion-titulo">Hard<span>Work</span> BMX</h2>
-      <p class="lab-seccion-sub">Selecciona tu objetivo de entrenamiento y el sistema genera un <strong style="color:var(--blanco)">plan estructurado de 30 días</strong> con sesiones diarias diseñadas para las exigencias físicas del BMX. Máximo 8–9 ejercicios por sesión para evitar la fatiga acumulada.</p>
+      <p class="lab-seccion-sub">Selecciona tu objetivo de entrenamiento y el sistema genera un <strong style="color:var(--blanco)">plan estructurado de 30 días</strong> con sesiones diarias diseñadas para las exigencias físicas del BMX. Máximo 8–9 ejercicios por sesión para evitar la fatiga acumulada.<br><br>
+      <strong style="color:var(--teal);">⚠️ Este plan es un complemento a tu práctica habitual de BMX.</strong> No reemplaza los días que montas en bici. Sigue entrenando en tu bici con la frecuencia que tu progresión requiera; estos ejercicios están diseñados para mejorar tu condición física, prevenir lesiones y acelerar tu aprendizaje sobre la bicicleta.</p>
       <div class="lab-divider"></div>
 
       <p class="hw-selector-label"><i class="fa-solid fa-crosshairs"></i> ¿En qué quieres mejorar?</p>
@@ -399,14 +401,13 @@
 // ── Estado ───────────────────────────────────────────────────
 let hwMetas = new Set();
 
-// Colores y configuración del calendario
+// Colores y configuración del calendario (eliminado "bmx")
 const CAL_CONFIG = {
   rotacion:    { color:"#e63946", bg:"rgba(230,57,70,0.18)",   icono:"⚡", label:"Rotación" },
   potencia:    { color:"#f4a261", bg:"rgba(244,162,97,0.18)",  icono:"🚀", label:"Potencia" },
   equilibrio:  { color:"#2ec4b6", bg:"rgba(46,196,182,0.18)",  icono:"⚖️", label:"Equilibrio" },
   grinds:      { color:"#c77dff", bg:"rgba(199,125,255,0.18)", icono:"🔩", label:"Grinds" },
   combinado:   { color:"#f9c74f", bg:"rgba(249,199,79,0.18)",  icono:"🟡", label:"Combinado" },
-  bmx:         { color:"#57cc99", bg:"rgba(87,204,153,0.18)",  icono:"🚲", label:"Sesión BMX" },
   descanso:    { color:"#444",    bg:"rgba(60,60,60,0.5)",     icono:"😴", label:"Descanso" },
   movilidad:   { color:"#a8dadc", bg:"rgba(168,218,220,0.18)", icono:"🧘", label:"Movilidad" },
 };
@@ -455,16 +456,16 @@ function generarCalendario() {
   document.getElementById("cal-subtitulo").textContent =
     `Inicio: ${new Date().toLocaleDateString("es-EC",{day:"numeric",month:"long",year:"numeric"})} · Máx. 9 ejercicios/sesión`;
 
-  // Construir leyenda
-  const leySets = [...metas, "combinado", "bmx", "movilidad", "descanso"];
+  // Leyenda (sin bmx)
+  const leySets = [...metas, "combinado", "movilidad", "descanso"];
   document.getElementById("cal-leyenda").innerHTML = leySets.map(k => `
     <div class="cal-ley-item">
       <div class="cal-ley-dot" style="background:${CAL_CONFIG[k].color}"></div>
       ${CAL_CONFIG[k].icono} ${CAL_CONFIG[k].label}
     </div>`).join("");
 
-  // Construir patrón de 30 días
-  const patron = buildPatron(metas);
+  // Patrón de 30 días variado
+  const patron = buildPatronVariado(metas);
 
   // Headers de días
   const dias = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
@@ -495,64 +496,93 @@ function generarCalendario() {
   }
   document.getElementById("cal-semanas").innerHTML = html;
 
-  // Renderizar detalle de sesiones
+  // Detalle de sesiones (sin bmx)
   renderDetalleSesiones(metas);
 }
 
-// ── Patrón de 30 días según número de metas ─────────────────
-function buildPatron(metas) {
+// ── Patrón variado y determinista para 30 días ─────────────────
+function buildPatronVariado(metas) {
   const n = metas.length;
-  const patron = [];
-
-  if (n === 1) {
-    // 1 meta: Lun trabajo, Mar movilidad, Mié trabajo, Jue descanso,
-    //         Vie trabajo, Sáb BMX, Dom descanso
-    const template = [metas[0],"movilidad",metas[0],"descanso",metas[0],"bmx","descanso"];
-    for (let i = 0; i < 30; i++) patron.push(template[i % 7]);
-  } else if (n === 2) {
-    // 2 metas: alternar por semana
-    // Sem 1-2: base (una meta/día) · Sem 3-4: combinado
-    const [a, b] = metas;
-    const sem12 = [a,"movilidad",b,"descanso",a,"bmx","descanso"];
-    const sem34 = [a,"movilidad",b,"descanso","combinado","bmx","descanso"];
-    for (let i = 0; i < 30; i++) {
-      const sem = Math.floor(i / 7);
-      patron.push(sem < 2 ? sem12[i % 7] : sem34[i % 7]);
+  const patron = new Array(30);
+  
+  // Definir plantillas semanales que varían según la semana
+  // Cada semana tiene: [tipo1, tipo2, tipo3, tipo4, tipo5, tipo6, tipo7]
+  // donde tipo puede ser: una meta, "movilidad", "descanso", o "combinado"
+  // Generamos las semanas de forma determinista usando un desplazamiento basado en la semana y las metas.
+  
+  // Función auxiliar para obtener una lista de tipos de trabajo rotando las metas
+  function getWorkTypes(weekIndex) {
+    if (n === 1) return [metas[0]];
+    // Para n>=2, creamos una secuencia que rota las metas
+    let workList = [];
+    if (n === 2) {
+      // Alternar las dos metas en orden, pero variar el inicio según la semana
+      const order = (weekIndex % 2 === 0) ? [metas[0], metas[1]] : [metas[1], metas[0]];
+      workList = [...order, ...order]; // longitud 4, suficiente para una semana
+    } else if (n === 3) {
+      const order = (weekIndex % 2 === 0) ? [metas[0], metas[1], metas[2]] : [metas[1], metas[2], metas[0]];
+      workList = [...order, ...order.slice(0,1)]; // 4 elementos
+    } else { // n === 4
+      const order = (weekIndex % 2 === 0) ? [metas[0], metas[1], metas[2], metas[3]] : [metas[2], metas[3], metas[0], metas[1]];
+      workList = [...order]; // 4 elementos
     }
-  } else if (n === 3) {
-    const [a, b, c] = metas;
-    const sem12 = [a,"movilidad",b,"descanso",c,"bmx","descanso"];
-    const sem34 = [a,b,"movilidad",c,"combinado","bmx","descanso"];
-    for (let i = 0; i < 30; i++) {
-      const sem = Math.floor(i / 7);
-      patron.push(sem < 2 ? sem12[i % 7] : sem34[i % 7]);
+    return workList;
+  }
+  
+  // Estructura de cada semana: días de trabajo (5) + movilidad (1) + descanso (1)
+  // pero variamos la posición del descanso y movilidad según la semana
+  for (let w = 0; w < 5; w++) {
+    // Posiciones de descanso y movilidad dentro de la semana (0-6)
+    // Dependen de w para que no siempre sean los mismos días
+    const restDay = (w * 2) % 7;     // 0,2,4,6,1
+    const mobilityDay = (w * 3 + 1) % 7;
+    // Asegurar que no coincidan
+    let mobilityDayAdjusted = mobilityDay;
+    if (mobilityDayAdjusted === restDay) mobilityDayAdjusted = (mobilityDayAdjusted + 1) % 7;
+    
+    // Obtener lista de tipos de trabajo rotados
+    const workTypes = getWorkTypes(w);
+    // Construir array de 7 posiciones con placeholders
+    let week = new Array(7).fill(null);
+    
+    // Asignar descanso y movilidad
+    week[restDay] = "descanso";
+    week[mobilityDayAdjusted] = "movilidad";
+    
+    // Llenar los días restantes con trabajo, alternando entre tipos de trabajo
+    let workIdx = 0;
+    for (let i = 0; i < 7; i++) {
+      if (week[i] === null) {
+        // Si hay más de una meta y es la semana 3 o 4, podemos incluir combinado
+        if (n >= 2 && w >= 2 && workIdx % 3 === 0) {
+          week[i] = "combinado";
+        } else {
+          week[i] = workTypes[workIdx % workTypes.length];
+        }
+        workIdx++;
+      }
     }
-  } else {
-    // 4 metas: rotar las 4, combinado el viernes
-    const [a, b, c, d] = metas;
-    const sem12 = [a,"movilidad",b,c,"descanso","bmx","descanso"];
-    const sem34 = [a,b,"movilidad",c,d,"bmx","descanso"];
-    // día 28 es especial: combinado
-    for (let i = 0; i < 30; i++) {
-      const sem = Math.floor(i / 7);
-      if (i === 28) { patron.push("combinado"); continue; }
-      if (i === 29) { patron.push("descanso"); continue; }
-      patron.push(sem < 2 ? sem12[i % 7] : sem34[i % 7]);
+    
+    // Guardar en el patrón global
+    for (let d = 0; d < 7; d++) {
+      const idx = w * 7 + d;
+      if (idx < 30) patron[idx] = week[d];
     }
   }
+  
+  // Ajustar los últimos días si hay 30 (5 semanas completas) – ya está bien
   return patron;
 }
 
-// ── Detalle de sesiones ──────────────────────────────────────
+// ── Detalle de sesiones (sin bmx) ──────────────────────────────
 function renderDetalleSesiones(metas) {
   const cont = document.getElementById("cal-sesiones-detalle");
   const sesionTypes = [...new Set([...metas, metas.length > 1 ? "combinado" : null].filter(Boolean))];
-
+  
   cont.innerHTML = sesionTypes.map(tipo => {
     const cfg = CAL_CONFIG[tipo];
     let ejercs;
     if (tipo === "combinado") {
-      // Para combinado: 2-3 ejercicios principales de cada meta (sin calentamiento/enfriamiento)
       ejercs = [];
       metas.forEach(m => {
         const ejsMeta = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(m));
@@ -561,13 +591,12 @@ function renderDetalleSesiones(metas) {
     } else {
       ejercs = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(tipo));
     }
-
-    // Calentamiento + principal (max 6) + enfriamiento = ~9 bloques
+    
     const ejsCalent = EJERCICIOS.filter(e => e.bloque==="calentamiento").slice(0,1);
     const ejsPrinc  = ejercs.slice(0, tipo==="combinado" ? 6 : 5);
     const ejsEnfr   = EJERCICIOS.filter(e => e.bloque==="enfriamiento").slice(0,2);
     const todos     = [...ejsCalent, ...ejsPrinc, ...ejsEnfr];
-
+    
     const ejsHTML = todos.map(e => `
       <div class="cal-ej-item">
         <div>
@@ -576,7 +605,7 @@ function renderDetalleSesiones(metas) {
         </div>
         <div class="cal-ej-stats">${e.series}×${e.reps.toString().split(' ')[0]}</div>
       </div>`).join("");
-
+    
     return `
       <div class="cal-sesion-card">
         <div class="cal-sesion-header" style="border-bottom:2px solid ${cfg.color}">
@@ -591,21 +620,19 @@ function renderDetalleSesiones(metas) {
   }).join("");
 }
 
-// ── Generación del PDF (2 hojas) ─────────────────────────────
+// ── Generación del PDF (sin bmx) ──────────────────────────────
 function descargarPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const metas = [...hwMetas];
-  const patron = buildPatron(metas);
+  const patron = buildPatronVariado(metas);
   const hoy = new Date();
   const metasLabel = metas.map(m => CAL_CONFIG[m].label).join(" + ");
-
-  // ── HOJA 1: Calendario ──────────────────────────────────────
-  // Fondo oscuro
+  
+  // HOJA 1: Calendario
   doc.setFillColor(10, 10, 10);
   doc.rect(0, 0, 210, 297, "F");
-
-  // Header
+  
   doc.setFillColor(230, 57, 70);
   doc.rect(0, 0, 210, 22, "F");
   doc.setTextColor(255, 255, 255);
@@ -616,11 +643,10 @@ function descargarPDF() {
   doc.setFont("helvetica", "normal");
   doc.text(`Plan 30 días · ${metasLabel}`, 14, 17);
   doc.text(`Inicio: ${hoy.toLocaleDateString("es-EC",{day:"numeric",month:"long",year:"numeric"})}`, 196, 17, { align:"right" });
-
-  // Leyenda
+  
   let lx = 14; const ly = 28;
   doc.setFontSize(7);
-  const leySets = [...metas, "combinado", "bmx", "movilidad", "descanso"];
+  const leySets = [...metas, "combinado", "movilidad", "descanso"];
   leySets.forEach(k => {
     const cfg = CAL_CONFIG[k];
     const rgb = hexToRgb(cfg.color);
@@ -630,8 +656,7 @@ function descargarPDF() {
     doc.text(`${cfg.icono} ${cfg.label}`, lx+5, ly);
     lx += 32;
   });
-
-  // Días de la semana header
+  
   const dias = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
   const startX = 14, startY = 38;
   const cellW = 26, cellH = 36;
@@ -641,16 +666,14 @@ function descargarPDF() {
   dias.forEach((d, i) => {
     doc.text(d, startX + 8 + i * cellW, startY, { align:"center" });
   });
-
-  // Celdas del calendario
+  
   for (let sem = 0; sem < 5; sem++) {
     const y = startY + 6 + sem * (cellH + 3);
-    // Label semana
     doc.setTextColor(100, 100, 100);
     doc.setFontSize(7);
     doc.setFont("helvetica", "normal");
     doc.text(`SEM ${sem+1}`, 4, y + cellH/2, { align:"center" });
-
+    
     for (let d = 0; d < 7; d++) {
       const diaIdx = sem * 7 + d;
       if (diaIdx >= 30) continue;
@@ -659,44 +682,37 @@ function descargarPDF() {
       const cfg  = CAL_CONFIG[tipo];
       const rgb  = hexToRgb(cfg.color);
       const fecha = new Date(hoy); fecha.setDate(hoy.getDate() + diaIdx);
-
-      // Fondo celda
+      
       doc.setFillColor(rgb.r * 0.25, rgb.g * 0.25, rgb.b * 0.25);
       doc.roundedRect(x, y, cellW - 1, cellH, 2, 2, "F");
-      // Borde
       doc.setDrawColor(rgb.r, rgb.g, rgb.b);
       doc.setLineWidth(0.3);
       doc.roundedRect(x, y, cellW - 1, cellH, 2, 2, "S");
-
-      // Número del día
+      
       doc.setTextColor(180, 180, 180);
       doc.setFontSize(7);
       doc.setFont("helvetica", "normal");
       doc.text(String(fecha.getDate()), x + 2, y + 5);
-
-      // Ícono
+      
       doc.setFontSize(14);
       doc.setTextColor(255, 255, 255);
       doc.text(cfg.icono, x + cellW/2 - 1, y + 20, { align:"center" });
-
-      // Label
+      
       doc.setFontSize(6);
       doc.setTextColor(rgb.r, rgb.g, rgb.b);
       doc.text(cfg.label, x + cellW/2 - 1, y + cellH - 4, { align:"center" });
     }
   }
-
-  // Footer hoja 1
+  
   doc.setFontSize(7);
   doc.setTextColor(100, 100, 100);
   doc.text("bmx593.ec · Street Lab — HardWork BMX · Hoja 1/2", 105, 290, { align:"center" });
-
-  // ── HOJA 2: Rutinas detalladas ──────────────────────────────
+  
+  // HOJA 2: Rutinas detalladas
   doc.addPage();
   doc.setFillColor(10, 10, 10);
   doc.rect(0, 0, 210, 297, "F");
-
-  // Header hoja 2
+  
   doc.setFillColor(230, 57, 70);
   doc.rect(0, 0, 210, 22, "F");
   doc.setTextColor(255, 255, 255);
@@ -706,15 +722,15 @@ function descargarPDF() {
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
   doc.text(`${metasLabel} · Máx. 9 ejercicios/sesión · ~45–55 min`, 14, 17);
-
+  
   let yPos = 28;
   const sesionTypes = [...new Set([...metas, metas.length > 1 ? "combinado" : null].filter(Boolean))];
-
+  
   sesionTypes.forEach(tipo => {
     if (yPos > 260) { doc.addPage(); yPos = 20; }
     const cfg = CAL_CONFIG[tipo];
     const rgb = hexToRgb(cfg.color);
-
+    
     let ejercs;
     if (tipo === "combinado") {
       ejercs = [];
@@ -725,13 +741,12 @@ function descargarPDF() {
     } else {
       ejercs = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(tipo));
     }
-
+    
     const ejsCalent = EJERCICIOS.filter(e => e.bloque==="calentamiento").slice(0,1);
     const ejsPrinc  = ejercs.slice(0, tipo==="combinado" ? 6 : 5);
     const ejsEnfr   = EJERCICIOS.filter(e => e.bloque==="enfriamiento").slice(0,2);
     const todos     = [...ejsCalent, ...ejsPrinc, ...ejsEnfr];
-
-    // Título de sesión
+    
     doc.setFillColor(rgb.r * 0.2, rgb.g * 0.2, rgb.b * 0.2);
     doc.roundedRect(14, yPos, 182, 9, 1.5, 1.5, "F");
     doc.setFillColor(rgb.r, rgb.g, rgb.b);
@@ -744,10 +759,7 @@ function descargarPDF() {
     doc.setFontSize(7);
     doc.text("~45–55 min", 186, yPos + 6, { align:"right" });
     yPos += 12;
-
-    // Tabla de ejercicios
-    const cols = { nombre:80, series:25, reps:35, descanso:25, bloque:20 };
-    // Header tabla
+    
     doc.setFillColor(30, 30, 30);
     doc.rect(14, yPos, 182, 6, "F");
     doc.setTextColor(120, 120, 120);
@@ -758,18 +770,17 @@ function descargarPDF() {
     doc.text("REPS", 121, yPos + 4);
     doc.text("DESCANSO", 156, yPos + 4);
     yPos += 6;
-
+    
     todos.forEach((e, idx) => {
       if (yPos > 270) { doc.addPage(); yPos = 20; }
       const bg = idx % 2 === 0 ? [22,22,22] : [28,28,28];
       doc.setFillColor(bg[0], bg[1], bg[2]);
       doc.rect(14, yPos, 182, 7, "F");
-
-      // Bloque badge
+      
       const bloqueRgb = e.bloque==="calentamiento" ? [230,57,70] : e.bloque==="enfriamiento" ? [46,196,182] : [100,100,200];
       doc.setFillColor(bloqueRgb[0]*0.3, bloqueRgb[1]*0.3, bloqueRgb[2]*0.3);
       doc.rect(14, yPos, 2.5, 7, "F");
-
+      
       doc.setTextColor(220, 220, 220);
       doc.setFontSize(7.5);
       doc.setFont("helvetica", "normal");
@@ -784,14 +795,14 @@ function descargarPDF() {
     });
     yPos += 6;
   });
-
-  // Mensaje motivacional
-  if (yPos < 250) {
+  
+  // Mensaje motivacional y aclaración
+  if (yPos < 240) {
     doc.setFillColor(50, 20, 20);
-    doc.roundedRect(14, yPos, 182, 20, 2, 2, "F");
+    doc.roundedRect(14, yPos, 182, 28, 2, 2, "F");
     doc.setDrawColor(230, 57, 70);
     doc.setLineWidth(0.5);
-    doc.roundedRect(14, yPos, 182, 20, 2, 2, "S");
+    doc.roundedRect(14, yPos, 182, 28, 2, 2, "S");
     doc.setTextColor(230, 57, 70);
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
@@ -801,14 +812,21 @@ function descargarPDF() {
     doc.setFont("helvetica", "normal");
     doc.text("30 días es el tiempo mínimo para adaptar patrones neuromusculares.", 18, yPos + 13);
     doc.text("Comparte tus resultados con la comunidad #BMX593HardWork", 18, yPos + 18);
+    doc.setTextColor(46, 196, 182);
+    doc.text("💪 Este plan es un complemento a tu práctica habitual de BMX. Sigue montando en bici.", 18, yPos + 24);
+  } else {
+    doc.addPage();
+    doc.setFillColor(10,10,10);
+    doc.rect(0,0,210,297,"F");
+    doc.setTextColor(46,196,182);
+    doc.setFontSize(8);
+    doc.text("💪 Este plan es un complemento a tu práctica habitual de BMX. Sigue montando en bici.", 14, 20);
   }
-
-  // Footer hoja 2
+  
   doc.setFontSize(7);
   doc.setTextColor(100, 100, 100);
   doc.text("bmx593.ec · Street Lab — HardWork BMX · Hoja 2/2", 105, 290, { align:"center" });
-
-  // Guardar
+  
   doc.save(`BMX593-HardWork-${metas.join("-")}-30dias.pdf`);
 }
 
