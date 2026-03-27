@@ -9,8 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
+    /* ========== ESTILOS EXISTENTES (se mantienen todos) ========== */
     :root {
       --lab-rojo:#e63946;--lab-teal:#2ec4b6;--lab-naranja:#f4a261;
       --lab-verde:#57cc99;--lab-amarillo:#f9c74f;--lab-purp:#c77dff;
@@ -28,7 +28,6 @@
     .lab-pillar{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:40px;padding:6px 14px;font-size:0.75rem;color:var(--gris-200);font-family:var(--font-display);font-weight:700;letter-spacing:1px;text-transform:uppercase;}
     .lab-pillar i{color:var(--rojo);}
 
-    /* Sidebar */
     .lab-sidebar{background:var(--gris-900);border-right:1px solid rgba(255,255,255,0.06);padding:1.5rem 0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
     .lab-sidebar-titulo{font-family:var(--font-display);font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris-400);padding:0 1.5rem;margin-bottom:0.75rem;}
     .lab-tab{width:100%;display:flex;align-items:center;gap:10px;padding:0.9rem 1.5rem;background:transparent;border:none;color:var(--gris-400);cursor:pointer;font-family:var(--font-display);font-size:0.88rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:left;transition:color 0.2s,background 0.2s;border-left:3px solid transparent;}
@@ -37,7 +36,6 @@
     .lab-tab i{width:18px;text-align:center;font-size:0.9rem;}
     .lab-tab.activo i{color:var(--rojo);}
 
-    /* Contenido */
     .lab-contenido{padding:2.5rem 2rem 5rem;max-width:1060px;}
     .lab-seccion{display:none;}
     .lab-seccion.activa{display:block;}
@@ -46,7 +44,6 @@
     .lab-seccion-sub{font-size:0.85rem;color:var(--gris-400);margin-bottom:2.5rem;line-height:1.65;max-width:600px;}
     .lab-divider{width:48px;height:3px;background:var(--rojo);margin:0.75rem 0 2rem;}
 
-    /* HardWork selector */
     .hw-selector-label{font-family:var(--font-display);font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
     .hw-metas{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2rem;}
     .hw-meta-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:1.2rem 0.75rem;background:var(--gris-800);border:1.5px solid var(--gris-600);border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:center;}
@@ -56,25 +53,19 @@
     .hw-meta-nombre{font-family:var(--font-display);font-size:0.85rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--blanco);}
     .hw-meta-trucos{font-size:0.65rem;color:var(--gris-400);line-height:1.4;}
 
-    /* Calendario 30 días */
     .cal-wrap{display:none;}
     .cal-wrap.visible{display:block;}
-
     .cal-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;}
     .cal-info h3{font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:var(--blanco);}
     .cal-info p{font-size:0.78rem;color:var(--gris-400);margin-top:3px;}
-
     .btn-descargar{font-family:var(--font-display);font-size:0.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 22px;background:var(--rojo);color:#fff;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s,transform 0.1s;}
     .btn-descargar:hover{background:var(--rojo-hover);}
     .btn-descargar:active{transform:scale(0.97);}
     .btn-descargar i{font-size:0.9rem;}
 
-    /* Leyenda */
     .cal-leyenda{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem;}
     .cal-ley-item{display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--gris-200);font-family:var(--font-display);font-weight:600;letter-spacing:0.5px;}
     .cal-ley-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
-
-    /* Grid del calendario */
     .cal-semanas{display:flex;flex-direction:column;gap:6px;margin-bottom:2rem;}
     .cal-semana-row{display:grid;grid-template-columns:60px repeat(7,1fr);gap:4px;align-items:center;}
     .cal-semana-label{font-family:var(--font-display);font-size:0.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gris-400);text-align:right;padding-right:8px;}
@@ -85,7 +76,6 @@
     .cal-dia-icono{font-size:1.1rem;line-height:1;}
     .cal-dia-tipo{font-family:var(--font-display);font-size:0.55rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:rgba(255,255,255,0.6);line-height:1.2;text-align:center;}
 
-    /* Detalle de sesiones */
     .cal-detalle{margin-top:2rem;}
     .cal-detalle-titulo{font-family:var(--font-display);font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
     .cal-detalle-titulo i{color:var(--rojo);}
@@ -101,7 +91,6 @@
     .cal-ej-meta{font-size:0.68rem;color:var(--gris-400);}
     .cal-ej-stats{font-size:0.68rem;color:var(--rojo);font-family:var(--font-display);font-weight:700;white-space:nowrap;}
 
-    /* Ejercicios cards */
     .hw-bloque{margin-bottom:2rem;}
     .hw-bloque-titulo{font-family:var(--font-display);font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris-400);margin-bottom:1rem;display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);}
     .hw-bloque-titulo i{color:var(--rojo);}
@@ -123,17 +112,14 @@
     .hw-ej-prog{margin-top:8px;font-size:0.72rem;color:var(--gris-400);display:flex;gap:6px;align-items:flex-start;}
     .hw-ej-prog i{color:var(--naranja);margin-top:2px;flex-shrink:0;}
 
-    /* Motivación */
     .hw-motivacion{background:rgba(230,57,70,0.07);border:1px solid rgba(230,57,70,0.2);border-radius:10px;padding:1.2rem 1.5rem;margin-top:2rem;display:flex;gap:14px;align-items:flex-start;}
     .hw-motivacion i{color:var(--rojo);font-size:1.1rem;margin-top:2px;flex-shrink:0;}
     .hw-motivacion p{font-size:0.82rem;color:var(--gris-200);line-height:1.7;}
     .hw-motivacion strong{color:var(--blanco);}
 
-    /* Placeholder */
     .hw-placeholder{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:3rem;text-align:center;color:var(--gris-400);background:var(--gris-800);border-radius:12px;border:1px dashed var(--gris-600);}
     .hw-placeholder i{font-size:2.5rem;opacity:0.2;}
 
-    /* LESIONES */
     .lesiones-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
     .lesion-card{background:var(--gris-800);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.15s;}
     .lesion-card:hover{border-color:rgba(230,57,70,0.3);transform:translateY(-2px);}
@@ -154,7 +140,6 @@
     .lesion-senal{font-size:0.7rem;padding:3px 8px;background:rgba(255,255,255,0.06);border-radius:4px;color:var(--gris-200);}
     .lesion-recuperacion{margin-top:0.75rem;padding:8px 12px;background:rgba(46,196,182,0.08);border:1px solid rgba(46,196,182,0.2);border-radius:6px;font-size:0.75rem;color:var(--teal);display:flex;gap:8px;align-items:center;}
 
-    /* PREVENCIÓN */
     .prev-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:2.5rem;}
     .prev-card{background:var(--gris-800);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:1.2rem 1.4rem;}
     .prev-header{display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;}
@@ -173,7 +158,6 @@
     .caida-num{width:24px;height:24px;border-radius:50%;background:var(--rojo);color:#fff;font-family:var(--font-display);font-size:0.78rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .caida-texto{font-size:0.82rem;color:var(--gris-200);line-height:1.65;}
 
-    /* LAB SESSIONS */
     .sessions-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;}
     .session-card{background:var(--gris-800);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform 0.2s,border-color 0.2s;}
     .session-card:hover{transform:translateY(-3px);border-color:rgba(230,57,70,0.3);}
@@ -191,7 +175,6 @@
     .session-desc{font-size:0.78rem;color:var(--gris-200);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
     .session-meta{display:flex;gap:12px;margin-top:10px;font-size:0.72rem;color:var(--gris-400);padding-top:10px;border-top:1px solid rgba(255,255,255,0.05);}
 
-    /* Modal video */
     #lab-vm{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.96);align-items:center;justify-content:center;padding:1.5rem;}
     #lab-vm.activo{display:flex;}
     .lvm-inner{position:relative;max-width:960px;width:100%;}
@@ -201,7 +184,6 @@
     .lvm-wrap{position:relative;padding-bottom:56.25%;background:#000;border-radius:8px;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,0.8);}
     .lvm-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 
-    /* Responsive */
     @media(max-width:1024px){.hw-metas{grid-template-columns:repeat(2,1fr);}.hw-ejercicio-grid{grid-template-columns:1fr;}.cal-sesiones-grid{grid-template-columns:1fr;}}
     @media(max-width:768px){
       .lab-layout{grid-template-columns:1fr;}
@@ -216,6 +198,45 @@
       .cal-semana-row{grid-template-columns:42px repeat(7,1fr);}
       .cal-dia{min-height:46px;padding:5px 2px;}
       .cal-dia-tipo{display:none;}
+    }
+
+    /* ========== ESTILOS PARA IMPRESIÓN ========== */
+    @media print {
+      body {
+        background: white;
+        color: black;
+        margin: 0;
+        padding: 0;
+      }
+      .navbar, .lab-sidebar, .lab-hero, .btn-descargar, .lab-tab, .footer, .cal-header, .cal-leyenda, .lab-divider, .hw-motivacion, .cal-detalle-titulo, .cal-sesiones-grid {
+        display: none !important;
+      }
+      .lab-contenido {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100%;
+      }
+      .lab-seccion {
+        display: block !important;
+      }
+      .cal-wrap {
+        display: block !important;
+      }
+      .cal-semanas, .cal-semana-row, .cal-dia {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .print-plan-detalle {
+        display: block !important;
+        margin-top: 20px;
+      }
+      .print-dia {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        padding: 8px;
+      }
     }
   </style>
 </head>
@@ -235,8 +256,7 @@
 </nav>
 
 <div class="lab-layout">
-
-  <!-- HERO -->
+  <!-- HERO (se mantiene) -->
   <div class="lab-hero">
     <div class="lab-hero-inner">
       <div>
@@ -275,8 +295,6 @@
 
   <!-- CONTENIDO -->
   <main class="lab-contenido">
-
-    <!-- ══ HARDWORK BMX ══ -->
     <section class="lab-seccion activa" id="tab-hardwork">
       <h2 class="lab-seccion-titulo">Hard<span>Work</span> BMX</h2>
       <p class="lab-seccion-sub">Selecciona tu objetivo de entrenamiento y el sistema genera un <strong style="color:var(--blanco)">plan estructurado de 30 días</strong> con sesiones diarias diseñadas para las exigencias físicas del BMX. Máximo 8–9 ejercicios por sesión para evitar la fatiga acumulada.</p>
@@ -318,7 +336,7 @@
             <p id="cal-subtitulo"></p>
           </div>
           <button class="btn-descargar" onclick="descargarPDF()">
-            <i class="fa-solid fa-file-pdf"></i> Descargar PDF
+            <i class="fa-solid fa-file-pdf"></i> Descargar / Imprimir Plan
           </button>
         </div>
 
@@ -338,7 +356,6 @@
       </div>
     </section>
 
-    <!-- ══ LESIONES ══ -->
     <section class="lab-seccion" id="tab-lesiones">
       <h2 class="lab-seccion-titulo">Lesiones <span>Comunes</span></h2>
       <p class="lab-seccion-sub">Conocer cómo ocurren las lesiones y qué hacer cuando suceden puede marcar la diferencia entre una recuperación rápida y una crónica. Haz clic en cada lesión para ver el detalle.</p>
@@ -346,7 +363,6 @@
       <div class="lesiones-grid" id="lesiones-grid"></div>
     </section>
 
-    <!-- ══ PREVENCIÓN ══ -->
     <section class="lab-seccion" id="tab-prevencion">
       <h2 class="lab-seccion-titulo">Pre<span>vención</span></h2>
       <p class="lab-seccion-sub">Equipamiento correcto, calentamiento adecuado y técnica de caída — los tres pilares que separan a los riders que progresan de los que se quedan en el banco.</p>
@@ -354,14 +370,12 @@
       <div id="prev-contenido"></div>
     </section>
 
-    <!-- ══ LAB SESSIONS ══ -->
     <section class="lab-seccion" id="tab-sessions">
       <h2 class="lab-seccion-titulo">Lab <span>Sessions</span></h2>
       <p class="lab-seccion-sub">Videos del equipo BMX.593 — el proceso completo: fallos, análisis y logros. No solo el resultado final.</p>
       <div class="lab-divider"></div>
       <div class="sessions-grid" id="sessions-grid"></div>
     </section>
-
   </main>
 </div>
 
@@ -395,26 +409,24 @@
 
 <script src="js/streetlab.js"></script>
 <script>
-// ── Estado ───────────────────────────────────────────────────
+// ======================== DATOS Y CONFIGURACIÓN ========================
 let hwMetas = new Set();
 
-// Colores y configuración del calendario
 const CAL_CONFIG = {
   rotacion:    { color:"#e63946", bg:"rgba(230,57,70,0.18)",   icono:"⚡", label:"Rotación" },
   potencia:    { color:"#f4a261", bg:"rgba(244,162,97,0.18)",  icono:"🚀", label:"Potencia" },
   equilibrio:  { color:"#2ec4b6", bg:"rgba(46,196,182,0.18)",  icono:"⚖️", label:"Equilibrio" },
   grinds:      { color:"#c77dff", bg:"rgba(199,125,255,0.18)", icono:"🔩", label:"Grinds" },
   combinado:   { color:"#f9c74f", bg:"rgba(249,199,79,0.18)",  icono:"🟡", label:"Combinado" },
-  bmx:         { color:"#57cc99", bg:"rgba(87,204,153,0.18)",  icono:"🚲", label:"Sesión BMX" },
-  descanso:    { color:"#444",    bg:"rgba(60,60,60,0.5)",     icono:"😴", label:"Descanso" },
   movilidad:   { color:"#a8dadc", bg:"rgba(168,218,220,0.18)", icono:"🧘", label:"Movilidad" },
+  descanso:    { color:"#444",    bg:"rgba(60,60,60,0.5)",     icono:"😴", label:"Descanso" }
 };
 
 const ZONA_COLORES = { cabeza:"#e63946",hombro:"#f4a261",muneca:"#2ec4b6",codo:"#f9c74f",espalda:"#a8dadc",cadera:"#c77dff",rodilla:"#57cc99",tobillo:"#f4a261",pie:"#e63946" };
 const GRAV_CFG = { leve:{color:"#57cc99",label:"Leve"},moderada:{color:"#f9c74f",label:"Moderada"},grave:{color:"#e63946",label:"Grave"} };
 const RES_CFG  = { logrado:{color:"#57cc99",label:"✅ Logrado"},"en-progreso":{color:"#f9c74f",label:"🔄 En progreso"},wip:{color:"#a8dadc",label:"🧪 WIP"} };
 
-// ── Init ─────────────────────────────────────────────────────
+// ======================== FUNCIONES EXISTENTES (mantenidas) ========================
 document.addEventListener("DOMContentLoaded", () => {
   renderLesiones();
   renderPrevencion();
@@ -424,13 +436,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", e => { if(e.key==="Escape") cerrarVM(); });
 });
 
-// ── Tabs ─────────────────────────────────────────────────────
 function cambiarTab(tab) {
   document.querySelectorAll(".lab-tab").forEach(t => t.classList.toggle("activo", t.dataset.tab===tab));
   document.querySelectorAll(".lab-seccion").forEach(s => s.classList.toggle("activa", s.id==="tab-"+tab));
 }
 
-// ── HardWork toggle ──────────────────────────────────────────
 function hwToggle(btn) {
   const meta = btn.dataset.meta;
   hwMetas.has(meta) ? hwMetas.delete(meta) : hwMetas.add(meta);
@@ -443,7 +453,6 @@ function mostrarPlaceholder() {
   document.getElementById("cal-wrap").classList.remove("visible");
 }
 
-// ── Generación del calendario de 30 días ─────────────────────
 function generarCalendario() {
   const metas = [...hwMetas];
   document.getElementById("hw-placeholder").style.display = "none";
@@ -454,24 +463,19 @@ function generarCalendario() {
   document.getElementById("cal-subtitulo").textContent =
     `Inicio: ${new Date().toLocaleDateString("es-EC",{day:"numeric",month:"long",year:"numeric"})} · Máx. 9 ejercicios/sesión`;
 
-  // Construir leyenda
-  const leySets = [...metas, "combinado", "bmx", "movilidad", "descanso"];
+  const leySets = [...metas, "combinado", "movilidad", "descanso"];
   document.getElementById("cal-leyenda").innerHTML = leySets.map(k => `
     <div class="cal-ley-item">
       <div class="cal-ley-dot" style="background:${CAL_CONFIG[k].color}"></div>
       ${CAL_CONFIG[k].icono} ${CAL_CONFIG[k].label}
     </div>`).join("");
 
-  // Construir patrón de 30 días
   const patron = buildPatron(metas);
-
-  // Headers de días
   const dias = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
   document.getElementById("cal-semanas-headers").innerHTML =
     `<div class="cal-semana-label"></div>` +
     dias.map(d => `<div class="cal-dia-header">${d}</div>`).join("");
 
-  // Renderizar semanas
   const hoy = new Date();
   let html = "";
   for (let sem = 0; sem < 5; sem++) {
@@ -483,8 +487,7 @@ function generarCalendario() {
       const tipo  = patron[diaNum];
       const cfg   = CAL_CONFIG[tipo];
       html += `
-        <div class="cal-dia" style="background:${cfg.bg};border-color:${cfg.color}22"
-             title="Día ${diaNum+1}: ${cfg.label}">
+        <div class="cal-dia" style="background:${cfg.bg};border-color:${cfg.color}22">
           <span class="cal-dia-num">${fecha.getDate()}</span>
           <span class="cal-dia-icono">${cfg.icono}</span>
           <span class="cal-dia-tipo">${cfg.label}</span>
@@ -493,45 +496,36 @@ function generarCalendario() {
     html += `</div>`;
   }
   document.getElementById("cal-semanas").innerHTML = html;
-
-  // Renderizar detalle de sesiones
   renderDetalleSesiones(metas);
 }
 
-// ── Patrón de 30 días según número de metas ─────────────────
 function buildPatron(metas) {
   const n = metas.length;
   const patron = [];
-
   if (n === 1) {
-    // 1 meta: Lun trabajo, Mar movilidad, Mié trabajo, Jue descanso,
-    //         Vie trabajo, Sáb BMX, Dom descanso
-    const template = [metas[0],"movilidad",metas[0],"descanso",metas[0],"bmx","descanso"];
+    const m = metas[0];
+    const template = [m, "movilidad", m, "descanso", m, "movilidad", "descanso"];
     for (let i = 0; i < 30; i++) patron.push(template[i % 7]);
   } else if (n === 2) {
-    // 2 metas: alternar por semana
-    // Sem 1-2: base (una meta/día) · Sem 3-4: combinado
     const [a, b] = metas;
-    const sem12 = [a,"movilidad",b,"descanso",a,"bmx","descanso"];
-    const sem34 = [a,"movilidad",b,"descanso","combinado","bmx","descanso"];
+    const sem12 = [a, "movilidad", b, "descanso", a, "movilidad", "descanso"];
+    const sem34 = [a, "movilidad", b, "descanso", "combinado", "movilidad", "descanso"];
     for (let i = 0; i < 30; i++) {
       const sem = Math.floor(i / 7);
       patron.push(sem < 2 ? sem12[i % 7] : sem34[i % 7]);
     }
   } else if (n === 3) {
     const [a, b, c] = metas;
-    const sem12 = [a,"movilidad",b,"descanso",c,"bmx","descanso"];
-    const sem34 = [a,b,"movilidad",c,"combinado","bmx","descanso"];
+    const sem12 = [a, "movilidad", b, "descanso", c, "movilidad", "descanso"];
+    const sem34 = [a, b, "movilidad", c, "combinado", "movilidad", "descanso"];
     for (let i = 0; i < 30; i++) {
       const sem = Math.floor(i / 7);
       patron.push(sem < 2 ? sem12[i % 7] : sem34[i % 7]);
     }
   } else {
-    // 4 metas: rotar las 4, combinado el viernes
     const [a, b, c, d] = metas;
-    const sem12 = [a,"movilidad",b,c,"descanso","bmx","descanso"];
-    const sem34 = [a,b,"movilidad",c,d,"bmx","descanso"];
-    // día 28 es especial: combinado
+    const sem12 = [a, "movilidad", b, c, "descanso", "movilidad", "descanso"];
+    const sem34 = [a, b, "movilidad", c, d, "movilidad", "descanso"];
     for (let i = 0; i < 30; i++) {
       const sem = Math.floor(i / 7);
       if (i === 28) { patron.push("combinado"); continue; }
@@ -542,16 +536,13 @@ function buildPatron(metas) {
   return patron;
 }
 
-// ── Detalle de sesiones ──────────────────────────────────────
 function renderDetalleSesiones(metas) {
   const cont = document.getElementById("cal-sesiones-detalle");
   const sesionTypes = [...new Set([...metas, metas.length > 1 ? "combinado" : null].filter(Boolean))];
-
   cont.innerHTML = sesionTypes.map(tipo => {
     const cfg = CAL_CONFIG[tipo];
     let ejercs;
     if (tipo === "combinado") {
-      // Para combinado: 2-3 ejercicios principales de cada meta (sin calentamiento/enfriamiento)
       ejercs = [];
       metas.forEach(m => {
         const ejsMeta = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(m));
@@ -560,13 +551,10 @@ function renderDetalleSesiones(metas) {
     } else {
       ejercs = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(tipo));
     }
-
-    // Calentamiento + principal (max 6) + enfriamiento = ~9 bloques
     const ejsCalent = EJERCICIOS.filter(e => e.bloque==="calentamiento").slice(0,1);
     const ejsPrinc  = ejercs.slice(0, tipo==="combinado" ? 6 : 5);
     const ejsEnfr   = EJERCICIOS.filter(e => e.bloque==="enfriamiento").slice(0,2);
     const todos     = [...ejsCalent, ...ejsPrinc, ...ejsEnfr];
-
     const ejsHTML = todos.map(e => `
       <div class="cal-ej-item">
         <div>
@@ -575,7 +563,6 @@ function renderDetalleSesiones(metas) {
         </div>
         <div class="cal-ej-stats">${e.series}×${e.reps.toString().split(' ')[0]}</div>
       </div>`).join("");
-
     return `
       <div class="cal-sesion-card">
         <div class="cal-sesion-header" style="border-bottom:2px solid ${cfg.color}">
@@ -590,152 +577,109 @@ function renderDetalleSesiones(metas) {
   }).join("");
 }
 
-// ── Generación del PDF (2 hojas) con reemplazo de emojis ──────────
+// ======================== NUEVA FUNCIÓN PARA IMPRESIÓN CON PLAN DETALLADO ========================
 function descargarPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const metas = [...hwMetas];
+  if (metas.length === 0) {
+    alert("Selecciona al menos un objetivo antes de imprimir el plan.");
+    return;
+  }
+  generarPlanImpresion(metas);
+  window.print();
+}
+
+function generarPlanImpresion(metas) {
+  // Eliminar si ya existe el div de impresión
+  const existing = document.getElementById("printPlan");
+  if (existing) existing.remove();
+
   const patron = buildPatron(metas);
   const hoy = new Date();
   const metasLabel = metas.map(m => CAL_CONFIG[m].label).join(" + ");
 
-  // Mapeo de tipos a texto corto para el PDF (sin emojis)
-  const TIPO_TEXTO = {
-    rotacion: "ROT",
-    potencia: "POT",
-    equilibrio: "EQU",
-    grinds: "GRI",
-    combinado: "MIX",
-    descanso: "DSC",
-    movilidad: "MOV",
-    bmx: "BMX"
-  };
+  // Crear contenedor para impresión
+  const printDiv = document.createElement("div");
+  printDiv.id = "printPlan";
+  printDiv.style.display = "block";
+  printDiv.style.position = "absolute";
+  printDiv.style.top = "-10000px";
+  printDiv.style.left = "-10000px";
+  printDiv.style.width = "100%";
+  printDiv.style.background = "white";
+  printDiv.style.color = "black";
+  printDiv.style.padding = "20px";
+  printDiv.style.fontFamily = "sans-serif";
+  document.body.appendChild(printDiv);
 
-  // ── HOJA 1: Calendario ──────────────────────────────────────
-  doc.setFillColor(10, 10, 10);
-  doc.rect(0, 0, 210, 297, "F");
+  // Cabecera
+  let html = `
+    <div style="text-align:center; margin-bottom:30px;">
+      <h1 style="color:#e63946;">BMX.593 — HardWork BMX</h1>
+      <h2>Plan 30 días · ${metasLabel}</h2>
+      <p>Inicio: ${hoy.toLocaleDateString("es-EC",{day:"numeric",month:"long",year:"numeric"})}</p>
+      <p>Complemento físico para riders de BMX. Máximo 9 ejercicios por sesión (~45-55 min).</p>
+    </div>
+  `;
 
-  // Header
-  doc.setFillColor(230, 57, 70);
-  doc.rect(0, 0, 210, 22, "F");
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(18);
-  doc.setFont("helvetica", "bold");
-  doc.text("BMX.593 — HardWork BMX", 14, 10);
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "normal");
-  doc.text(`Plan 30 días · ${metasLabel}`, 14, 17);
-  doc.text(`Inicio: ${hoy.toLocaleDateString("es-EC",{day:"numeric",month:"long",year:"numeric"})}`, 196, 17, { align:"right" });
-
-  // Leyenda (usando textos cortos)
-  let lx = 14; const ly = 28;
-  doc.setFontSize(7);
-  const leySets = [...metas, "combinado", "bmx", "movilidad", "descanso"];
+  // Calendario (solo visual, sin rutina)
+  html += `<h3>Calendario</h3><div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">`;
+  const leySets = [...metas, "combinado", "movilidad", "descanso"];
   leySets.forEach(k => {
     const cfg = CAL_CONFIG[k];
-    const rgb = hexToRgb(cfg.color);
-    doc.setFillColor(rgb.r, rgb.g, rgb.b);
-    doc.roundedRect(lx, ly-3, 3.5, 3.5, 0.5, 0.5, "F");
-    doc.setTextColor(rgb.r, rgb.g, rgb.b);
-    const txt = TIPO_TEXTO[k] || k.substring(0,3).toUpperCase();
-    doc.text(txt, lx+5, ly);
-    lx += 18;
+    html += `<div style="display:flex; align-items:center; gap:4px; margin-right:12px;">
+              <div style="width:12px; height:12px; background:${cfg.color}; border-radius:2px;"></div>
+              <span>${cfg.label}</span>
+            </div>`;
   });
-
-  // Días de la semana header
-  const dias = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
-  const startX = 14, startY = 38;
-  const cellW = 26, cellH = 36;
-  doc.setTextColor(150, 150, 150);
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "bold");
-  dias.forEach((d, i) => {
-    doc.text(d, startX + 8 + i * cellW, startY, { align:"center" });
-  });
-
-  // Celdas del calendario
-  for (let sem = 0; sem < 5; sem++) {
-    const y = startY + 6 + sem * (cellH + 3);
-    // Label semana
-    doc.setTextColor(100, 100, 100);
-    doc.setFontSize(7);
-    doc.setFont("helvetica", "normal");
-    doc.text(`SEM ${sem+1}`, 4, y + cellH/2, { align:"center" });
-
-    for (let d = 0; d < 7; d++) {
-      const diaIdx = sem * 7 + d;
-      if (diaIdx >= 30) continue;
-      const x = startX + d * cellW;
-      const tipo = patron[diaIdx];
-      const cfg  = CAL_CONFIG[tipo];
-      const rgb  = hexToRgb(cfg.color);
-      const fecha = new Date(hoy); fecha.setDate(hoy.getDate() + diaIdx);
-
-      // Fondo celda
-      doc.setFillColor(rgb.r * 0.25, rgb.g * 0.25, rgb.b * 0.25);
-      doc.roundedRect(x, y, cellW - 1, cellH, 2, 2, "F");
-      // Borde
-      doc.setDrawColor(rgb.r, rgb.g, rgb.b);
-      doc.setLineWidth(0.3);
-      doc.roundedRect(x, y, cellW - 1, cellH, 2, 2, "S");
-
-      // Número del día
-      doc.setTextColor(180, 180, 180);
-      doc.setFontSize(7);
-      doc.setFont("helvetica", "normal");
-      doc.text(String(fecha.getDate()), x + 2, y + 5);
-
-      // Texto corto en lugar de ícono
-      doc.setFontSize(10);
-      doc.setTextColor(255, 255, 255);
-      const textoCorto = TIPO_TEXTO[tipo] || tipo.substring(0,3).toUpperCase();
-      doc.text(textoCorto, x + cellW/2 - 1, y + 20, { align:"center" });
-
-      // Label
-      doc.setFontSize(6);
-      doc.setTextColor(rgb.r, rgb.g, rgb.b);
-      doc.text(cfg.label, x + cellW/2 - 1, y + cellH - 4, { align:"center" });
-    }
-  }
-
-  // Footer hoja 1
-  doc.setFontSize(7);
-  doc.setTextColor(100, 100, 100);
-  doc.text("bmx593.ec · Street Lab — HardWork BMX · Hoja 1/2", 105, 290, { align:"center" });
-
-  // ── HOJA 2: Rutinas detalladas ──────────────────────────────
-  doc.addPage();
-  doc.setFillColor(10, 10, 10);
-  doc.rect(0, 0, 210, 297, "F");
-
-  // Header hoja 2
-  doc.setFillColor(230, 57, 70);
-  doc.rect(0, 0, 210, 22, "F");
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(16);
-  doc.setFont("helvetica", "bold");
-  doc.text("Rutinas Detalladas", 14, 10);
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "normal");
-  doc.text(`${metasLabel} · Máx. 9 ejercicios/sesión · ~45–55 min`, 14, 17);
-
-  let yPos = 28;
-  const sesionTypes = [...new Set([...metas, metas.length > 1 ? "combinado" : null].filter(Boolean))];
-
-  sesionTypes.forEach(tipo => {
-    if (yPos > 260) { doc.addPage(); yPos = 20; }
+  html += `</div><div style="display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:30px;">`;
+  const diasSem = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+  diasSem.forEach(d => html += `<div style="font-weight:bold; text-align:center;">${d}</div>`);
+  for (let i = 0; i < 30; i++) {
+    const tipo = patron[i];
     const cfg = CAL_CONFIG[tipo];
-    const rgb = hexToRgb(cfg.color);
+    const fecha = new Date(hoy); fecha.setDate(hoy.getDate() + i);
+    html += `<div style="border:1px solid #ccc; text-align:center; padding:6px; background:${cfg.bg}">
+              <div>${fecha.getDate()}</div>
+              <div style="font-size:0.8rem;">${cfg.label}</div>
+            </div>`;
+  }
+  html += `</div>`;
 
+  // Rutina día por día
+  html += `<h3>Rutina detallada (día por día)</h3>`;
+  for (let i = 0; i < 30; i++) {
+    const tipo = patron[i];
+    if (tipo === "descanso") {
+      html += `<div style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                <strong>Día ${i+1} (${new Date(hoy).toLocaleDateString("es-EC",{day:"numeric",month:"long"})})</strong> — ${CAL_CONFIG[tipo].label}<br>
+                <em>Descanso activo: estiramientos suaves, movilidad articular.</em>
+              </div>`;
+      continue;
+    }
+
+    // Seleccionar ejercicios para este día
     let ejercs;
     if (tipo === "combinado") {
       ejercs = [];
       metas.forEach(m => {
         const ejsMeta = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(m));
-        ejercs.push(...ejsMeta.slice(0,2));
+        // Usar seed para elegir combinación variada
+        const seed = i * 31 + m.charCodeAt(0);
+        const shuffled = [...ejsMeta];
+        for (let k = shuffled.length - 1; k > 0; k--) {
+          const j = Math.floor((seed + k) % (k + 1));
+          [shuffled[k], shuffled[j]] = [shuffled[j], shuffled[k]];
+        }
+        ejercs.push(...shuffled.slice(0,2));
       });
     } else {
       ejercs = EJERCICIOS.filter(e => e.bloque==="principal" && e.capacidad.includes(tipo));
+      // Barajar con seed para variabilidad
+      const seed = i * 17;
+      for (let k = ejercs.length - 1; k > 0; k--) {
+        const j = Math.floor((seed + k) % (k + 1));
+        [ejercs[k], ejercs[j]] = [ejercs[j], ejercs[k]];
+      }
     }
 
     const ejsCalent = EJERCICIOS.filter(e => e.bloque==="calentamiento").slice(0,1);
@@ -743,96 +687,29 @@ function descargarPDF() {
     const ejsEnfr   = EJERCICIOS.filter(e => e.bloque==="enfriamiento").slice(0,2);
     const todos     = [...ejsCalent, ...ejsPrinc, ...ejsEnfr];
 
-    // Título de sesión (sin emojis)
-    const tituloSesion = `Sesión ${cfg.label}  ·  ${todos.length} ejercicios`;
-    doc.setFillColor(rgb.r * 0.2, rgb.g * 0.2, rgb.b * 0.2);
-    doc.roundedRect(14, yPos, 182, 9, 1.5, 1.5, "F");
-    doc.setFillColor(rgb.r, rgb.g, rgb.b);
-    doc.rect(14, yPos, 3, 9, "F");
-    doc.setTextColor(rgb.r, rgb.g, rgb.b);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text(tituloSesion, 20, yPos + 6);
-    doc.setTextColor(150,150,150);
-    doc.setFontSize(7);
-    doc.text("~45–55 min", 186, yPos + 6, { align:"right" });
-    yPos += 12;
-
-    // Tabla de ejercicios
-    const cols = { nombre:80, series:25, reps:35, descanso:25, bloque:20 };
-    // Header tabla
-    doc.setFillColor(30, 30, 30);
-    doc.rect(14, yPos, 182, 6, "F");
-    doc.setTextColor(120, 120, 120);
-    doc.setFontSize(6.5);
-    doc.setFont("helvetica", "bold");
-    doc.text("EJERCICIO", 16, yPos + 4);
-    doc.text("SERIES", 96, yPos + 4);
-    doc.text("REPS", 121, yPos + 4);
-    doc.text("DESCANSO", 156, yPos + 4);
-    yPos += 6;
-
-    todos.forEach((e, idx) => {
-      if (yPos > 270) { doc.addPage(); yPos = 20; }
-      const bg = idx % 2 === 0 ? [22,22,22] : [28,28,28];
-      doc.setFillColor(bg[0], bg[1], bg[2]);
-      doc.rect(14, yPos, 182, 7, "F");
-
-      // Bloque badge
-      const bloqueRgb = e.bloque==="calentamiento" ? [230,57,70] : e.bloque==="enfriamiento" ? [46,196,182] : [100,100,200];
-      doc.setFillColor(bloqueRgb[0]*0.3, bloqueRgb[1]*0.3, bloqueRgb[2]*0.3);
-      doc.rect(14, yPos, 2.5, 7, "F");
-
-      doc.setTextColor(220, 220, 220);
-      doc.setFontSize(7.5);
-      doc.setFont("helvetica", "normal");
-      doc.text(e.nombre, 18, yPos + 4.5);
-      doc.setTextColor(200, 200, 200);
-      doc.text(String(e.series), 98, yPos + 4.5);
-      doc.setTextColor(200, 200, 200);
-      doc.text(e.reps.toString().length > 18 ? e.reps.toString().substring(0,18)+"..." : e.reps.toString(), 123, yPos + 4.5);
-      doc.setTextColor(46, 196, 182);
-      doc.text(e.descanso, 158, yPos + 4.5);
-      yPos += 7;
+    html += `<div style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">
+              <strong>Día ${i+1} (${new Date(hoy).toLocaleDateString("es-EC",{day:"numeric",month:"long"})}) — ${CAL_CONFIG[tipo].label}</strong><br>
+              <table style="width:100%; border-collapse:collapse; margin-top:6px;">
+                <thead><tr style="background:#f0f0f0;"><th style="text-align:left; padding:4px;">Ejercicio</th><th style="text-align:center; padding:4px;">Series</th><th style="text-align:center; padding:4px;">Reps/Duración</th><th style="text-align:center; padding:4px;">Descanso</th></tr></thead>
+                <tbody>`;
+    todos.forEach(e => {
+      html += `<tr><td style="padding:4px;">${e.nombre}</td>
+                <td style="text-align:center; padding:4px;">${e.series}</td>
+                <td style="text-align:center; padding:4px;">${e.reps}</td>
+                <td style="text-align:center; padding:4px;">${e.descanso}</td></tr>`;
     });
-    yPos += 6;
-  });
-
-  // Mensaje motivacional (sin emojis)
-  if (yPos < 250) {
-    doc.setFillColor(50, 20, 20);
-    doc.roundedRect(14, yPos, 182, 20, 2, 2, "F");
-    doc.setDrawColor(230, 57, 70);
-    doc.setLineWidth(0.5);
-    doc.roundedRect(14, yPos, 182, 20, 2, 2, "S");
-    doc.setTextColor(230, 57, 70);
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "bold");
-    doc.text("!Comprometete con el plan!", 18, yPos + 7);
-    doc.setTextColor(180, 180, 180);
-    doc.setFontSize(7.5);
-    doc.setFont("helvetica", "normal");
-    doc.text("30 dias es el tiempo minimo para adaptar patrones neuromusculares.", 18, yPos + 13);
-    doc.text("Comparte tus resultados con la comunidad #BMX593HardWork", 18, yPos + 18);
+    html += `</tbody></table></div>`;
   }
 
-  // Footer hoja 2
-  doc.setFontSize(7);
-  doc.setTextColor(100, 100, 100);
-  doc.text("bmx593.ec · Street Lab — HardWork BMX · Hoja 2/2", 105, 290, { align:"center" });
+  html += `<div style="margin-top:30px; text-align:center; font-size:0.8rem;">
+            <p>¡Comprométete con el plan! 30 días es el tiempo mínimo para adaptar patrones neuromusculares.</p>
+            <p>Comparte tus resultados con la comunidad #BMX593HardWork</p>
+          </div>`;
 
-  // Guardar
-  doc.save(`BMX593-HardWork-${metas.join("-")}-30dias.pdf`);
+  printDiv.innerHTML = html;
 }
 
-function hexToRgb(hex) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return { r, g, b };
-}
-
-// ── LESIONES ─────────────────────────────────────────────────
+// ======================== FUNCIONES EXISTENTES (LESIONES, PREVENCIÓN, SESSIONS) ========================
 function renderLesiones() {
   document.getElementById("lesiones-grid").innerHTML = LESIONES.map(l => {
     const color = ZONA_COLORES[l.zona] || "#666";
@@ -863,7 +740,6 @@ function renderLesiones() {
 }
 function toggleLesion(id) { document.getElementById("lc-"+id)?.classList.toggle("expandida"); }
 
-// ── PREVENCIÓN ───────────────────────────────────────────────
 function renderPrevencion() {
   const c = document.getElementById("prev-contenido");
   c.innerHTML = `
@@ -892,7 +768,6 @@ function renderPrevencion() {
       </div>`).join("")}`;
 }
 
-// ── LAB SESSIONS ─────────────────────────────────────────────
 function renderSessions() {
   document.getElementById("sessions-grid").innerHTML = LAB_SESSIONS.map(s => {
     const rcfg = RES_CFG[s.resultado] || {color:"#666",label:s.resultado};
