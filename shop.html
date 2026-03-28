@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMX.593 — Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Hero ──────────────────────────────────────────────── */
+    .shop-hero {
+      padding: 100px 2rem 3rem;
+      background: var(--negro);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: relative; overflow: hidden;
+    }
+    .shop-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 90% 50%, rgba(230,57,70,0.07) 0%, transparent 70%);
+    }
+    .shop-hero-inner {
+      max-width: 1280px; margin: 0 auto;
+      position: relative; z-index: 1;
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+    }
+    .shop-hero-eyebrow {
+      font-family: var(--font-display); font-size: 0.78rem;
+      font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--rojo); margin-bottom: 0.5rem;
+    }
+    .shop-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800; text-transform: uppercase;
+      letter-spacing: 2px; line-height: 0.9;
+    }
+    .shop-hero h1 span { color: var(--rojo); }
+    .shop-hero-desc {
+      font-size: 0.88rem; color: var(--gris-400);
+      max-width: 420px; line-height: 1.65; margin-top: 0.75rem;
+    }
+    .shop-hero-aviso {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(46,196,182,0.08);
+      border: 1px solid rgba(46,196,182,0.2);
+      border-radius: 40px; padding: 8px 16px; margin-top: 1.2rem;
+      font-size: 0.75rem; color: var(--teal);
+      font-family: var(--font-display); font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    /* ── Tabs ──────────────────────────────────────────────── */
+    .shop-tabs-wrap {
+      background: var(--gris-900);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky; top: 60px; z-index: 100;
+    }
+    .shop-tabs {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 2rem; display: flex;
+    }
+    .shop-tab {
+      font-family: var(--font-display); font-size: 0.88rem;
+      font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 1.1rem 1.8rem; background: transparent; border: none;
+      color: var(--gris-400); cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      position: relative; transition: color 0.2s;
+    }
+    .shop-tab::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 3px;
+      background: transparent; transition: background 0.2s;
+    }
+    .shop-tab:hover { color: var(--blanco); }
+    .shop-tab.activo { color: var(--blanco); }
+    .shop-tab.activo::after { background: var(--rojo); }
+
+    /* ── Contenido principal ───────────────────────────────── */
+    .shop-contenido {
+      max-width: 1280px; margin: 0 auto;
+      padding: 2.5rem 2rem 5rem;
+    }
+    .shop-seccion { display: none; }
+    .shop-seccion.activa { display: block; }
+
+    /* ── MERCHANDISE ───────────────────────────────────────── */
+    .merch-intro {
+      background: rgba(230,57,70,0.06);
+      border: 1px solid rgba(230,57,70,0.15);
+      border-radius: 10px; padding: 1.2rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .merch-intro i { color: var(--rojo); font-size: 1rem; margin-top: 2px; flex-shrink: 0; }
+    .merch-intro p { font-size: 0.82rem; color: var(--gris-200); line-height: 1.65; }
+    .merch-intro strong { color: var(--blanco); }
+
+    .merch-filtros {
+      display: flex; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap;
+    }
+    .merch-filtro {
+      font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 40px;
+      border: 1.5px solid var(--gris-600);
+      background: transparent; color: var(--gris-200); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .merch-filtro:hover { border-color: var(--gris-200); color: var(--blanco); }
+    .merch-filtro.activo { background: var(--rojo); border-color: var(--rojo); color: #fff; }
+
+    .merch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+    }
+
+    .merch-card {
+      background: var(--gris-800);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .merch-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(230,57,70,0.25);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .merch-card.destacada { border-color: rgba(230,57,70,0.2); }
+
+    .merch-img-wrap {
+      position: relative; aspect-ratio: 1/1;
+      background: var(--gris-700); overflow: hidden;
+    }
+    .merch-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.75rem; color: var(--gris-600);
+    }
+    .merch-img-placeholder i { font-size: 3rem; }
+    .merch-img-placeholder span {
+      font-family: var(--font-display); font-size: 0.72rem;
+      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    }
+    .merch-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .merch-card:hover .merch-img-wrap img { transform: scale(1.04); }
+
+    .merch-badge {
+      position: absolute; top: 10px; left: 10px;
+      font-family: var(--font-display); font-size: 0.62rem;
+      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 4px;
+      background: var(--rojo); color: #fff;
+    }
+    .merch-badge.pronto { background: var(--gris-600); }
+    .merch-badge.limitada { background: var(--naranja); color: #000; }
+
+    .merch-body {
+      padding: 1rem 1.2rem 1.2rem;
+      display: flex; flex-direction: column; flex: 1; gap: 6px;
+    }
+    .merch-nombre {
+      font-family: var(--font-display); font-size: 1.1rem;
+      font-weight: 800; color: var(--blanco); line-height: 1.1;
+    }
+    .merch-desc {
+      font-size: 0.78rem; color: var(--gris-200); line-height: 1.6;
+      flex: 1;
+    }
+    .merch-meta { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+    .merch-colores, .merch-tallas {
+      display: flex; gap: 5px; flex-wrap: wrap; align-items: center;
+    }
+    .merch-meta-label {
+      font-size: 0.65rem; color: var(--gris-400);
+      font-family: var(--font-display); font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; min-width: 52px;
+    }
+    .merch-chip {
+      font-size: 0.65rem; padding: 2px 8px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px; color: var(--gris-200);
+    }
+
+    .merch-footer {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 8px;
+    }
+    .merch-precio {
+      font-family: var(--font-display); font-size: 1.4rem;
+      font-weight: 800; color: var(--blanco);
+    }
+    .merch-precio .moneda { font-size: 0.8rem; color: var(--gris-400); margin-right: 2px; }
+
+    .merch-btns { display: flex; gap: 6px; }
+    .merch-btn {
+      width: 38px; height: 38px; border-radius: 8px;
+      border: 1.5px solid var(--gris-600);
+      background: transparent; color: var(--gris-200);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; cursor: pointer;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .merch-btn:hover { color: var(--blanco); }
+    .merch-btn.wa:hover { background: #25D366; border-color: #25D366; color: #fff; }
+    .merch-btn.ig:hover { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); border-color: #e6683c; color: #fff; }
+    .merch-btn-pronto {
+      font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 8px 14px; border-radius: 8px;
+      border: 1.5px solid var(--gris-600);
+      background: transparent; color: var(--gris-400);
+      cursor: default;
+    }
+
+    /* ── EVENTOS ───────────────────────────────────────────── */
+    .eventos-header {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap;
+      gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .eventos-titulo {
+      font-family: var(--font-display); font-size: 1.2rem;
+      font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .eventos-titulo span { color: var(--rojo); }
+
+    .eventos-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1.2rem; margin-bottom: 3rem;
+    }
+    .evento-card {
+      background: var(--gris-800);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .evento-card:hover { transform: translateY(-2px); border-color: rgba(230,57,70,0.25); }
+    .evento-card.destacado { border-color: rgba(230,57,70,0.2); }
+    .evento-card.pasado { opacity: 0.6; }
+
+    .evento-img {
+      position: relative; aspect-ratio: 16/7; overflow: hidden;
+      background: var(--gris-700);
+    }
+    .evento-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gris-600); font-size: 2.5rem;
+    }
+    .evento-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.7); transition: transform 0.3s;
+    }
+    .evento-card:hover .evento-img img { transform: scale(1.03); }
+    .evento-tipo-badge {
+      position: absolute; top: 10px; left: 10px;
+      font-family: var(--font-display); font-size: 0.62rem;
+      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 4px; color: #fff;
+    }
+    .evento-estado-badge {
+      position: absolute; top: 10px; right: 10px;
+      font-family: var(--font-display); font-size: 0.62rem;
+      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 4px;
+    }
+
+    .evento-body { padding: 1.2rem; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .evento-nombre {
+      font-family: var(--font-display); font-size: 1.15rem;
+      font-weight: 800; color: var(--blanco); line-height: 1.15;
+    }
+    .evento-desc { font-size: 0.78rem; color: var(--gris-200); line-height: 1.65; flex: 1; }
+
+    .evento-detalles {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px; margin-top: 4px;
+    }
+    .evento-detalle {
+      display: flex; align-items: flex-start; gap: 7px;
+      font-size: 0.75rem; color: var(--gris-200);
+    }
+    .evento-detalle i { color: var(--rojo); font-size: 0.7rem; margin-top: 2px; flex-shrink: 0; }
+
+    .evento-cupos-wrap { margin-top: 4px; }
+    .evento-cupos-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.7rem; color: var(--gris-400); margin-bottom: 4px;
+    }
+    .evento-cupos-bar {
+      height: 4px; background: var(--gris-700); border-radius: 2px;
+    }
+    .evento-cupos-fill {
+      height: 100%; border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .evento-incluye { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 5px; }
+    .evento-inc-chip {
+      font-size: 0.65rem; padding: 2px 8px;
+      background: rgba(46,196,182,0.08);
+      border: 1px solid rgba(46,196,182,0.15);
+      border-radius: 4px; color: var(--teal);
+    }
+
+    .evento-footer {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 10px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 8px; flex-wrap: wrap;
+    }
+    .evento-precio {
+      font-family: var(--font-display); font-size: 1.4rem;
+      font-weight: 800; color: var(--blanco);
+    }
+    .evento-precio .gratis { color: var(--teal); }
+    .evento-precio .moneda { font-size: 0.8rem; color: var(--gris-400); }
+
+    .evento-btns { display: flex; gap: 6px; }
+    .btn-inscribir {
+      font-family: var(--font-display); font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 9px 16px; border-radius: 8px;
+      background: var(--rojo); border: none; color: #fff;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px; text-decoration: none;
+    }
+    .btn-inscribir:hover { background: #c62d38; transform: translateY(-1px); }
+    .btn-inscribir.wa { background: #25D366; }
+    .btn-inscribir.wa:hover { background: #1da851; }
+    .btn-inscribir.ig { background: #e6683c; }
+    .btn-inscribir.ig:hover { background: #cc4a22; }
+    .btn-inscribir.agotado { background: var(--gris-600); cursor: not-allowed; }
+    .btn-inscribir.agotado:hover { transform: none; }
+
+    /* Eventos pasados */
+    .pasados-titulo {
+      font-family: var(--font-display); font-size: 1rem;
+      font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--gris-400); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .pasados-titulo i { color: var(--gris-600); }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .merch-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .shop-hero { padding-top: 80px; }
+      .merch-grid { grid-template-columns: 1fr; }
+      .eventos-grid { grid-template-columns: 1fr; }
+      .shop-tabs { overflow-x: auto; }
+      .shop-tab { padding: 1rem 1.2rem; font-size: 0.78rem; white-space: nowrap; }
+      .shop-contenido { padding: 1.5rem 1.2rem 3rem; }
+      .evento-detalles { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-logo">BMX<span class="punto">.</span><span class="num">593</span></a>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+      <li><a href="spots.html"><i class="fa-solid fa-map-location-dot"></i> Spots</a></li>
+      <li><a href="anatomia.html"><i class="fa-solid fa-bicycle"></i> Anatomía</a></li>
+      <li><a href="tutoriales.html"><i class="fa-solid fa-play-circle"></i> Tutoriales</a></li>
+      <li><a href="streetlab.html"><i class="fa-solid fa-flask"></i> Street Lab</a></li>
+      <li><a href="shop.html" class="activo"><i class="fa-solid fa-bag-shopping"></i> Shop</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="shop-hero">
+    <div class="shop-hero-inner">
+      <div>
+        <p class="shop-hero-eyebrow"><i class="fa-solid fa-bag-shopping"></i> Tienda oficial</p>
+        <h1>BMX<span>.</span>Shop</h1>
+        <p class="shop-hero-desc">Merchandise oficial de BMX.593 y eventos de riding para la comunidad. Apoya el BMX freestyle ecuatoriano.</p>
+        <div class="shop-hero-aviso">
+          <i class="fa-solid fa-circle-info"></i>
+          Próximamente — los productos estarán disponibles muy pronto
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="shop-tabs-wrap">
+    <div class="shop-tabs">
+      <button class="shop-tab activo" data-tab="merch" onclick="cambiarTab('merch')">
+        <i class="fa-solid fa-shirt"></i> Merchandise
+      </button>
+      <button class="shop-tab" data-tab="eventos" onclick="cambiarTab('eventos')">
+        <i class="fa-solid fa-calendar-days"></i> Eventos y Talleres
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="shop-contenido">
+
+    <!-- ══ MERCHANDISE ══ -->
+    <section class="shop-seccion activa" id="tab-merch">
+      <div class="merch-intro">
+        <i class="fa-solid fa-circle-info"></i>
+        <p>Los productos están en desarrollo — los diseños estarán disponibles próximamente. Para hacer tu pedido cuando estén listos, contáctanos por <strong>WhatsApp</strong> o <strong>Instagram</strong> usando los botones de cada producto.</p>
+      </div>
+      <div class="merch-filtros" id="merch-filtros"></div>
+      <div class="merch-grid" id="merch-grid"></div>
+    </section>
+
+    <!-- ══ EVENTOS ══ -->
+    <section class="shop-seccion" id="tab-eventos">
+      <div class="eventos-header">
+        <div class="eventos-titulo">Próximos <span>Eventos</span></div>
+      </div>
+      <div class="eventos-grid" id="eventos-proximos"></div>
+
+      <div class="pasados-titulo">
+        <i class="fa-solid fa-clock-rotate-left"></i> Eventos pasados
+      </div>
+      <div class="eventos-grid" id="eventos-pasados"></div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">BMX<span>.</span>593</div>
+        <p class="footer-tagline">Comunidad de BMX Freestyle en Ecuador.</p>
+        <p class="footer-contact">📧 <a href="mailto:hola@bmx593.ec">hola@bmx593.ec</a></p>
+      </div>
+      <div class="footer-social">
+        <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://youtube.com"   target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://tiktok.com"    target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://facebook.com"  target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i></a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 BMX.593 — Todos los derechos reservados</span>
+      <span>Hecho con 🚲 en Ecuador</span>
+    </div>
+  </footer>
+
+  <script src="js/shop.js"></script>
+  <script>
+    // ── Estado ────────────────────────────────────────────────
+    let filtroActivo = "todos";
+
+    const TIPO_CONFIG = {
+      taller: { color:"#e63946", label:"Taller" },
+      sesion: { color:"#2ec4b6", label:"Sesión" },
+    };
+    const ESTADO_CONFIG = {
+      proximo: { color:"#57cc99", bg:"rgba(87,204,153,0.15)", label:"Próximo" },
+      agotado: { color:"#e63946", bg:"rgba(230,57,70,0.15)",  label:"Agotado" },
+      pasado:  { color:"#666",    bg:"rgba(80,80,80,0.2)",    label:"Finalizado" },
+    };
+
+    // ── Init ─────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", () => {
+      renderFiltros();
+      renderMerch();
+      renderEventos();
+      document.getElementById("navToggle").addEventListener("click", () =>
+        document.getElementById("navLinks").classList.toggle("abierto"));
+    });
+
+    // ── Tabs ─────────────────────────────────────────────────
+    function cambiarTab(tab) {
+      document.querySelectorAll(".shop-tab").forEach(t =>
+        t.classList.toggle("activo", t.dataset.tab === tab));
+      document.querySelectorAll(".shop-seccion").forEach(s =>
+        s.classList.toggle("activa", s.id === "tab-" + tab));
+    }
+
+    // ── Filtros de merchandise ────────────────────────────────
+    function renderFiltros() {
+      const categorias = ["todos", ...new Set(PRODUCTOS.map(p => p.categoria))];
+      const labels = { todos:"Todos", ropa:"Ropa", accesorios:"Accesorios" };
+      document.getElementById("merch-filtros").innerHTML = categorias.map(c => `
+        <button class="merch-filtro ${c === "todos" ? "activo" : ""}"
+                data-cat="${c}" onclick="filtrarMerch('${c}')">
+          ${labels[c] || c}
+        </button>`).join("");
+    }
+
+    function filtrarMerch(cat) {
+      filtroActivo = cat;
+      document.querySelectorAll(".merch-filtro").forEach(b =>
+        b.classList.toggle("activo", b.dataset.cat === cat));
+      renderMerch();
+    }
+
+    // ── Merchandise ───────────────────────────────────────────
+    function renderMerch() {
+      const productos = filtroActivo === "todos"
+        ? PRODUCTOS
+        : PRODUCTOS.filter(p => p.categoria === filtroActivo);
+
+      document.getElementById("merch-grid").innerHTML = productos.map(p => {
+        const badgeClass = p.badge === "Próximamente" ? "pronto"
+          : p.badge === "Edición Limitada" ? "limitada" : "";
+
+        // Imagen o placeholder
+        const imgHTML = `
+          <div class="merch-img-placeholder">
+            <i class="fa-solid fa-shirt"></i>
+            <span>Diseño en desarrollo</span>
+          </div>`;
+
+        // Colores y tallas
+        const coloresHTML = p.colores.length ? `
+          <div class="merch-colores">
+            <span class="merch-meta-label">Colores</span>
+            ${p.colores.map(c => `<span class="merch-chip">${c}</span>`).join("")}
+          </div>` : "";
+
+        const tallasHTML = p.tallas.length ? `
+          <div class="merch-tallas">
+            <span class="merch-meta-label">Tallas</span>
+            ${p.tallas.map(t => `<span class="merch-chip">${t}</span>`).join("")}
+          </div>` : "";
+
+        // Botones
+        const waMsg  = encodeURIComponent(`Hola BMX.593! Me interesa el producto: ${p.nombre} ($${p.precio}). ¿Cuándo estará disponible?`);
+        const igMsg  = encodeURIComponent(`Hola! Me interesa: ${p.nombre}`);
+        const btnsHTML = p.disponible
+          ? `<div class="merch-btns">
+               <a href="https://wa.me/${SHOP_CONFIG.whatsapp}?text=${waMsg}" target="_blank" rel="noopener" class="merch-btn wa" title="Pedir por WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+               <a href="https://instagram.com/${SHOP_CONFIG.instagram}" target="_blank" rel="noopener" class="merch-btn ig" title="Ver en Instagram"><i class="fa-brands fa-instagram"></i></a>
+             </div>`
+          : `<div class="merch-btns">
+               <a href="https://wa.me/${SHOP_CONFIG.whatsapp}?text=${waMsg}" target="_blank" rel="noopener" class="merch-btn wa" title="Consultar por WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+               <a href="https://instagram.com/${SHOP_CONFIG.instagram}" target="_blank" rel="noopener" class="merch-btn ig" title="Ver en Instagram"><i class="fa-brands fa-instagram"></i></a>
+             </div>`;
+
+        return `
+          <div class="merch-card ${p.destacado ? "destacada" : ""}">
+            <div class="merch-img-wrap">
+              ${imgHTML}
+              <span class="merch-badge ${badgeClass}">${p.badge}</span>
+            </div>
+            <div class="merch-body">
+              <div class="merch-nombre">${p.nombre}</div>
+              <p class="merch-desc">${p.descripcion}</p>
+              <div class="merch-meta">${coloresHTML}${tallasHTML}</div>
+              <div class="merch-footer">
+                <div class="merch-precio">
+                  <span class="moneda">$</span>${p.precio}
+                </div>
+                ${btnsHTML}
+              </div>
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    // ── Eventos ───────────────────────────────────────────────
+    function renderEventos() {
+      const proximos = EVENTOS.filter(e => e.estado !== "pasado");
+      const pasados  = EVENTOS.filter(e => e.estado === "pasado");
+
+      document.getElementById("eventos-proximos").innerHTML =
+        proximos.length ? proximos.map(e => renderEventoCard(e)).join("") :
+        `<div style="color:var(--gris-400);font-size:0.88rem;grid-column:1/-1;padding:2rem 0">
+           No hay eventos próximos por ahora. ¡Síguenos en redes para no perderte ninguno!
+         </div>`;
+
+      document.getElementById("eventos-pasados").innerHTML =
+        pasados.length ? pasados.map(e => renderEventoCard(e)).join("") : "";
+    }
+
+    function renderEventoCard(e) {
+      const tipoCfg   = TIPO_CONFIG[e.tipo] || { color:"#666", label:e.tipo };
+      const estadoCfg = ESTADO_CONFIG[e.estado] || { color:"#666", bg:"rgba(100,100,100,0.15)", label:e.estado };
+      const fecha     = new Date(e.fecha + "T12:00:00");
+      const fechaStr  = fecha.toLocaleDateString("es-EC", { weekday:"long", day:"numeric", month:"long" });
+      const esPasado  = e.estado === "pasado";
+      const esAgotado = e.cuposDisponibles === 0 && !esPasado;
+
+      const ocupados    = e.cuposTotal - e.cuposDisponibles;
+      const pctOcupado  = Math.round((ocupados / e.cuposTotal) * 100);
+      const colorCupos  = pctOcupado >= 90 ? "#e63946" : pctOcupado >= 60 ? "#f9c74f" : "#57cc99";
+
+      // Imagen o placeholder
+      const imgHTML = `
+        <div class="evento-img-placeholder">
+          <i class="fa-solid ${e.tipo === "taller" ? "fa-chalkboard-user" : "fa-bicycle"}"></i>
+        </div>`;
+
+      // Precio
+      const precioHTML = e.precio === 0
+        ? `<div class="evento-precio"><span class="gratis">GRATIS</span></div>`
+        : `<div class="evento-precio"><span class="moneda">$</span>${e.precio}</div>`;
+
+      // Botones
+      const waMsg = encodeURIComponent(`Hola BMX.593! Quiero inscribirme al evento: ${e.nombre} (${fechaStr})`);
+      let btnsHTML = "";
+      if (esPasado) {
+        btnsHTML = `<span style="font-size:0.75rem;color:var(--gris-400)">Evento finalizado</span>`;
+      } else if (esAgotado || e.estado === "agotado") {
+        btnsHTML = `<button class="btn-inscribir agotado" disabled><i class="fa-solid fa-ban"></i> Agotado</button>`;
+      } else {
+        btnsHTML = `
+          <a href="https://wa.me/${SHOP_CONFIG.whatsapp}?text=${waMsg}" target="_blank" rel="noopener" class="btn-inscribir wa">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+          </a>
+          <a href="https://instagram.com/${SHOP_CONFIG.instagram}" target="_blank" rel="noopener" class="btn-inscribir ig">
+            <i class="fa-brands fa-instagram"></i> Instagram
+          </a>`;
+      }
+
+      // Incluye chips
+      const incluyeHTML = e.incluye.length ? `
+        <div class="evento-incluye">
+          ${e.incluye.map(i => `<span class="evento-inc-chip"><i class="fa-solid fa-check"></i> ${i}</span>`).join("")}
+        </div>` : "";
+
+      return `
+        <div class="evento-card ${e.destacado ? "destacado" : ""} ${esPasado ? "pasado" : ""}">
+          <div class="evento-img">
+            ${imgHTML}
+            <span class="evento-tipo-badge" style="background:${tipoCfg.color}">${tipoCfg.label}</span>
+            <span class="evento-estado-badge" style="background:${estadoCfg.bg};color:${estadoCfg.color}">${estadoCfg.label}</span>
+          </div>
+          <div class="evento-body">
+            <h3 class="evento-nombre">${e.nombre}</h3>
+            <p class="evento-desc">${e.descripcion}</p>
+            <div class="evento-detalles">
+              <div class="evento-detalle"><i class="fa-solid fa-calendar"></i>${fechaStr}</div>
+              <div class="evento-detalle"><i class="fa-solid fa-clock"></i>${e.hora}</div>
+              <div class="evento-detalle"><i class="fa-solid fa-location-dot"></i>${e.lugar}</div>
+              <div class="evento-detalle"><i class="fa-solid fa-user"></i>${e.instructor}</div>
+            </div>
+            ${!esPasado ? `
+            <div class="evento-cupos-wrap">
+              <div class="evento-cupos-label">
+                <span>Cupos disponibles</span>
+                <span style="color:${colorCupos}">${e.cuposDisponibles} / ${e.cuposTotal}</span>
+              </div>
+              <div class="evento-cupos-bar">
+                <div class="evento-cupos-fill" style="width:${pctOcupado}%;background:${colorCupos}"></div>
+              </div>
+            </div>` : ""}
+            ${incluyeHTML}
+            <div class="evento-footer">
+              ${precioHTML}
+              <div class="evento-btns">${btnsHTML}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+  </script>
+</body>
+</html>
